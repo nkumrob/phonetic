@@ -2,6 +2,8 @@
 
 import { Button } from '@/components/ui';
 import { AlphabetGrid } from '@/components/phonetic/alphabet-grid';
+import { TextConverter } from '@/components/phonetic/text-converter';
+import { ReverseLookup } from '@/components/phonetic/reverse-lookup';
 
 export default function Home() {
   return (
@@ -38,16 +40,30 @@ export default function Home() {
         <AlphabetGrid />
       </section>
 
-      {/* Converter Section Placeholder */}
+      {/* Converter Section */}
       <section id="converter" className="scroll-mt-20">
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold mb-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-semibold mb-2">
             Text to Phonetic Converter
           </h2>
           <p className="text-muted-foreground">
-            Converter coming soon...
+            Convert any text into NATO phonetic alphabet spelling
           </p>
         </div>
+        <TextConverter />
+      </section>
+
+      {/* Reverse Lookup Section */}
+      <section id="lookup" className="scroll-mt-20">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-semibold mb-2">
+            Reverse Lookup
+          </h2>
+          <p className="text-muted-foreground">
+            Find letters by searching for their phonetic code words
+          </p>
+        </div>
+        <ReverseLookup />
       </section>
     </div>
   );
