@@ -271,8 +271,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   };
 
   const resetSession = () => {
+    // Reset to default session
     setSession(defaultSession);
+    
+    // Clear all related localStorage items
     localStorage.removeItem('phoneticSession');
+    localStorage.removeItem('dailyGoals_v2');
+    localStorage.removeItem('lastKnownLevel');
+    localStorage.removeItem('onboardingCompleted');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('soundEnabled');
+    localStorage.removeItem('soundVolume');
+    
+    // Force immediate save of empty session
+    setIsInitialized(false);
   };
 
   const getAchievementProgress = () => {

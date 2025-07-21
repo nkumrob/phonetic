@@ -36,7 +36,7 @@ interface PracticeHubProps {
 }
 
 export function PracticeHub({ onModeSelect }: PracticeHubProps = {}) {
-  const { session, updateProgress } = useSession();
+  const { session, updateProgress, getAchievementProgress } = useSession();
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
   const { needsOnboarding, completeOnboarding } = useOnboarding();
   const { showXPGain, XPGainDisplay } = useXPAnimation();
@@ -168,6 +168,10 @@ export function PracticeHub({ onModeSelect }: PracticeHubProps = {}) {
   const xpInfo = calculateLevelFromTotalXP(session.userProgress.experience);
   const xpForNextLevel = xpInfo.xpForNextLevel;
   const xpProgress = xpInfo.progressPercent;
+  
+  // Calculate earned achievements
+  const achievementProgress = getAchievementProgress();
+  const earnedAchievements = Object.values(achievementProgress).filter(progress => progress >= 100).length;
 
   // Get user name for personalization - only on client to prevent hydration mismatch
   const [userName, setUserName] = useState<string | null>(null);
@@ -330,7 +334,7 @@ export function PracticeHub({ onModeSelect }: PracticeHubProps = {}) {
                 </div>
                 <div className="text-center p-3 bg-muted/50 rounded-lg">
                   <p className="text-2xl font-bold">
-                    {session.userProgress.achievements.length}
+                    {earnedAchievements}
                   </p>
                   <p className="text-xs text-muted-foreground">Achievements</p>
                 </div>

@@ -102,3 +102,6 @@
 - **XP Overflow Fix**: Added level-up logic to updateProgress preventing impossible XP displays (600/500)
 - **Intelligent Distractors**: Phonetically similar options, civilian alternatives, common mistakes by difficulty
 - **Print/PDF Color Fix**: Print preview and PDFs need black text (#000000) not colored text; add print-color-adjust: exact
+- **XP Calculation Bug**: XP was being subtracted during level-ups! Now store total XP, calculate level from that
+- **Multiple Streak Systems**: Quiz has session streak (resets each quiz), global streak (persistent), daily streak (goals)
+- **Race Conditions**: localStorage saves debounced 500ms can cause XP updates to overwrite each other
