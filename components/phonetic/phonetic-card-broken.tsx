@@ -2,42 +2,33 @@
 
 import React, { useCallback } from 'react';
 import { cn } from '@/lib/utils/cn';
+import { PhoneticAlphabet } from '@/lib/types/phonetic';
 
 interface PhoneticCardProps {
-  letter: string;
-  codeWord: string;
-  pronunciation: string;
-  ipa: string;
+  item: PhoneticAlphabet;
   isActive?: boolean;
   isSpeaking?: boolean;
-  isFocused?: boolean;
-  onClick: () => void;
-  onSpeak: () => void;
-  onFocus?: () => void;
+  onClick: (letter: string) => void;
+  onSpeak: (letter: string, codeWord: string) => void;
 }
 
 export function PhoneticCard({
-  letter,
-  codeWord,
-  pronunciation,
-  ipa,
+  item,
   isActive = false,
   isSpeaking = false,
-  isFocused = false,
   onClick,
   onSpeak,
-  onFocus,
 }: PhoneticCardProps) {
   const handleClick = useCallback(() => {
-    onClick();
-  }, [onClick]);
+    onClick(item.letter);
+  }, [onClick, item.letter]);
 
   const handleSpeak = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      onSpeak();
+      onSpeak(item.letter, item.codeWord);
     },
-    [onSpeak]
+    [onSpeak, item.letter, item.codeWord]
   );
 
   return (
@@ -45,14 +36,12 @@ export function PhoneticCard({
       className={cn(
         "phonetic-card group",
         isActive && "phonetic-card-active",
-        isSpeaking && "animate-pulse-slow",
-        isFocused && "ring-2 ring-primary ring-offset-2"
+        isSpeaking && "animate-pulse-slow"
       )}
       onClick={handleClick}
-      onFocus={onFocus}
       tabIndex={0}
       role="button"
-      aria-label={`${letter} for ${codeWord}`}
+      aria-label={`${item.letter} for ${item.codeWord}`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -65,22 +54,22 @@ export function PhoneticCard({
       
       {/* Letter */}
       <div className="phonetic-letter relative z-10 transition-transform group-hover:scale-110 duration-300">
-        {letter}
+        {item.letter}
       </div>
       
       {/* Code Word */}
       <div className="phonetic-word relative z-10">
-        {codeWord}
+        {item.codeWord}
       </div>
       
       {/* Pronunciation */}
       <div className="phonetic-pronunciation relative z-10">
-        {pronunciation}
+        {item.pronunciation}
       </div>
       
       {/* IPA */}
       <div className="text-sm text-tertiary font-mono relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        [{ipa}]
+        [{item.ipa}]
       </div>
       
       {/* Audio Button */}
@@ -96,7 +85,7 @@ export function PhoneticCard({
           "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
           isSpeaking && "opacity-100 bg-blue-50 dark:bg-blue-900/30"
         )}
-        aria-label={`Play pronunciation for ${codeWord}`}
+        aria-label={`Play pronunciation for ${item.codeWord}`}
       >
         <svg
           className={cn(
