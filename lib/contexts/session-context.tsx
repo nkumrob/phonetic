@@ -16,19 +16,37 @@ interface UserProgress {
   consecutiveDays: number;
 }
 
+interface QuizResult {
+  mode: string;
+  difficulty: string;
+  correct: number;
+  incorrect: number;
+  score: number;
+  streak: number;
+  averageTime: number;
+  timestamp: string;
+}
+
+interface ConversionHistoryItem {
+  id: string;
+  input: string;
+  output: string;
+  timestamp: number;
+}
+
 interface SessionData {
   userProgress: UserProgress;
-  quizHistory: any[];
+  quizHistory: QuizResult[];
   flashcardProgress: { [key: string]: number };
-  conversionHistory: { id: string; input: string; output: string; timestamp: number }[];
+  conversionHistory: ConversionHistoryItem[];
 }
 
 interface SessionContextType {
   session: SessionData;
   updateProgress: (updates: Partial<UserProgress>) => void;
-  addQuizResult: (result: any) => void;
+  addQuizResult: (result: QuizResult) => void;
   updateFlashcardProgress: (letter: string, count: number) => void;
-  addConversionHistory: (item: any) => void;
+  addConversionHistory: (item: ConversionHistoryItem) => void;
   resetSession: () => void;
   getAchievementProgress: () => { [key: string]: number };
   isSaving: boolean;
@@ -70,9 +88,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         const parsed = JSON.parse(savedSession);
         
         // Validate the loaded data
-        if (parsed.userProgress && typeof parsed.userProgress === 'object') {
+        if (parsed && parsed.userProgress && typeof parsed.userProgress === 'object') {
           // Check consecutive days
-          const lastPlayed = new Date(parsed.userProgress.lastPlayed);
+          const lastPlayed = parsed.userProgress.lastPlayed ? new Date(parsed.userProgress.lastPlayed) : new Date();
           const today = new Date();
           const daysDiff = Math.floor((today.getTime() - lastPlayed.getTime()) / (1000 * 60 * 60 * 24));
           
@@ -92,9 +110,16 @@ export function SessionProvider({ children }: { children: ReactNode }) {
               ...defaultSession.userProgress,
               ...parsed.userProgress,
             },
+            // Ensure arrays are preserved
+            quizHistory: parsed.quizHistory || defaultSession.quizHistory,
+            flashcardProgress: parsed.flashcardProgress || defaultSession.flashcardProgress,
+            conversionHistory: parsed.conversionHistory || defaultSession.conversionHistory,
           };
           
           setSession(mergedSession);
+        } else {
+          // If no valid saved data, just use defaults
+          setSession(defaultSession);
         }
       }
     } catch (error) {
@@ -132,16 +157,48 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, [session, isInitialized]);
 
   const updateProgress = (updates: Partial<UserProgress>) => {
-    setSession(prev => ({
-      ...prev,
-      userProgress: {
+    setSession(prev => {
+      const newProgress = {
         ...prev.userProgress,
         ...updates,
-      },
-    }));
+      };
+      
+      // Check for level up if experience was updated
+      if (updates.experience !== undefined) {
+        let currentLevel = newProgress.level;
+        let currentXP = newProgress.experience;
+        
+        while (currentXP >= currentLevel * 100) {
+          currentXP -= currentLevel * 100;
+          currentLevel += 1;
+          
+          // Unlock new modes based on level
+          if (currentLevel === 3 && !newProgress.unlockedModes.includes('medium')) {
+            newProgress.unlockedModes.push('medium');
+          }
+          if (currentLevel === 5 && !newProgress.unlockedModes.includes('hard')) {
+            newProgress.unlockedModes.push('hard');
+          }
+          if (currentLevel === 10 && !newProgress.unlockedModes.includes('expert')) {
+            newProgress.unlockedModes.push('expert');
+          }
+          if (currentLevel === 15 && !newProgress.unlockedModes.includes('nightmare')) {
+            newProgress.unlockedModes.push('nightmare');
+          }
+        }
+        
+        newProgress.level = currentLevel;
+        newProgress.experience = currentXP;
+      }
+      
+      return {
+        ...prev,
+        userProgress: newProgress,
+      };
+    });
   };
 
-  const addQuizResult = (result: any) => {
+  const addQuizResult = (result: QuizResult) => {
     setSession(prev => {
       const newSession = { ...prev };
       
@@ -158,32 +215,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         newSession.userProgress.bestStreak = result.streak;
       }
       
-      // Update current streak based on quiz performance
-      if (result.incorrect === 0 && result.correct > 0) {
-        // Perfect quiz - continue or start streak
-        newSession.userProgress.currentStreak = (newSession.userProgress.currentStreak || 0) + result.correct;
-      } else if (result.correct === 0) {
-        // No correct answers - reset streak
-        newSession.userProgress.currentStreak = 0;
-      } else {
-        // Some correct - maintain but don't increase streak
-        // This is debatable - you might want to reset on any incorrect
-      }
+      // Note: currentStreak is not used anymore. Quiz streaks are tracked per session only.
+      // Daily streaks are tracked via consecutiveDays.
+      // We keep currentStreak for backward compatibility but don't update it.
       
-      // Add experience points
-      const baseXP = result.correct * 10;
-      const streakBonus = Math.min(result.streak * 5, 50);
-      const difficultyMultiplier = 
-        result.difficulty === 'easy' ? 1 : 
-        result.difficulty === 'medium' ? 1.5 : 
-        result.difficulty === 'hard' ? 2 :
-        result.difficulty === 'expert' ? 3 : 
-        result.difficulty === 'nightmare' ? 5 : 1;
+      // XP is now added per answer in the quiz component, not at the end
+      // This prevents double XP addition and allows for proper animations
       
-      const totalXP = Math.floor((baseXP + streakBonus) * difficultyMultiplier);
-      newSession.userProgress.experience += totalXP;
-      
-      // Level up logic
+      // Check for level up based on current experience
       const xpForNextLevel = newSession.userProgress.level * 100;
       if (newSession.userProgress.experience >= xpForNextLevel) {
         newSession.userProgress.level += 1;
@@ -218,7 +257,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const addConversionHistory = (item: any) => {
+  const addConversionHistory = (item: ConversionHistoryItem) => {
     setSession(prev => ({
       ...prev,
       conversionHistory: [...prev.conversionHistory, item].slice(-20), // Keep last 20

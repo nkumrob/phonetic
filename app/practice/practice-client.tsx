@@ -1,80 +1,76 @@
 'use client';
 
 import { useState } from 'react';
-import { QuizInterface } from '@/components/learning/quiz-interface';
-import { EnhancedQuiz } from '@/components/learning/enhanced-quiz';
+import { PracticeHub } from '@/components/practice/practice-hub';
+import { UnifiedQuiz } from '@/components/practice/unified-quiz';
 import { Flashcards } from '@/components/learning/flashcards';
 import { ErrorBoundary } from '@/components/error-boundary';
-import { Button } from '@/components/ui';
-import { useSession } from '@/lib/contexts/session-context';
 
 export default function PracticeClient() {
-  const [activeTab, setActiveTab] = useState<'standard' | 'enhanced' | 'flashcards'>('enhanced');
-  const { session } = useSession();
+  const [activeMode, setActiveMode] = useState<'hub' | 'learn' | 'practice' | 'challenge'>('hub');
+
+  const handleModeSelect = (mode: 'learn' | 'practice' | 'challenge') => {
+    setActiveMode(mode);
+  };
+
+  const handleComplete = () => {
+    setActiveMode('hub');
+  };
+
+  const handleSessionSaved = () => {
+    // Session saved indicator is handled within components
+  };
+
+  // Route to PracticeHub which handles mode selection
+  if (activeMode === 'hub') {
+    return (
+      <ErrorBoundary>
+        <PracticeHub onModeSelect={handleModeSelect} />
+      </ErrorBoundary>
+    );
+  }
 
   return (
-    <div className="space-y-16">
-      {/* Hero Section */}
-      <section className="text-center py-8">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Practice & Master
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-4">
-          Reinforce your learning with quizzes and flashcards
-        </p>
-        <p className="text-lg text-primary">
-          Level {session.userProgress.level} • {session.userProgress.experience} XP
-        </p>
-      </section>
-
-      {/* Tab Navigation */}
-      <div className="flex justify-center gap-3 mb-8 flex-wrap">
-        <Button
-          variant={activeTab === 'enhanced' ? 'primary' : 'secondary'}
-          onClick={() => setActiveTab('enhanced')}
-          className="min-w-[160px]"
-        >
-          <span className="mr-2">🎮</span>
-          Challenge Mode
-        </Button>
-        <Button
-          variant={activeTab === 'standard' ? 'primary' : 'secondary'}
-          onClick={() => setActiveTab('standard')}
-          className="min-w-[160px]"
-        >
-          <span className="mr-2">📝</span>
-          Classic Quiz
-        </Button>
-        <Button
-          variant={activeTab === 'flashcards' ? 'primary' : 'secondary'}
-          onClick={() => setActiveTab('flashcards')}
-          className="min-w-[160px]"
-        >
-          <span className="mr-2">🎴</span>
-          Flashcards
-        </Button>
-      </div>
-
-      {/* Content based on active tab */}
-      <section className="min-h-[600px]">
-        <ErrorBoundary>
-          {activeTab === 'enhanced' && (
-            <div className="animate-fade-in">
-              <EnhancedQuiz />
+    <div className="min-h-screen">
+      <ErrorBoundary>
+        {activeMode === 'learn' && (
+          <div className="max-w-4xl mx-auto px-4 py-8">
+            <div className="mb-8">
+              <button
+                onClick={() => setActiveMode('hub')}
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Practice Hub
+              </button>
             </div>
-          )}
-          {activeTab === 'standard' && (
-            <div className="animate-fade-in">
-              <QuizInterface />
+            <Flashcards />
+          </div>
+        )}
+        
+        {(activeMode === 'practice' || activeMode === 'challenge') && (
+          <div className="max-w-4xl mx-auto px-4 py-8">
+            <div className="mb-8">
+              <button
+                onClick={() => setActiveMode('hub')}
+                className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Practice Hub
+              </button>
             </div>
-          )}
-          {activeTab === 'flashcards' && (
-            <div className="animate-fade-in">
-              <Flashcards />
-            </div>
-          )}
-        </ErrorBoundary>
-      </section>
+            <UnifiedQuiz 
+              mode={activeMode as 'practice' | 'challenge'} 
+              onComplete={handleComplete}
+              onSessionSaved={handleSessionSaved}
+            />
+          </div>
+        )}
+      </ErrorBoundary>
     </div>
   );
 }

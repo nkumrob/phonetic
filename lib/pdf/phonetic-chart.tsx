@@ -1,23 +1,12 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
-
-// Register fonts
-Font.register({
-  family: 'Inter',
-  fonts: [
-    { src: 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2' },
-    { src: 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hiA.woff2', fontWeight: 600 },
-    { src: 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiA.woff2', fontWeight: 700 },
-  ],
-});
 
 // Styles for PDF
 const styles = StyleSheet.create({
   page: {
     flexDirection: 'column',
     backgroundColor: '#ffffff',
-    fontFamily: 'Inter',
     padding: 40,
   },
   header: {
@@ -112,54 +101,56 @@ interface PhoneticChartPDFProps {
 
 export const PhoneticChartPDF: React.FC<PhoneticChartPDFProps> = ({ 
   includeUsageGuide = false 
-}) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.title}>NATO Phonetic Alphabet</Text>
-        <Text style={styles.subtitle}>International Radiotelephony Spelling Alphabet</Text>
-        <Text style={styles.subtitle}>Used by Military, Aviation, and Emergency Services</Text>
-      </View>
+}) => {
 
-      {/* Alphabet Grid */}
-      <View style={styles.grid}>
-        {NATO_ALPHABET.map((item) => (
-          <View key={item.letter} style={styles.card}>
-            <Text style={styles.letter}>{item.letter}</Text>
-            <Text style={styles.codeWord}>{item.codeWord}</Text>
-            <Text style={styles.pronunciation}>{item.pronunciation}</Text>
-            <Text style={styles.ipa}>[{item.ipa}]</Text>
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.title}>NATO Phonetic Alphabet</Text>
+          <Text style={styles.subtitle}>International Radiotelephony Spelling Alphabet</Text>
+          <Text style={styles.subtitle}>Used by Military, Aviation, and Emergency Services</Text>
+        </View>
+
+        {/* Alphabet Grid */}
+        <View style={styles.grid}>
+          {NATO_ALPHABET.map((item) => (
+            <View key={item.letter} style={styles.card}>
+              <Text style={styles.letter}>{item.letter}</Text>
+              <Text style={styles.codeWord}>{item.codeWord}</Text>
+              <Text style={styles.pronunciation}>{item.pronunciation}</Text>
+              <Text style={styles.ipa}>[{item.ipa}]</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Usage Guide */}
+        {includeUsageGuide && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>How to Use</Text>
+            <Text style={styles.usageText}>
+              Each letter is replaced with its corresponding code word
+            </Text>
+            <Text style={styles.usageText}>
+              Example: ABC becomes Alpha Bravo Charlie
+            </Text>
+            <Text style={styles.usageText}>
+              Speak clearly and pause between words
+            </Text>
+            <Text style={styles.usageText}>
+              Used to avoid confusion in radio communications
+            </Text>
           </View>
-        ))}
-      </View>
+        )}
 
-      {/* Usage Guide */}
-      {includeUsageGuide && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>How to Use</Text>
-          <Text style={styles.usageText}>
-            • Each letter is replaced with its corresponding code word
-          </Text>
-          <Text style={styles.usageText}>
-            • Example: &quot;ABC&quot; becomes &quot;Alpha Bravo Charlie&quot;
-          </Text>
-          <Text style={styles.usageText}>
-            • Speak clearly and pause between words
-          </Text>
-          <Text style={styles.usageText}>
-            • Used to avoid confusion in radio communications
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Generated from phoneticalphabet.com
           </Text>
         </View>
-      )}
-
-      {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Generated from{' '}
-          <Text style={styles.link}>phoneticalphabet.com</Text>
-        </Text>
-      </View>
-    </Page>
-  </Document>
-);
+      </Page>
+    </Document>
+  );
+};

@@ -202,8 +202,8 @@ export function TextConverter() {
       {/* Example */}
       <div className="text-center">
         <p className="text-sm text-secondary">
-          Try: <span className="font-mono text-primary">"Hello World"</span> → 
-          <span className="font-mono text-primary ml-2">"Hotel Echo Lima Lima Oscar (space) Whiskey Oscar Romeo Lima Delta"</span>
+          Try: <span className="font-mono text-primary">&quot;Hello World&quot;</span> → 
+          <span className="font-mono text-primary ml-2">&quot;Hotel Echo Lima Lima Oscar (space) Whiskey Oscar Romeo Lima Delta&quot;</span>
         </p>
       </div>
 

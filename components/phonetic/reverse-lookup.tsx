@@ -6,13 +6,14 @@ import { useDebounce } from '@/lib/hooks/use-debounce';
 import { searchPhoneticWords, getCommonMisspellings, type SearchResult } from '@/lib/utils/fuzzy-search';
 import { cn } from '@/lib/utils/cn';
 import { PHONETIC_MNEMONICS } from '@/lib/constants/mnemonics';
+import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 
 export function ReverseLookup() {
   const [searchQuery, setSearchQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [selectedLetter, setSelectedLetter] = useState<SearchResult | null>(null);
+  const [selectedLetter, setSelectedLetter] = useState<SearchResult & { mnemonic?: string; pronunciation?: string; ipa?: string } | null>(null);
   const [copied, setCopied] = useState(false);
   
   const debouncedQuery = useDebounce(searchQuery, 300);
@@ -74,14 +75,20 @@ export function ReverseLookup() {
   };
 
   const handleSelectResult = (result: SearchResult) => {
-    setSelectedLetter(result);
-    setResults([]);
-    
     // Find mnemonic for this letter
     const mnemonic = PHONETIC_MNEMONICS.find(m => m.letter === result.letter);
-    if (mnemonic) {
-      result.mnemonic = mnemonic.mnemonic;
-    }
+    // Find full details from NATO_ALPHABET
+    const fullDetails = NATO_ALPHABET.find(item => item.letter === result.letter);
+    
+    const resultWithDetails = {
+      ...result,
+      mnemonic: mnemonic?.mnemonic,
+      pronunciation: fullDetails?.pronunciation,
+      ipa: fullDetails?.ipa
+    };
+    
+    setSelectedLetter(resultWithDetails);
+    setResults([]);
   };
 
   const handleCopyLetter = async () => {

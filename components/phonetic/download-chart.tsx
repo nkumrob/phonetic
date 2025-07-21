@@ -12,7 +12,7 @@ export function DownloadChart() {
     setIsGenerating(true);
     
     try {
-      // Generate PDF
+      // Generate PDF with the NATO alphabet data
       const doc = <PhoneticChartPDF includeUsageGuide={true} />;
       const blob = await pdf(doc).toBlob();
       
@@ -31,6 +31,8 @@ export function DownloadChart() {
       URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error generating PDF:', error);
+      // Show user-friendly error
+      alert('Sorry, there was an error generating the PDF. Please try again or use the Print option instead.');
     } finally {
       setIsGenerating(false);
     }
