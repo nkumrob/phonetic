@@ -119,11 +119,25 @@
   
   /* Phonetic letter card */
   .phonetic-card {
-    @apply card cursor-pointer p-4 text-center transition-all hover:scale-105 hover:bg-primary/5 dark:hover:bg-primary/10;
+    @apply relative card cursor-pointer p-6 text-center transition-all hover:scale-105 hover:bg-primary/5 dark:hover:bg-primary/10 min-h-[200px] flex flex-col items-center justify-center;
   }
   
   .phonetic-card-active {
     @apply bg-primary/10 dark:bg-primary/20 scale-105 ring-2 ring-primary;
+  }
+  
+  /* Pulse animation for speaking */
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
 

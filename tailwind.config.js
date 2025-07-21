@@ -1,6 +1,5 @@
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -45,19 +44,23 @@ const config: Config = {
         military: ['Bebas Neue', 'sans-serif'],
       },
       fontSize: {
-        // Custom font sizes for phonetic display
         'phonetic-lg': ['3rem', { lineHeight: '1.2', letterSpacing: '0.02em' }],
         'phonetic-xl': ['4rem', { lineHeight: '1.1', letterSpacing: '0.02em' }],
       },
-      spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
-        '128': '32rem',
+      borderRadius: {
+        card: '0.75rem',
+      },
+      gridTemplateColumns: {
+        'alphabet': 'repeat(auto-fit, minmax(80px, 1fr))',
+        'alphabet-lg': 'repeat(auto-fit, minmax(100px, 1fr))',
+      },
+      boxShadow: {
+        'card': '0 2px 8px rgba(0, 0, 0, 0.08)',
+        'card-hover': '0 4px 16px rgba(0, 0, 0, 0.12)',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       },
       keyframes: {
         fadeIn: {
@@ -69,21 +72,7 @@ const config: Config = {
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
       },
-      boxShadow: {
-        'card': '0 2px 8px rgba(0, 0, 0, 0.08)',
-        'card-hover': '0 4px 16px rgba(0, 0, 0, 0.12)',
-      },
-      borderRadius: {
-        'card': '0.75rem',
-      },
-      gridTemplateColumns: {
-        // Custom grid for alphabet display
-        'alphabet': 'repeat(auto-fit, minmax(80px, 1fr))',
-        'alphabet-lg': 'repeat(auto-fit, minmax(100px, 1fr))',
-      },
     },
   },
   plugins: [],
 };
-
-export default config;

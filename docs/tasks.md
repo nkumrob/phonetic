@@ -60,13 +60,12 @@
 **Effort:** 10 hours
 
 #### Audio Integration
-- [ ] Source/record professional audio files (A-Z)
-- [ ] Compress audio files to optimal size
-- [ ] Create audio player utility
-- [ ] Implement click-to-play functionality
-- [ ] Add loading states for audio
-- [ ] Test cross-browser audio compatibility
-**Effort:** 12 hours
+- [ ] Use browser's built-in text-to-speech (window.speechSynthesis)
+- [ ] Create simple play button for each letter
+- [ ] Implement click-to-speak functionality
+- [ ] Add visual feedback when speaking
+- [ ] Test cross-browser compatibility
+**Effort:** 4 hours
 
 #### Keyboard Navigation
 - [ ] Implement keyboard event handlers
