@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui';
 import { AlphabetGrid } from '@/components/phonetic/alphabet-grid';
 
