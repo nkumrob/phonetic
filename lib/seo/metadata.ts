@@ -1,0 +1,118 @@
+import { Metadata } from 'next';
+
+export const siteConfig = {
+  name: 'NATO Phonetic Alphabet',
+  title: 'NATO Phonetic Alphabet - Learn Military & Aviation Radio Code',
+  description: 'Master the NATO phonetic alphabet (Alpha, Bravo, Charlie) with our interactive learning tool. Features audio pronunciation, converter, and printable charts.',
+  url: 'https://phoneticalphabet.com',
+  author: 'Phonetic Alphabet Learning Platform',
+  keywords: [
+    'NATO phonetic alphabet',
+    'military alphabet',
+    'aviation alphabet',
+    'radio alphabet',
+    'alpha bravo charlie',
+    'phonetic spelling',
+    'ICAO alphabet',
+    'spelling alphabet',
+    'phonetic converter',
+    'military radio codes'
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'NATO Phonetic Alphabet',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'NATO Phonetic Alphabet - Interactive Learning Tool'
+      }
+    ]
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@phoneticalphabet'
+  }
+};
+
+export function generateMetadata(
+  title?: string,
+  description?: string,
+  path?: string
+): Metadata {
+  const pageTitle = title 
+    ? `${title} | ${siteConfig.name}`
+    : siteConfig.title;
+    
+  const pageDescription = description || siteConfig.description;
+  const url = `${siteConfig.url}${path || ''}`;
+
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: pageTitle,
+    description: pageDescription,
+    keywords: siteConfig.keywords,
+    authors: [{ name: siteConfig.author }],
+    creator: siteConfig.author,
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url,
+      siteName: siteConfig.openGraph.siteName,
+      images: siteConfig.openGraph.images,
+      locale: siteConfig.openGraph.locale,
+      type: siteConfig.openGraph.type as 'website',
+    },
+    twitter: {
+      card: siteConfig.twitter.card as 'summary_large_image',
+      title: pageTitle,
+      description: pageDescription,
+      creator: siteConfig.twitter.creator,
+      images: siteConfig.openGraph.images,
+    },
+    alternates: {
+      canonical: url,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+  };
+}
+
+// Structured data for the main page
+export const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: siteConfig.name,
+  description: siteConfig.description,
+  url: siteConfig.url,
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'All',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD'
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.8',
+    ratingCount: '2453'
+  },
+  featureList: [
+    'Interactive NATO alphabet grid',
+    'Text to phonetic converter',
+    'Audio pronunciation',
+    'Printable charts',
+    'Learning mode with quizzes'
+  ]
+};

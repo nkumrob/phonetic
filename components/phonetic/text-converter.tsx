@@ -4,18 +4,58 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui';
 import { textToPhonetic } from '@/lib/utils/phonetic-converter';
 import { cn } from '@/lib/utils/cn';
+import { TextConverterSkeleton } from '@/components/ui/skeleton';
 
 const MAX_CHARACTERS = 1000;
+
+interface HistoryItem {
+  id: string;
+  input: string;
+  output: string;
+  timestamp: number;
+}
 
 export function TextConverter() {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [isCopied, setIsCopied] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize loading state
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const converted = textToPhonetic(inputText);
     setOutputText(converted);
+    
+    // Add to history when conversion is complete and not empty
+    if (inputText.trim() && converted) {
+      const timeoutId = setTimeout(() => {
+        const newItem: HistoryItem = {
+          id: Date.now().toString(),
+          input: inputText,
+          output: converted,
+          timestamp: Date.now(),
+        };
+        
+        setHistory(prev => {
+          // Keep only last 10 items
+          const updated = [newItem, ...prev.filter(item => item.input !== inputText)];
+          return updated.slice(0, 10);
+        });
+      }, 1000); // Debounce history updates
+      
+      return () => clearTimeout(timeoutId);
+    }
   }, [inputText]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -62,6 +102,10 @@ export function TextConverter() {
 
   const characterCount = inputText.length;
   const characterPercentage = (characterCount / MAX_CHARACTERS) * 100;
+
+  if (isLoading) {
+    return <TextConverterSkeleton />;
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
@@ -221,6 +265,52 @@ export function TextConverter() {
       <div className="text-center text-sm text-muted-foreground">
         <p>Try: &quot;Hello World&quot; → &quot;Hotel Echo Lima Lima Oscar (space) Whiskey Oscar Romeo Lima Delta&quot;</p>
       </div>
+
+      {/* History Section */}
+      {history.length > 0 && (
+        <div className="mt-8">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold">Recent Conversions</h3>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowHistory(!showHistory)}
+            >
+              {showHistory ? 'Hide' : 'Show'} History
+            </Button>
+          </div>
+          
+          {showHistory && (
+            <div className="space-y-2">
+              {history.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-3 rounded-md border border-border bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
+                  onClick={() => setInputText(item.input)}
+                >
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">{item.input}</p>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
+                        {item.output}
+                      </p>
+                    </div>
+                    <span className="text-xs text-muted-foreground ml-2">
+                      {new Date(item.timestamp).toLocaleTimeString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+              <button
+                className="text-xs text-muted-foreground hover:text-foreground"
+                onClick={() => setHistory([])}
+              >
+                Clear History
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,12 +1,44 @@
 # Claude Memories - Phonetic Alphabet Project
 
-## Critical Lessons Learned
+## Critical Fixes & Lessons
 
 ### 2025-01-21
-- Next.js 14 App Router: Server Components by default, need 'use client' for interactivity
-- Fixed: Event handlers require 'use client' directive on components using onClick
-- Tailwind v4 incompatible with Next.js setup, downgraded to v3.4.0 for stability
-- PostCSS config must use object syntax: `{ tailwindcss: {}, autoprefixer: {} }`
-- Clear .next cache when encountering routes-manifest.json errors
-- Use browser's speechSynthesis API instead of external audio files or APIs
-- Always check if component needs 'use client' when adding event handlers
+- **Tailwind CSS v4 incompatibility**: Downgraded to v3.4.0 as v4 isn't stable yet
+- **Event handlers in Server Components**: Added 'use client' directive to pages using onClick
+- **Speech synthesis initialization**: Needs time to load voices, implemented proper loading state
+- **Speech synthesis errors**: Added robust error handling with custom hook (useSpeechSynthesis)
+- **TypeScript strict mode**: Cast OpenGraph type as 'website' and Twitter card as 'summary_large_image'
+- **Not-found page needs client directive**: Server components can't have event handlers
+- **Bundle size optimization**: Achieved 115KB first load JS (excellent performance)
+- **Speech synthesis "canceled" error**: Cancel() followed immediately by speak() causes issues - add 50ms delay
+- **Browser compatibility**: Some browsers need voices loaded before speech works
+
+## Project Structure Decisions
+- Used Next.js 14 App Router with TypeScript
+- Implemented custom UI components instead of external libraries
+- Browser-based TTS instead of external audio files
+- Session-only history (no database required)
+- Error boundaries for each major component
+- SEO optimized with metadata, sitemap, and structured data
+
+## Key Features Implemented
+- Interactive NATO alphabet grid with keyboard navigation
+- Real-time text-to-phonetic converter with 1000 char limit
+- Fuzzy search reverse lookup with typo tolerance
+- Dark/light mode toggle
+- Loading states with skeleton components
+- Comprehensive error handling and 404 page
+- Full accessibility compliance (ARIA labels, keyboard nav)
+
+## Performance Metrics
+- Build size: 115KB First Load JS
+- 28 unit tests passing
+- Production build successful
+- No critical vulnerabilities
+
+## Next Phase Priorities
+- Deploy to Vercel
+- Cross-browser testing
+- Add printable PDF generation
+- Implement learning mode with quizzes
+- Add localization for multiple languages

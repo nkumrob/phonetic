@@ -4,6 +4,7 @@ import { Button } from '@/components/ui';
 import { AlphabetGrid } from '@/components/phonetic/alphabet-grid';
 import { TextConverter } from '@/components/phonetic/text-converter';
 import { ReverseLookup } from '@/components/phonetic/reverse-lookup';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 export default function Home() {
   return (
@@ -37,7 +38,9 @@ export default function Home() {
             Click any letter to highlight it. Click the speaker icon to hear pronunciation.
           </p>
         </div>
-        <AlphabetGrid />
+        <ErrorBoundary>
+          <AlphabetGrid />
+        </ErrorBoundary>
       </section>
 
       {/* Converter Section */}
@@ -50,7 +53,9 @@ export default function Home() {
             Convert any text into NATO phonetic alphabet spelling
           </p>
         </div>
-        <TextConverter />
+        <ErrorBoundary>
+          <TextConverter />
+        </ErrorBoundary>
       </section>
 
       {/* Reverse Lookup Section */}
@@ -63,7 +68,9 @@ export default function Home() {
             Find letters by searching for their phonetic code words
           </p>
         </div>
-        <ReverseLookup />
+        <ErrorBoundary>
+          <ReverseLookup />
+        </ErrorBoundary>
       </section>
     </div>
   );

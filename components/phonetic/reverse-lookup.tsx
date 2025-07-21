@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Input } from '@/components/ui';
+import { Input, LoadingSpinner } from '@/components/ui';
 import { useDebounce } from '@/lib/hooks/use-debounce';
 import { searchPhoneticWords, getCommonMisspellings, type SearchResult } from '@/lib/utils/fuzzy-search';
 import { cn } from '@/lib/utils/cn';
@@ -87,22 +87,26 @@ export function ReverseLookup() {
             aria-controls="search-results"
             aria-expanded={results.length > 0}
           />
-          {/* Search icon */}
+          {/* Search icon or loading spinner */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-5 h-5 text-muted-foreground"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-              />
-            </svg>
+            {isSearching ? (
+              <LoadingSpinner size="sm" />
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5 text-muted-foreground"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+                />
+              </svg>
+            )}
           </div>
         </div>
 

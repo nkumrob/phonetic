@@ -10,8 +10,10 @@ interface PhoneticCardProps {
   ipa: string;
   isActive?: boolean;
   isSpeaking?: boolean;
+  isFocused?: boolean;
   onClick?: () => void;
   onSpeak?: () => void;
+  onFocus?: () => void;
 }
 
 export function PhoneticCard({
@@ -21,25 +23,30 @@ export function PhoneticCard({
   ipa,
   isActive = false,
   isSpeaking = false,
+  isFocused = false,
   onClick,
   onSpeak,
+  onFocus,
 }: PhoneticCardProps) {
   return (
     <div
       className={cn(
         'phonetic-card',
         isActive && 'phonetic-card-active',
-        isSpeaking && 'ring-2 ring-accent animate-pulse-slow'
+        isSpeaking && 'ring-2 ring-accent animate-pulse-slow',
+        isFocused && 'ring-2 ring-primary ring-offset-2'
       )}
       onClick={onClick}
-      role="button"
-      tabIndex={0}
+      onFocus={onFocus}
+      role="gridcell"
+      tabIndex={isFocused ? 0 : -1}
       aria-label={`${letter} - ${codeWord}`}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           onClick?.();
         }
+        // Removed 's' key handling - handled by parent grid
       }}
     >
       {/* Letter */}
