@@ -252,6 +252,81 @@
   transition: none !important;
 }
 
+/* 3D Flashcard styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Print styles */
+@media print {
+  /* Hide non-essential elements */
+  header,
+  footer,
+  nav,
+  .no-print,
+  button,
+  .keyboard-shortcuts,
+  .download-section {
+    display: none !important;
+  }
+  
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
+  
+  /* Reset colors for print */
+  * {
+    color: black !important;
+    background: white !important;
+  }
+  
+  /* Alphabet grid print layout */
+  .alphabet-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 0.5rem !important;
+    page-break-inside: avoid;
+  }
+  
+  .phonetic-card {
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+    padding: 0.5rem !important;
+    min-height: auto !important;
+  }
+  
+  /* Ensure text is visible */
+  .text-primary {
+    color: black !important;
+    font-weight: bold !important;
+  }
+  
+  /* Add print header */
+  body::before {
+    content: "NATO Phonetic Alphabet";
+    display: block;
+    font-size: 24pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20pt;
+  }
+}
+
 /* Custom font imports */
 @import '@fontsource/inter/400.css';
 @import '@fontsource/inter/500.css';

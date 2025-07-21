@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { PhoneticCard } from './phonetic-card';
 import { PhoneticCardSkeleton } from '@/components/ui/skeleton';
@@ -114,7 +114,6 @@ export function AlphabetGrid() {
         grid.removeEventListener('keydown', handleKeyDown);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusedIndex]);
 
   return (
@@ -155,7 +154,7 @@ export function AlphabetGrid() {
       </div>
       
       {/* Keyboard shortcuts guide */}
-      <div className="mt-6 text-center text-sm text-muted-foreground">
+      <div className="mt-6 text-center text-sm text-muted-foreground keyboard-shortcuts no-print">
         <p>
           <kbd className="px-2 py-1 bg-muted rounded text-xs">←→↑↓</kbd> Navigate • 
           <kbd className="px-2 py-1 bg-muted rounded text-xs ml-2">Enter</kbd> Select • 

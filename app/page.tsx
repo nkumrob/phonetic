@@ -4,6 +4,9 @@ import { Button } from '@/components/ui';
 import { AlphabetGrid } from '@/components/phonetic/alphabet-grid';
 import { TextConverter } from '@/components/phonetic/text-converter';
 import { ReverseLookup } from '@/components/phonetic/reverse-lookup';
+import { DownloadChart } from '@/components/phonetic/download-chart';
+import { QuizInterface } from '@/components/learning/quiz-interface';
+import { Flashcards } from '@/components/learning/flashcards';
 import { ErrorBoundary } from '@/components/error-boundary';
 
 export default function Home() {
@@ -70,6 +73,35 @@ export default function Home() {
         </div>
         <ErrorBoundary>
           <ReverseLookup />
+        </ErrorBoundary>
+      </section>
+      
+      {/* Download Section */}
+      <section id="download" className="scroll-mt-20 download-section">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-semibold mb-2">
+            Download & Print
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            Get a printable PDF chart of the NATO phonetic alphabet
+          </p>
+          <ErrorBoundary>
+            <DownloadChart />
+          </ErrorBoundary>
+        </div>
+      </section>
+      
+      {/* Quiz Section */}
+      <section id="quiz" className="scroll-mt-20">
+        <ErrorBoundary>
+          <QuizInterface />
+        </ErrorBoundary>
+      </section>
+      
+      {/* Flashcards Section */}
+      <section id="flashcards" className="scroll-mt-20">
+        <ErrorBoundary>
+          <Flashcards />
         </ErrorBoundary>
       </section>
     </div>
