@@ -165,11 +165,17 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       
       // Check for level up if experience was updated
       if (updates.experience !== undefined) {
-        let currentLevel = newProgress.level;
-        let currentXP = newProgress.experience;
+        // Store total experience earned
+        const totalXP = updates.experience;
+        let currentLevel = 1;
+        let remainingXP = totalXP;
         
-        while (currentXP >= currentLevel * 100) {
-          currentXP -= currentLevel * 100;
+        // Calculate current level based on total XP
+        // Level 1: 0-99 XP, Level 2: 100-299 XP, Level 3: 300-599 XP, etc.
+        let xpNeeded = 0;
+        while (remainingXP >= (currentLevel * 100)) {
+          remainingXP -= (currentLevel * 100);
+          xpNeeded += (currentLevel * 100);
           currentLevel += 1;
           
           // Unlock new modes based on level
@@ -188,7 +194,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         }
         
         newProgress.level = currentLevel;
-        newProgress.experience = currentXP;
+        newProgress.experience = totalXP; // Store total XP, not remaining
       }
       
       return {

@@ -14,6 +14,7 @@ import {
   useLevelUpCeremony
 } from '@/components/gamification';
 import { useSoundEffects } from '@/lib/hooks/use-sound-effects';
+import { calculateLevelFromTotalXP } from '@/lib/utils/xp-calculations';
 import type { DailyGoal } from '@/components/gamification';
 
 interface PracticeMode {
@@ -163,8 +164,10 @@ export function PracticeHub({ onModeSelect }: PracticeHubProps = {}) {
     }
   ];
 
-  const xpForNextLevel = session.userProgress.level * 100;
-  const xpProgress = (session.userProgress.experience / xpForNextLevel) * 100;
+  // Calculate XP progress correctly using total XP
+  const xpInfo = calculateLevelFromTotalXP(session.userProgress.experience);
+  const xpForNextLevel = xpInfo.xpForNextLevel;
+  const xpProgress = xpInfo.progressPercent;
 
   // Get user name for personalization - only on client to prevent hydration mismatch
   const [userName, setUserName] = useState<string | null>(null);
@@ -311,7 +314,7 @@ export function PracticeHub({ onModeSelect }: PracticeHubProps = {}) {
               
               {/* Level & XP */}
               <XPProgressBar
-                current={session.userProgress.experience}
+                current={xpInfo.currentLevelXP}
                 max={xpForNextLevel}
                 level={session.userProgress.level}
                 size="default"
