@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './premium-design.css';
 import { Header } from '@/components/layout/header';
 import { generateMetadata, structuredData } from '@/lib/seo/metadata';
 import { SessionProvider } from '@/lib/contexts/session-context';
