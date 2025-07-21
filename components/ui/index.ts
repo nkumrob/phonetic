@@ -1,2 +1,3 @@
-// UI components barrel export
-export {}; // Placeholder - will add components as we build them
+export * from './button';
+export * from './card';
+export * from './input';
