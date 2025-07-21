@@ -21,14 +21,20 @@ export function DownloadChart() {
       const link = document.createElement('a');
       link.href = url;
       link.download = 'nato-phonetic-alphabet.pdf';
+      link.style.display = 'none';
+      
+      // Force download (not preview)
+      link.setAttribute('download', 'nato-phonetic-alphabet.pdf');
       
       // Trigger download
       document.body.appendChild(link);
       link.click();
       
-      // Cleanup
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      // Cleanup with delay to ensure download starts
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 100);
     } catch (error) {
       console.error('Error generating PDF:', error);
       // Show user-friendly error

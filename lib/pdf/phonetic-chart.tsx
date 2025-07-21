@@ -15,13 +15,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 700,
     marginBottom: 10,
-    color: '#0F172A',
+    color: '#000000',
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 14,
-    color: '#64748B',
+    color: '#333333',
     marginBottom: 5,
   },
   grid: {
@@ -40,21 +40,19 @@ const styles = StyleSheet.create({
   },
   letter: {
     fontSize: 24,
-    fontWeight: 700,
-    color: '#0EA5E9',
+    color: '#000000',
     marginBottom: 5,
     textAlign: 'center',
   },
   codeWord: {
     fontSize: 16,
-    fontWeight: 600,
-    color: '#0F172A',
+    color: '#000000',
     marginBottom: 3,
     textAlign: 'center',
   },
   pronunciation: {
     fontSize: 11,
-    color: '#64748B',
+    color: '#333333',
     marginBottom: 2,
     textAlign: 'center',
   },
@@ -83,9 +81,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 600,
     marginBottom: 10,
-    color: '#0F172A',
+    color: '#000000',
   },
   usageText: {
     fontSize: 12,
@@ -102,6 +99,12 @@ interface PhoneticChartPDFProps {
 export const PhoneticChartPDF: React.FC<PhoneticChartPDFProps> = ({ 
   includeUsageGuide = false 
 }) => {
+  // Create safe data without special characters
+  const safeAlphabet = NATO_ALPHABET.map(item => ({
+    letter: String(item.letter || ''),
+    codeWord: String(item.codeWord || ''),
+    pronunciation: String(item.pronunciation || '').replace(/[^A-Za-z0-9\s\-]/g, '')
+  }));
 
   return (
     <Document>
@@ -115,12 +118,11 @@ export const PhoneticChartPDF: React.FC<PhoneticChartPDFProps> = ({
 
         {/* Alphabet Grid */}
         <View style={styles.grid}>
-          {NATO_ALPHABET.map((item) => (
-            <View key={item.letter} style={styles.card}>
+          {safeAlphabet.map((item, index) => (
+            <View key={index} style={styles.card}>
               <Text style={styles.letter}>{item.letter}</Text>
               <Text style={styles.codeWord}>{item.codeWord}</Text>
               <Text style={styles.pronunciation}>{item.pronunciation}</Text>
-              <Text style={styles.ipa}>[{item.ipa}]</Text>
             </View>
           ))}
         </View>

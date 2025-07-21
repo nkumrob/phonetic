@@ -101,3 +101,4 @@
 - **Level Gates**: Challenge mode requires Level 3+, 70% accuracy, 5 streak achievement
 - **XP Overflow Fix**: Added level-up logic to updateProgress preventing impossible XP displays (600/500)
 - **Intelligent Distractors**: Phonetically similar options, civilian alternatives, common mistakes by difficulty
+- **Print/PDF Color Fix**: Print preview and PDFs need black text (#000000) not colored text; add print-color-adjust: exact

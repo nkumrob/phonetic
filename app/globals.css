@@ -272,6 +272,14 @@
 
 /* Print styles */
 @media print {
+  /* Reset all CSS variables to ensure print compatibility */
+  :root, * {
+    --color-primary: 0 0 0 !important;
+    --color-text-primary: 0 0 0 !important;
+    --color-text-secondary: 0 0 0 !important;
+    --color-text-tertiary: 0 0 0 !important;
+  }
+  
   /* Hide non-essential elements */
   header,
   footer,
@@ -295,12 +303,9 @@
     background: white !important;
   }
   
-  /* Alphabet grid print layout */
+  /* Hide the original alphabet grid in print to avoid duplication */
   .alphabet-grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 0.5rem !important;
-    page-break-inside: avoid;
+    display: none !important;
   }
   
   .phonetic-card {
@@ -316,15 +321,75 @@
     font-weight: bold !important;
   }
   
-  /* Add print header */
-  body::before {
-    content: "NATO Phonetic Alphabet";
-    display: block;
-    font-size: 24pt;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20pt;
+  /* Phonetic card text styles for print */
+  .phonetic-letter {
+    font-size: 24pt !important;
+    font-weight: bold !important;
+    color: #000000 !important;
+    margin-bottom: 4pt !important;
+    display: block !important;
+    visibility: visible !important;
   }
+  
+  .phonetic-word {
+    font-size: 14pt !important;
+    font-weight: 600 !important;
+    color: #000000 !important;
+    margin-bottom: 2pt !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  .phonetic-pronunciation {
+    font-size: 10pt !important;
+    color: #333333 !important;
+    font-style: italic !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure all text in phonetic cards is black */
+  .phonetic-card * {
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Override CSS variables for print */
+  body,
+  .phonetic-card,
+  .phonetic-letter,
+  .phonetic-word,
+  .phonetic-pronunciation,
+  .text-primary,
+  .text-secondary,
+  .text-tertiary,
+  h1, h2, h3, h4, h5, h6,
+  p, span, div {
+    color: #000000 !important;
+  }
+  
+  /* Force text visibility */
+  * {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure loading states don't hide content */
+  .skeleton,
+  .loading,
+  [data-loading="true"] {
+    display: none !important;
+  }
+  
+  /* Force phonetic content to be visible */
+  .alphabet-grid > * {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Remove automatic header since we have a better one now */
 }
 
 /* Custom font imports */
