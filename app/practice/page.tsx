@@ -11,4 +11,3 @@ export const metadata: Metadata = baseGenerateMetadata(
 export default function PracticePage() {
   return <PracticeClient />;
 }
-}
