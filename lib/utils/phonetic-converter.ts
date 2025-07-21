@@ -135,7 +135,7 @@ export function phoneticToText(phonetic: string): string {
     
     // Check for number words
     const numberEntry = Object.entries(NUMBERS_PHONETIC).find(
-      ([_, phonetic]) => phonetic.toLowerCase() === word.toLowerCase()
+      ([, phonetic]) => phonetic.toLowerCase() === word.toLowerCase()
     );
     if (numberEntry) {
       result += numberEntry[0];

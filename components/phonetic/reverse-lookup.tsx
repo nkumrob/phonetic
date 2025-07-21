@@ -155,7 +155,7 @@ export function ReverseLookup() {
       {/* No results message */}
       {searchQuery && debouncedQuery && !isSearching && results.length === 0 && (
         <div className="text-center text-muted-foreground">
-          <p>No phonetic words found for "{debouncedQuery}"</p>
+          <p>No phonetic words found for &quot;{debouncedQuery}&quot;</p>
           <p className="text-sm mt-1">Try searching for Alpha, Bravo, Charlie, etc.</p>
         </div>
       )}

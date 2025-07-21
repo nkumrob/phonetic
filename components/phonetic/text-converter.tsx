@@ -36,7 +36,7 @@ export function TextConverter() {
   };
 
   const handleShare = async () => {
-    if (navigator.share) {
+    if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         setIsSharing(true);
         await navigator.share({
@@ -187,7 +187,7 @@ export function TextConverter() {
                 )}
               </Button>
               
-              {navigator.share && (
+              {typeof navigator !== 'undefined' && 'share' in navigator && (
                 <Button
                   variant="secondary"
                   size="sm"
@@ -219,7 +219,7 @@ export function TextConverter() {
 
       {/* Examples */}
       <div className="text-center text-sm text-muted-foreground">
-        <p>Try: "Hello World" → "Hotel Echo Lima Lima Oscar (space) Whiskey Oscar Romeo Lima Delta"</p>
+        <p>Try: &quot;Hello World&quot; → &quot;Hotel Echo Lima Lima Oscar (space) Whiskey Oscar Romeo Lima Delta&quot;</p>
       </div>
     </div>
   );
