@@ -71,7 +71,7 @@ export default function Home() {
             <h3 className="text-2xl font-bold mb-3 group-hover:text-gradient transition-all">
               Interactive Learning
             </h3>
-            <p className="text-secondary mb-6">
+            <p className="text-body text-secondary mb-6">
               Explore all 26 letters with professional audio pronunciation, visual memory aids, 
               and proven mnemonic techniques.
             </p>
@@ -105,7 +105,7 @@ export default function Home() {
             <h3 className="text-2xl font-bold mb-3 group-hover:text-gradient transition-all">
               Gamified Practice
             </h3>
-            <p className="text-secondary mb-6">
+            <p className="text-body text-secondary mb-6">
               Challenge yourself with adaptive quizzes, unlock achievements, and track your progress 
               through multiple difficulty levels.
             </p>
@@ -139,7 +139,7 @@ export default function Home() {
             <h3 className="text-2xl font-bold mb-3 group-hover:text-gradient transition-all">
               Professional Tools
             </h3>
-            <p className="text-secondary mb-6">
+            <p className="text-body text-secondary mb-6">
               Convert text instantly, perform reverse lookups, and generate professional PDF reference 
               charts for offline use.
             </p>

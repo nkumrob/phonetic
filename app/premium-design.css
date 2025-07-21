@@ -4,8 +4,8 @@
    1. CSS Variables & Design Tokens
    ================================================================= */
 
-@layer base {
-  :root {
+/* Root variables without @layer since we're not using Tailwind layers in this file */
+:root {
     /* Typography Scale - Perfect Fourth (1.333) */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-mono: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
@@ -117,10 +117,10 @@
     /* Container */
     --container-max: 1440px;
     --container-padding: clamp(1rem, 5vw, 3rem);
-  }
-  
-  /* Dark Theme */
-  .dark {
+}
+
+/* Dark Theme */
+.dark {
     --color-background: 15 23 42;
     --color-surface: 30 41 59;
     --color-surface-2: 51 65 85;
@@ -137,7 +137,6 @@
     --color-primary: 96 165 250;
     --color-primary-dark: 147 197 253;
     --color-primary-light: 30 64 175;
-  }
 }
 
 /* =================================================================
@@ -512,21 +511,11 @@ h4, .h4 {
 .mb-6 { margin-bottom: var(--space-6); }
 .mb-8 { margin-bottom: var(--space-8); }
 
-/* Display Utilities */
-.flex { display: flex; }
-.grid { display: grid; }
-.hidden { display: none; }
+/* Display Utilities - Removed to avoid Tailwind conflicts */
 
-/* Alignment */
-.items-center { align-items: center; }
-.justify-center { justify-content: center; }
-.justify-between { justify-content: space-between; }
+/* Alignment - Using Tailwind's utilities instead */
 
-/* Gap */
-.gap-2 { gap: var(--space-2); }
-.gap-4 { gap: var(--space-4); }
-.gap-6 { gap: var(--space-6); }
-.gap-8 { gap: var(--space-8); }
+/* Gap - Using Tailwind's utilities instead */
 
 /* =================================================================
    9. Animations
@@ -663,6 +652,12 @@ h4, .h4 {
     rgb(var(--color-secondary)) 100%
   );
   transition: width 0.3s var(--ease-out);
+}
+
+/* Phonetic Card Mini */
+.phonetic-card-mini {
+  padding: var(--space-4);
+  min-height: 120px;
 }
 
 /* Achievement Badge */
