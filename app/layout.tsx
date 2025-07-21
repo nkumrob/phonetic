@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Header } from '@/components/layout/header';
 import { generateMetadata, structuredData } from '@/lib/seo/metadata';
+import { SessionProvider } from '@/lib/contexts/session-context';
 
 export const metadata: Metadata = generateMetadata();
 
@@ -17,12 +18,14 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <div className="min-h-screen bg-background">
-          <Header />
-          <main className="container mx-auto px-4 py-8">
-            {children}
-          </main>
-        </div>
+        <SessionProvider>
+          <div className="min-h-screen bg-background">
+            <Header />
+            <main className="container mx-auto px-4 py-8">
+              {children}
+            </main>
+          </div>
+        </SessionProvider>
       </body>
     </html>
   );

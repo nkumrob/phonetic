@@ -2,16 +2,21 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Button } from '@/components/ui';
+import { cn } from '@/lib/utils/cn';
+import { useSession } from '@/lib/contexts/session-context';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const { session } = useSession();
 
   const navigation = [
-    { name: 'Converter', href: '#converter' },
-    { name: 'Learn', href: '#learn' },
-    { name: 'About', href: '#about' },
+    { name: 'Learn', href: '/learn' },
+    { name: 'Practice', href: '/practice' },
+    { name: 'Tools', href: '/tools' },
   ];
 
   return (
@@ -32,7 +37,10 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-foreground",
+                  pathname === item.href ? "text-foreground" : "text-muted-foreground"
+                )}
               >
                 {item.name}
               </Link>
@@ -41,6 +49,13 @@ export function Header() {
 
           {/* Actions */}
           <div className="flex items-center space-x-4">
+            <Link
+              href="/profile"
+              className="hidden md:flex items-center gap-2 text-sm font-medium transition-colors hover:text-foreground text-muted-foreground"
+            >
+              <span className="text-lg">🏆</span>
+              <span>Level {session.userProgress.level}</span>
+            </Link>
             <ThemeToggle />
             
             {/* Mobile menu button */}
@@ -95,7 +110,10 @@ export function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block rounded-md px-3 py-2 text-base font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
+                  className={cn(
+                    "block rounded-md px-3 py-2 text-base font-medium hover:bg-muted hover:text-foreground",
+                    pathname === item.href ? "bg-muted text-foreground" : "text-muted-foreground"
+                  )}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item.name}

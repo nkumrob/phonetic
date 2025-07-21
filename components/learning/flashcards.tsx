@@ -5,6 +5,7 @@ import { Button } from '@/components/ui';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { PHONETIC_MNEMONICS } from '@/lib/constants/mnemonics';
 import { cn } from '@/lib/utils/cn';
+import { useSession } from '@/lib/contexts/session-context';
 
 interface FlashcardData {
   letter: string;
@@ -15,11 +16,11 @@ interface FlashcardData {
 }
 
 export function Flashcards() {
+  const { session, updateFlashcardProgress } = useSession();
   const [cards, setCards] = useState<FlashcardData[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isStudyMode, setIsStudyMode] = useState(false);
-  const [studyProgress, setStudyProgress] = useState<{[key: string]: number}>({});
   const [showMnemonics, setShowMnemonics] = useState(true);
 
   // Initialize cards
@@ -33,19 +34,10 @@ export function Flashcards() {
     });
     setCards(flashcardData);
     
-    // Load progress from localStorage
-    const saved = localStorage.getItem('flashcardProgress');
-    if (saved) {
-      setStudyProgress(JSON.parse(saved));
-    }
+    // Progress is now managed by SessionContext
   }, []);
 
-  // Save progress
-  useEffect(() => {
-    if (Object.keys(studyProgress).length > 0) {
-      localStorage.setItem('flashcardProgress', JSON.stringify(studyProgress));
-    }
-  }, [studyProgress]);
+  // Progress is automatically saved by SessionContext
 
   const handleNext = () => {
     setIsFlipped(false);
@@ -67,16 +59,16 @@ export function Flashcards() {
 
   const markAsLearned = () => {
     const currentCard = cards[currentIndex];
-    setStudyProgress(prev => ({
-      ...prev,
-      [currentCard.letter]: (prev[currentCard.letter] || 0) + 1
-    }));
+    const currentCount = session.flashcardProgress[currentCard.letter] || 0;
+    updateFlashcardProgress(currentCard.letter, currentCount + 1);
     handleNext();
   };
 
   const resetProgress = () => {
-    setStudyProgress({});
-    localStorage.removeItem('flashcardProgress');
+    // Reset all flashcard progress
+    NATO_ALPHABET.forEach(item => {
+      updateFlashcardProgress(item.letter, 0);
+    });
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
@@ -97,12 +89,13 @@ export function Flashcards() {
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, isFlipped]);
 
   if (cards.length === 0) return null;
 
   const currentCard = cards[currentIndex];
-  const learnedCount = Object.values(studyProgress).filter(v => v >= 3).length;
+  const learnedCount = Object.values(session.flashcardProgress).filter(v => v >= 3).length;
   const progressPercentage = (learnedCount / cards.length) * 100;
 
   return (
@@ -167,11 +160,11 @@ export function Flashcards() {
                 </div>
               )}
               <div className="flex gap-2 mt-4">
-                {studyProgress[currentCard.letter] >= 3 ? (
+                {(session.flashcardProgress[currentCard.letter] || 0) >= 3 ? (
                   <span className="text-green-600 font-semibold">✓ Mastered</span>
                 ) : (
                   <span className="text-muted-foreground text-sm">
-                    Studied {studyProgress[currentCard.letter] || 0} times
+                    Studied {session.flashcardProgress[currentCard.letter] || 0} times
                   </span>
                 )}
               </div>
