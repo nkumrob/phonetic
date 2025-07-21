@@ -3,6 +3,7 @@
 import { TextConverter } from '@/components/phonetic/text-converter-fixed';
 import { ReverseLookup } from '@/components/phonetic/reverse-lookup';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { Icons } from '@/components/ui/icons';
 
 export default function ToolsPageClient() {
   return (
@@ -22,8 +23,8 @@ export default function ToolsPageClient() {
         <section className="mb-24">
           <div className="card card-interactive p-8 lg:p-12">
             <div className="text-center mb-10">
-              <div className="feature-icon mx-auto mb-4">
-                <span>🔄</span>
+              <div className="feature-icon mx-auto mb-4 text-primary">
+                <Icons.convert size={48} />
               </div>
               <h2 className="h3 mb-3">Text to Phonetic Converter</h2>
               <p className="text-body-lg text-secondary max-w-2xl mx-auto">
@@ -40,8 +41,8 @@ export default function ToolsPageClient() {
         <section className="mb-24">
           <div className="card card-interactive p-8 lg:p-12">
             <div className="text-center mb-10">
-              <div className="feature-icon mx-auto mb-4">
-                <span>🔍</span>
+              <div className="feature-icon mx-auto mb-4 text-primary">
+                <Icons.search size={48} />
               </div>
               <h2 className="h3 mb-3">Reverse Lookup</h2>
               <p className="text-body-lg text-secondary max-w-2xl mx-auto">
@@ -60,15 +61,15 @@ export default function ToolsPageClient() {
             <h3 className="text-xl font-semibold mb-3">Quick Tips</h3>
             <ul className="space-y-2 text-secondary">
               <li className="flex items-start gap-2">
-                <span className="text-green-500 mt-1">✓</span>
+                <Icons.checkCircle size={20} className="text-green-500 mt-0.5 flex-shrink-0" />
                 <span>Use uppercase letters for clearer phonetic conversion</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-green-500 mt-1">✓</span>
+                <Icons.checkCircle size={20} className="text-green-500 mt-0.5 flex-shrink-0" />
                 <span>Numbers and special characters are spelled out automatically</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-green-500 mt-1">✓</span>
+                <Icons.checkCircle size={20} className="text-green-500 mt-0.5 flex-shrink-0" />
                 <span>Copy results with one click for easy sharing</span>
               </li>
             </ul>

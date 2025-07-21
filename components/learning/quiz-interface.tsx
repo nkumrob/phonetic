@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { cn } from '@/lib/utils/cn';
+import { useSession } from '@/lib/contexts/session-context';
 
 type QuestionType = 'letter-to-code' | 'code-to-letter' | 'audio-to-code' | 'mixed';
 type Difficulty = 'easy' | 'medium' | 'hard';
@@ -27,8 +28,10 @@ interface QuizStats {
 }
 
 export function QuizInterface() {
+  const { session, addQuizResult } = useSession();
   const [isQuizActive, setIsQuizActive] = useState(false);
   const [difficulty, setDifficulty] = useState<Difficulty>('easy');
+  const [selectedMode, setSelectedMode] = useState<'standard' | 'timed' | 'survival'>('standard');
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -41,7 +44,8 @@ export function QuizInterface() {
   });
   const [timer, setTimer] = useState(0);
   const [questionNumber, setQuestionNumber] = useState(0);
-  const totalQuestions = 10;
+  const [lives, setLives] = useState(3);
+  const totalQuestions = selectedMode === 'survival' ? 999 : 10;
 
   // Generate random question
   const generateQuestion = (): Question => {
@@ -118,6 +122,7 @@ export function QuizInterface() {
       totalTime: 0
     });
     setTimer(0);
+    setLives(selectedMode === 'survival' ? 3 : 999); // Set lives for survival mode
     setCurrentQuestion(generateQuestion());
   };
 
@@ -137,6 +142,18 @@ export function QuizInterface() {
       streak: isCorrect ? prev.streak + 1 : 0,
       bestStreak: isCorrect ? Math.max(prev.bestStreak, prev.streak + 1) : prev.bestStreak,
     }));
+    
+    // Handle survival mode lives
+    if (!isCorrect && selectedMode === 'survival') {
+      setLives(prev => prev - 1);
+      if (lives <= 1) {
+        setTimeout(() => endQuiz(), 2000);
+        return;
+      }
+    }
+    
+    // Auto-advance to next question
+    setTimeout(() => nextQuestion(), 2000);
   };
 
   // Next question
@@ -154,16 +171,22 @@ export function QuizInterface() {
   // End quiz
   const endQuiz = () => {
     setIsQuizActive(false);
-    setStats(prev => ({ ...prev, totalTime: timer }));
-    // Save to localStorage
-    const savedStats = JSON.parse(localStorage.getItem('phoneticQuizStats') || '[]');
-    savedStats.push({
-      date: new Date().toISOString(),
-      ...stats,
-      totalTime: timer,
-      difficulty
-    });
-    localStorage.setItem('phoneticQuizStats', JSON.stringify(savedStats));
+    const finalStats = { ...stats, totalTime: timer };
+    setStats(finalStats);
+    
+    // Save to session
+    const result = {
+      mode: `classic-${selectedMode}`,
+      difficulty,
+      correct: finalStats.correct,
+      incorrect: finalStats.incorrect,
+      score: finalStats.correct * 10,
+      streak: finalStats.bestStreak,
+      averageTime: finalStats.correct > 0 ? finalStats.totalTime / finalStats.correct : 0,
+      timestamp: new Date().toISOString()
+    };
+    
+    addQuizResult(result);
   };
 
   // Timer
@@ -176,6 +199,25 @@ export function QuizInterface() {
     }
     return () => clearInterval(interval);
   }, [isQuizActive, showResult]);
+  
+  // Timed mode countdown
+  const [questionTimer, setQuestionTimer] = useState(10);
+  useEffect(() => {
+    if (selectedMode === 'timed' && isQuizActive && !showResult) {
+      setQuestionTimer(10); // Reset to 10 seconds for each question
+      const interval = setInterval(() => {
+        setQuestionTimer(prev => {
+          if (prev <= 1) {
+            // Time's up - treat as incorrect answer
+            handleAnswer('__TIMEOUT__');
+            return 10;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [currentQuestion, isQuizActive, showResult, selectedMode]);
 
   // Play audio for audio questions
   useEffect(() => {
@@ -193,37 +235,75 @@ export function QuizInterface() {
     return (
       <div className="max-w-2xl mx-auto text-center space-y-6">
         <div className="space-y-4">
-          <h3 className="text-2xl font-semibold">Test Your Knowledge</h3>
+          <h3 className="text-2xl font-semibold">Classic Quiz Mode</h3>
           <p className="text-muted-foreground">
-            Challenge yourself with our phonetic alphabet quiz. Choose your difficulty level and see how well you know the NATO codes!
+            Test your knowledge of the NATO phonetic alphabet with traditional quiz formats.
+          </p>
+          <p className="text-lg text-primary">
+            Level {session.userProgress.level} • {session.userProgress.experience} XP
           </p>
         </div>
         
-        <div className="flex gap-3 justify-center mb-6">
-          <Button
-            variant={difficulty === 'easy' ? 'primary' : 'secondary'}
-            onClick={() => setDifficulty('easy')}
-          >
-            Easy
-          </Button>
-          <Button
-            variant={difficulty === 'medium' ? 'primary' : 'secondary'}
-            onClick={() => setDifficulty('medium')}
-          >
-            Medium
-          </Button>
-          <Button
-            variant={difficulty === 'hard' ? 'primary' : 'secondary'}
-            onClick={() => setDifficulty('hard')}
-          >
-            Hard
-          </Button>
+        {/* Mode Selection */}
+        <div className="space-y-4">
+          <h4 className="font-semibold">Select Mode:</h4>
+          <div className="flex gap-3 justify-center">
+            <Button
+              variant={selectedMode === 'standard' ? 'primary' : 'secondary'}
+              onClick={() => setSelectedMode('standard')}
+            >
+              Standard
+            </Button>
+            <Button
+              variant={selectedMode === 'timed' ? 'primary' : 'secondary'}
+              onClick={() => setSelectedMode('timed')}
+            >
+              Timed
+            </Button>
+            <Button
+              variant={selectedMode === 'survival' ? 'primary' : 'secondary'}
+              onClick={() => setSelectedMode('survival')}
+            >
+              Survival
+            </Button>
+          </div>
         </div>
         
-        <div className="bg-muted p-4 rounded-lg text-sm">
-          <p><strong>Easy:</strong> Letter to code word only</p>
-          <p><strong>Medium:</strong> Letter to code & code to letter</p>
-          <p><strong>Hard:</strong> All types including audio recognition</p>
+        {/* Difficulty Selection */}
+        <div className="space-y-4">
+          <h4 className="font-semibold">Select Difficulty:</h4>
+          <div className="flex gap-3 justify-center">
+            <Button
+              variant={difficulty === 'easy' ? 'primary' : 'secondary'}
+              onClick={() => setDifficulty('easy')}
+            >
+              Easy
+            </Button>
+            <Button
+              variant={difficulty === 'medium' ? 'primary' : 'secondary'}
+              onClick={() => setDifficulty('medium')}
+            >
+              Medium
+            </Button>
+            <Button
+              variant={difficulty === 'hard' ? 'primary' : 'secondary'}
+              onClick={() => setDifficulty('hard')}
+            >
+              Hard
+            </Button>
+          </div>
+        </div>
+        
+        <div className="bg-muted p-4 rounded-lg text-sm space-y-2">
+          <p className="font-semibold">Mode Info:</p>
+          <p><strong>Standard:</strong> 10 questions, no time limit</p>
+          <p><strong>Timed:</strong> 10 questions, 10 seconds each</p>
+          <p><strong>Survival:</strong> Continue until you get 3 wrong</p>
+          <div className="border-t pt-2 mt-2">
+            <p><strong>Easy:</strong> Letter to code word only</p>
+            <p><strong>Medium:</strong> Letter to code & code to letter</p>
+            <p><strong>Hard:</strong> All types including audio recognition</p>
+          </div>
         </div>
         
         <Button size="lg" onClick={startQuiz}>
@@ -245,9 +325,22 @@ export function QuizInterface() {
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm text-muted-foreground">
-            Question {questionNumber} of {totalQuestions}
+            Question {questionNumber}{selectedMode !== 'survival' && ` of ${totalQuestions}`}
+            {selectedMode === 'survival' && (
+              <span className="ml-2 text-red-500">
+                ❤️ {Array(lives).fill('').map((_, i) => '❤️').join(' ')}
+              </span>
+            )}
           </span>
           <span className="text-sm text-muted-foreground">
+            {selectedMode === 'timed' && !showResult && (
+              <span className={cn(
+                "font-bold mr-3",
+                questionTimer <= 3 ? "text-red-500" : "text-primary"
+              )}>
+                ⏱️ {questionTimer}s
+              </span>
+            )}
             Time: {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}
           </span>
         </div>

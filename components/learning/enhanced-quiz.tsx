@@ -44,16 +44,19 @@ interface QuizMode {
     mistakePenalty?: number;
     streakMultiplier?: number;
     minCorrectToPass?: number;
+    questionsLimit?: number;
   };
 }
 
 const QUIZ_MODES: Record<string, QuizMode> = {
   classic: {
     name: 'Classic',
-    description: 'Standard quiz with mixed questions',
+    description: 'Answer 10 mixed questions at your own pace',
     icon: '📚',
     unlockLevel: 0,
-    settings: {}
+    settings: {
+      questionsLimit: 10
+    }
   },
   speedRun: {
     name: 'Speed Run',
@@ -289,7 +292,7 @@ export function EnhancedQuiz() {
     setIsQuizActive(true);
     setQuestionNumber(1);
     setScore(0);
-    setStreak(0);
+    setStreak(0); // This is the quiz-session streak, different from global currentStreak
     setLives(currentMode.settings.livesAllowed || 3);
     setComboMultiplier(1);
     setQuestionsAnswered({ correct: 0, incorrect: 0 });
@@ -351,6 +354,8 @@ export function EnhancedQuiz() {
         endQuiz();
       } else if (selectedMode === 'perfectionist' && questionsAnswered.correct >= 10) {
         endQuiz();
+      } else if (currentMode.settings.questionsLimit && questionNumber >= currentMode.settings.questionsLimit) {
+        endQuiz();
       } else if (lives > 0 || currentMode.settings.livesAllowed === undefined) {
         setQuestionNumber(prev => prev + 1);
         nextQuestion();
@@ -382,6 +387,11 @@ export function EnhancedQuiz() {
           <h3 className="text-3xl font-bold">Challenge Yourself</h3>
           <p className="text-muted-foreground text-lg">
             Level {session.userProgress.level} • {session.userProgress.experience} XP
+            {session.userProgress.currentStreak > 0 && (
+              <span className="ml-3 text-primary">
+                • 🔥 {session.userProgress.currentStreak} Global Streak
+              </span>
+            )}
           </p>
         </div>
         

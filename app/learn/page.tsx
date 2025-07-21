@@ -31,7 +31,7 @@ export default function LearnPage() {
       </section>
 
       {/* Download Section */}
-      <section className="text-center">
+      <section className="text-center no-print">
         <h2 className="text-2xl font-semibold mb-4">
           Take It With You
         </h2>

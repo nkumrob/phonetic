@@ -8,7 +8,6 @@ interface PhoneticCardProps {
   codeWord: string;
   pronunciation: string;
   ipa: string;
-  isActive?: boolean;
   isSpeaking?: boolean;
   isFocused?: boolean;
   onClick: () => void;
@@ -21,7 +20,6 @@ export function PhoneticCard({
   codeWord,
   pronunciation,
   ipa,
-  isActive = false,
   isSpeaking = false,
   isFocused = false,
   onClick,
@@ -44,9 +42,7 @@ export function PhoneticCard({
     <article
       className={cn(
         "phonetic-card group",
-        isActive && "phonetic-card-active",
-        isSpeaking && "animate-pulse-slow",
-        isFocused && "ring-2 ring-primary ring-offset-2"
+        isSpeaking && "animate-pulse-slow"
       )}
       onClick={handleClick}
       onFocus={onFocus}
@@ -64,29 +60,25 @@ export function PhoneticCard({
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-blue-500/0 to-amber-500/0 group-hover:from-blue-500/10 group-hover:via-transparent group-hover:to-amber-500/10 rounded-xl transition-all duration-500" />
       
       {/* Letter */}
-      <div className="phonetic-letter relative z-10 transition-transform group-hover:scale-110 duration-300">
+      <div className="phonetic-letter">
         {letter}
       </div>
       
       {/* Code Word */}
-      <div className="phonetic-word relative z-10">
+      <div className="phonetic-word">
         {codeWord}
       </div>
       
       {/* Pronunciation */}
-      <div className="phonetic-pronunciation relative z-10">
+      <div className="phonetic-pronunciation">
         {pronunciation}
-      </div>
-      
-      {/* IPA */}
-      <div className="text-sm text-tertiary font-mono relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        [{ipa}]
       </div>
       
       {/* Audio Button */}
       <button
         onClick={handleSpeak}
         className={cn(
+          "no-print",
           "absolute top-4 right-4 p-3 rounded-lg",
           "bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm",
           "opacity-0 group-hover:opacity-100",
@@ -125,10 +117,6 @@ export function PhoneticCard({
         </svg>
       </button>
 
-      {/* Active Indicator */}
-      {isActive && (
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-amber-500 rounded-xl opacity-30 blur animate-pulse" />
-      )}
     </article>
   );
 }

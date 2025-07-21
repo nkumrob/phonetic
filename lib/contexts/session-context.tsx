@@ -31,6 +31,7 @@ interface SessionContextType {
   addConversionHistory: (item: any) => void;
   resetSession: () => void;
   getAchievementProgress: () => { [key: string]: number };
+  isSaving: boolean;
 }
 
 const defaultSession: SessionData = {
@@ -56,37 +57,79 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<SessionData>(defaultSession);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Load session from localStorage on mount
   useEffect(() => {
-    const savedSession = localStorage.getItem('phoneticSession');
-    if (savedSession) {
-      try {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const savedSession = localStorage.getItem('phoneticSession');
+      
+      if (savedSession) {
         const parsed = JSON.parse(savedSession);
         
-        // Check consecutive days
-        const lastPlayed = new Date(parsed.userProgress.lastPlayed);
-        const today = new Date();
-        const daysDiff = Math.floor((today.getTime() - lastPlayed.getTime()) / (1000 * 60 * 60 * 24));
-        
-        if (daysDiff === 1) {
-          parsed.userProgress.consecutiveDays += 1;
-        } else if (daysDiff > 1) {
-          parsed.userProgress.consecutiveDays = 1;
+        // Validate the loaded data
+        if (parsed.userProgress && typeof parsed.userProgress === 'object') {
+          // Check consecutive days
+          const lastPlayed = new Date(parsed.userProgress.lastPlayed);
+          const today = new Date();
+          const daysDiff = Math.floor((today.getTime() - lastPlayed.getTime()) / (1000 * 60 * 60 * 24));
+          
+          if (daysDiff === 1) {
+            parsed.userProgress.consecutiveDays = (parsed.userProgress.consecutiveDays || 0) + 1;
+          } else if (daysDiff > 1) {
+            parsed.userProgress.consecutiveDays = 1;
+          }
+          
+          parsed.userProgress.lastPlayed = today.toISOString();
+          
+          // Merge with default to ensure all fields exist
+          const mergedSession = {
+            ...defaultSession,
+            ...parsed,
+            userProgress: {
+              ...defaultSession.userProgress,
+              ...parsed.userProgress,
+            },
+          };
+          
+          setSession(mergedSession);
         }
-        
-        parsed.userProgress.lastPlayed = today.toISOString();
-        setSession(parsed);
-      } catch (error) {
-        console.error('Error loading session:', error);
       }
+    } catch (error) {
+      console.error('Error loading session from localStorage:', error);
+      // Don't crash the app if localStorage fails
     }
   }, []);
 
-  // Save session to localStorage on changes
+  // Track if session has been initialized from localStorage
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Save session to localStorage on changes with debouncing
   useEffect(() => {
-    localStorage.setItem('phoneticSession', JSON.stringify(session));
-  }, [session]);
+    if (typeof window === 'undefined') return;
+    
+    // Skip the first save if we haven't initialized yet
+    if (!isInitialized) {
+      setIsInitialized(true);
+      return;
+    }
+    
+    setIsSaving(true);
+    const timeoutId = setTimeout(() => {
+      try {
+        const dataToSave = JSON.stringify(session);
+        localStorage.setItem('phoneticSession', dataToSave);
+        setIsSaving(false);
+      } catch (error) {
+        console.error('Error saving session to localStorage:', error);
+        setIsSaving(false);
+      }
+    }, 500); // Debounce by 500ms
+    
+    return () => clearTimeout(timeoutId);
+  }, [session, isInitialized]);
 
   const updateProgress = (updates: Partial<UserProgress>) => {
     setSession(prev => ({
@@ -110,8 +153,21 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       newSession.userProgress.totalCorrectAnswers += result.correct;
       newSession.userProgress.totalIncorrectAnswers += result.incorrect;
       
+      // Update best streak if current is higher
       if (result.streak > newSession.userProgress.bestStreak) {
         newSession.userProgress.bestStreak = result.streak;
+      }
+      
+      // Update current streak based on quiz performance
+      if (result.incorrect === 0 && result.correct > 0) {
+        // Perfect quiz - continue or start streak
+        newSession.userProgress.currentStreak = (newSession.userProgress.currentStreak || 0) + result.correct;
+      } else if (result.correct === 0) {
+        // No correct answers - reset streak
+        newSession.userProgress.currentStreak = 0;
+      } else {
+        // Some correct - maintain but don't increase streak
+        // This is debatable - you might want to reset on any incorrect
       }
       
       // Add experience points
@@ -199,6 +255,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       addConversionHistory,
       resetSession,
       getAchievementProgress,
+      isSaving,
     }}>
       {children}
     </SessionContext.Provider>

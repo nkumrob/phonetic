@@ -6,7 +6,6 @@ import { PhoneticCard } from './phonetic-card';
 import { PhoneticCardSkeleton } from '@/components/ui/skeleton';
 
 export function AlphabetGrid() {
-  const [activeLetters, setActiveLetters] = useState<Set<string>>(new Set());
   const [speakingLetter, setSpeakingLetter] = useState<string | null>(null);
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -17,21 +16,18 @@ export function AlphabetGrid() {
     // Short delay to ensure smooth animation
     const timer = setTimeout(() => {
       setIsLoading(false);
+      // Focus the grid after loading for keyboard navigation
+      if (gridRef.current) {
+        gridRef.current.focus();
+      }
     }, 300);
     
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCardClick = (letter: string) => {
-    setActiveLetters(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(letter)) {
-        newSet.delete(letter);
-      } else {
-        newSet.add(letter);
-      }
-      return newSet;
-    });
+  const handleCardClick = (letter: string, codeWord: string) => {
+    // Just play audio on click, don't select
+    handleSpeak(letter, codeWord);
   };
 
   const handleSpeak = (letter: string, codeWord: string) => {
@@ -63,9 +59,13 @@ export function AlphabetGrid() {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Check if we're in the alphabet grid context
+      const isInGrid = gridRef.current?.contains(document.activeElement);
+      if (!isInGrid) return;
+
       const currentIndex = focusedIndex;
       const totalItems = NATO_ALPHABET.length;
-      const columnsPerRow = window.innerWidth < 640 ? 4 : 6; // Responsive columns
+      const columnsPerRow = window.innerWidth < 640 ? 3 : window.innerWidth < 1024 ? 4 : 6;
       
       switch (e.key) {
         case 'ArrowRight':
@@ -90,7 +90,7 @@ export function AlphabetGrid() {
         case ' ':
           e.preventDefault();
           if (currentIndex >= 0 && currentIndex < totalItems) {
-            handleCardClick(NATO_ALPHABET[currentIndex].letter);
+            handleCardClick(NATO_ALPHABET[currentIndex].letter, NATO_ALPHABET[currentIndex].codeWord);
           }
           break;
         case 's':
@@ -103,24 +103,27 @@ export function AlphabetGrid() {
       }
     };
 
-    // Only add listener when grid is focused
-    const grid = gridRef.current;
-    if (grid) {
-      grid.addEventListener('keydown', handleKeyDown);
-    }
+    // Add listener at document level for better keyboard navigation
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      if (grid) {
-        grid.removeEventListener('keydown', handleKeyDown);
-      }
+      document.removeEventListener('keydown', handleKeyDown);
     };
+  }, [focusedIndex]);
+
+  // Focus the card when focusedIndex changes
+  useEffect(() => {
+    const cards = gridRef.current?.querySelectorAll('.phonetic-card');
+    if (cards && cards[focusedIndex]) {
+      (cards[focusedIndex] as HTMLElement).focus();
+    }
   }, [focusedIndex]);
 
   return (
     <div className="w-full">
       <div 
         ref={gridRef}
-        className="alphabet-grid"
+        className="alphabet-grid focus:outline-none"
         tabIndex={0}
         role="grid"
         aria-label="NATO Phonetic Alphabet Grid. Use arrow keys to navigate, Enter to select, S to speak."
@@ -139,12 +142,11 @@ export function AlphabetGrid() {
               codeWord={item.codeWord}
               pronunciation={item.pronunciation}
               ipa={item.ipa}
-              isActive={activeLetters.has(item.letter)}
               isSpeaking={speakingLetter === item.letter}
               isFocused={index === focusedIndex}
               onClick={() => {
                 setFocusedIndex(index);
-                handleCardClick(item.letter);
+                handleCardClick(item.letter, item.codeWord);
               }}
               onSpeak={() => handleSpeak(item.letter, item.codeWord)}
               onFocus={() => setFocusedIndex(index)}

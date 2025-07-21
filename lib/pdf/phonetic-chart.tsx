@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
   ipa: {
     fontSize: 10,
     color: '#94A3B8',
-    fontStyle: 'italic',
     textAlign: 'center',
   },
   footer: {
