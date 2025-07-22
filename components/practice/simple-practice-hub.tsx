@@ -118,11 +118,11 @@ export function SimplePracticeHub({ onModeSelect }: SimplePracticeHubProps = {})
                     <div className={cn(
                       "w-16 h-16 rounded-lg flex items-center justify-center",
                       "border-2",
-                      mode.id === 'learn' && "bg-warmAmber-50 border-warmAmber-300 text-warmAmber-600",
-                      mode.id === 'practice' && "bg-coolBlue-50 border-coolBlue-300 text-coolBlue-600",
-                      mode.id === 'challenge' && "bg-warmNeutral-100 border-warmNeutral-400 text-warmNeutral-700"
+                      mode.id === 'learn' && "bg-warmAmber-500 border-warmAmber-600 text-white",
+                      mode.id === 'practice' && "bg-coolBlue-500 border-coolBlue-600 text-white",
+                      mode.id === 'challenge' && "bg-warmNeutral-600 border-warmNeutral-700 text-white"
                     )}>
-                      <div className="text-white">{mode.icon}</div>
+                      {mode.icon}
                     </div>
                     
                     <div>
