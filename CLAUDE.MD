@@ -19,12 +19,13 @@
 <Mandate id="1.9">Always analyze code and plan thoroughly and seek approval before implementing. STRICT rules</Mandate>
 <Mandate id="1.9">Always clear Next.js cache if applicable after each task. STRICT rules</Mandate>
 <Mandate id="1.10"> Create and update claude-memories.md to track lessons, preferences and to not repeat issues</Mandate>
-<Mandate id="1.11"> Test driven development is KEY and always test e2e scenarios including edge cases</Mandate>
+<Mandate id="1.11"> TEST DRIVEN DEVELOPMENT IS A MUST & WITH A STRICT REQUIREMENT. Always test e2e scenarios including edge cases</Mandate>
 <Mandate id="1.12"> No file should be more than 500 lines of code with no to minumum depencies-stricly limited, avoid "spiderweb". think modular and organize</Mandate>
 <Mandate id="1.13"> Always refer to claude-memories.md before and during and after tasks. Update with one-line critical memories such as changes in approach, critical fixes, new lessons, important things to note in a concise but detailed way with context. This is STRICT</Mandate>
 <Mandate id="1.14"> Take notes of old documents, code, issues, scripts or tests that cause conflicts and clean up safely.This is STRICT</Mandate>
-<Mandate id="1.15"> Always think harder and think of the best thorough plan by analyzing all important code and files first like a senior developer and architect before executing. Never assume something is working in a certain way without proof</Mandate>
-<Mandate id="1.15"> No hardcoded, temporary solutions or bandages. Think PROD, scale, secure and robust but KISS, YAGNI, DRY</Mandate>
+<Mandate id="1.15"> Always think harder and think of the best implementation plan & strategy by thoroughly analyzing the entire codebase and files first like a senior developer and architect before executing. Never assume something is working in a certain way without proof</Mandate>
+<Mandate id="1.16"> No hardcoded, temporary solutions or bandages. Think PROD, scale, secure and robust but KISS, YAGNI, DRY</Mandate>
+<Mandate id="1.16"> Don't just be chnaging code and causing regression you need to analyze and get the full picture always </Mandate>
 
 
 </BehavioralMandates>
@@ -88,6 +89,33 @@
     </corrections>
     
   </memory_bank>
+
+  ## Search & Analysis Tools Reference
+
+When helping with codebase searches, consider these tools:
+
+### File Discovery
+- **Finding files by name/type**: `fd [pattern]` 
+  - Example: `fd -e py` (all Python files)
+  - Example: `fd test` (files with 'test' in name)
+
+### Content Search
+- **Text/string search**: `rg [pattern]`
+  - Example: `rg "TODO"` (find all TODOs)
+  - Example: `rg -t py "import pandas"` (Python imports)
+
+### Structural Search
+- **Code structure patterns**: `ast-grep --pattern '[pattern]'`
+  - Example: Find all function definitions
+  - Example: Find specific API usage patterns
+
+### Data Processing
+- **JSON manipulation**: `jq '[expression]'`
+- **YAML/XML processing**: `yq '[expression]'`
+
+### Interactive Selection
+- **Multiple results**: `command | fzf`
+  - Makes selecting from results interactive
 
   <!-- Operations -->
   <ops>

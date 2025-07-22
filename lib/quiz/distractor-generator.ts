@@ -190,8 +190,8 @@ export class DistractorGenerator {
 
     // Add random NATO words from other letters
     const otherNATOWords = Array.from(this.NATO_MAP.entries())
-      .filter(([l, _]) => l !== letter)
-      .map(([_, word]) => word)
+      .filter(([l]) => l !== letter)
+      .map(([, word]) => word)
       .sort(() => Math.random() - 0.5)
       .slice(0, 3 - result.length);
     

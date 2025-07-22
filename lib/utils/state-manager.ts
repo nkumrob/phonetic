@@ -3,12 +3,46 @@
  * Prevents race conditions and ensures consistency
  */
 
-import { UserProgress } from '@/lib/types/session';
+// Define UserProgress interface locally to avoid circular dependencies
+interface UserProgress {
+  level: number;
+  experience: number;
+  bestStreak: number;
+  currentStreak: number;
+  totalCorrect: number;
+  totalAttempted: number;
+  unlockedModes: string[];
+  achievements: string[];
+  lastPlayedDate: string;
+  consecutiveDays: number;
+  quizHistory: Array<{
+    mode: string;
+    difficulty: string;
+    correct: number;
+    incorrect: number;
+    score: number;
+    streak: number;
+    averageTime?: number;
+    timestamp: string;
+  }>;
+  completedLetters: string[];
+  flashcardProgress: Record<string, number>;
+}
 
 interface StateUpdate {
   type: 'XP_UPDATE' | 'STREAK_UPDATE' | 'ACHIEVEMENT_UPDATE' | 'GOAL_UPDATE';
   timestamp: number;
-  data: any;
+  data: {
+    xp?: number;
+    streak?: number;
+    achievement?: string;
+    goalId?: string;
+    progress?: number;
+    experience?: number;
+    level?: number;
+    achievements?: string[];
+    [key: string]: unknown;
+  };
 }
 
 class GameStateManager {
@@ -62,14 +96,20 @@ class GameStateManager {
     
     switch (update.type) {
       case 'XP_UPDATE':
-        currentState.experience = update.data.experience;
-        currentState.level = update.data.level;
+        if (update.data.experience !== undefined) {
+          currentState.experience = update.data.experience;
+        }
+        if (update.data.level !== undefined) {
+          currentState.level = update.data.level;
+        }
         break;
       case 'STREAK_UPDATE':
         Object.assign(currentState, update.data);
         break;
       case 'ACHIEVEMENT_UPDATE':
-        currentState.achievements = update.data.achievements;
+        if (update.data.achievements !== undefined) {
+          currentState.achievements = update.data.achievements;
+        }
         break;
       case 'GOAL_UPDATE':
         // Goal updates handled separately

@@ -8,26 +8,26 @@ import { Icons } from '@/components/ui/icons';
 export default function ToolsPageClient() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="hero-content py-16">
-        <h1 className="h1 text-center mb-4">
-          Phonetic <span className="text-gradient">Tools</span>
+      {/* Hero Section - Mobile Optimized */}
+      <section className="container mx-auto px-4 py-8 sm:py-16">
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-headlines text-center mb-4">
+          Phonetic Tools
         </h1>
-        <p className="hero-description text-center max-w-2xl mx-auto">
+        <p className="text-lg sm:text-xl text-secondary text-center max-w-2xl mx-auto">
           Convert text and lookup NATO phonetic code words instantly with our professional-grade tools
         </p>
       </section>
 
-      <div className="container max-w-6xl mx-auto">
+      <div className="container max-w-6xl mx-auto px-4">
         {/* Text Converter Section */}
-        <section className="mb-24">
-          <div className="card card-interactive p-8 lg:p-12">
-            <div className="text-center mb-10">
-              <div className="feature-icon mx-auto mb-4 text-primary">
-                <Icons.convert size={48} />
+        <section className="mb-12 sm:mb-24">
+          <div className="bg-background border-2 border-border rounded-xl p-6 sm:p-8 lg:p-12 hover:border-primary hover:shadow-lg transition-all duration-200">
+            <div className="text-center mb-8 sm:mb-10">
+              <div className="w-16 h-16 bg-coolBlue-50 dark:bg-coolBlue-900/20 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                <Icons.convert size={32} className="text-coolBlue-500" />
               </div>
-              <h2 className="h3 mb-3">Text to Phonetic Converter</h2>
-              <p className="text-body-lg text-secondary max-w-2xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-black tracking-largeText mb-3">Text to Phonetic Converter</h2>
+              <p className="text-base sm:text-lg text-secondary max-w-2xl mx-auto">
                 Transform any text into NATO phonetic alphabet spelling for clear communication
               </p>
             </div>
@@ -38,14 +38,14 @@ export default function ToolsPageClient() {
         </section>
 
         {/* Reverse Lookup Section */}
-        <section className="mb-24">
-          <div className="card card-interactive p-8 lg:p-12">
-            <div className="text-center mb-10">
-              <div className="feature-icon mx-auto mb-4 text-primary">
-                <Icons.search size={48} />
+        <section className="mb-12 sm:mb-24">
+          <div className="bg-background border-2 border-border rounded-xl p-6 sm:p-8 lg:p-12 hover:border-primary hover:shadow-lg transition-all duration-200">
+            <div className="text-center mb-8 sm:mb-10">
+              <div className="w-16 h-16 bg-warmAmber-50 dark:bg-warmAmber-900/20 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                <Icons.search size={32} className="text-warmAmber-600" />
               </div>
-              <h2 className="h3 mb-3">Reverse Lookup</h2>
-              <p className="text-body-lg text-secondary max-w-2xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl font-black tracking-largeText mb-3">Reverse Lookup</h2>
+              <p className="text-base sm:text-lg text-secondary max-w-2xl mx-auto">
                 Find letters by searching for their phonetic code words with intelligent fuzzy matching
               </p>
             </div>
@@ -55,10 +55,10 @@ export default function ToolsPageClient() {
           </div>
         </section>
 
-        {/* Additional Features */}
-        <section className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="card p-6">
-            <h3 className="text-xl font-semibold mb-3">Quick Tips</h3>
+        {/* Additional Features - Mobile Responsive */}
+        <section className="grid sm:grid-cols-2 gap-4 sm:gap-8 mb-16">
+          <div className="bg-background border-2 border-border rounded-xl p-6 hover:shadow-md transition-all duration-200">
+            <h3 className="text-2xl font-bold tracking-largeText mb-3">Quick Tips</h3>
             <ul className="space-y-2 text-secondary">
               <li className="flex items-start gap-2">
                 <Icons.checkCircle size={20} className="text-green-500 mt-0.5 flex-shrink-0" />
@@ -75,19 +75,19 @@ export default function ToolsPageClient() {
             </ul>
           </div>
 
-          <div className="card p-6">
-            <h3 className="text-xl font-semibold mb-3">Common Uses</h3>
+          <div className="bg-background border-2 border-border rounded-xl p-6 hover:shadow-md transition-all duration-200">
+            <h3 className="text-2xl font-bold tracking-largeText mb-3">Common Uses</h3>
             <ul className="space-y-2 text-secondary">
               <li className="flex items-start gap-2">
-                <span className="text-blue-500 mt-1">•</span>
+                <span className="text-coolBlue-500 mt-1">•</span>
                 <span>Spelling names over the phone or radio</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-blue-500 mt-1">•</span>
+                <span className="text-coolBlue-500 mt-1">•</span>
                 <span>Communicating serial numbers clearly</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-blue-500 mt-1">•</span>
+                <span className="text-coolBlue-500 mt-1">•</span>
                 <span>Professional aviation and maritime communications</span>
               </li>
             </ul>

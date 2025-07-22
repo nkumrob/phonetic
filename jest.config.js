@@ -13,14 +13,43 @@ const customJestConfig = {
     '^@/components/(.*)$': '<rootDir>/components/$1',
     '^@/lib/(.*)$': '<rootDir>/lib/$1',
     '^@/app/(.*)$': '<rootDir>/app/$1',
+    '^@/tests/(.*)$': '<rootDir>/__tests__/$1',
   },
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   collectCoverageFrom: [
     'components/**/*.{js,jsx,ts,tsx}',
     'lib/**/*.{js,jsx,ts,tsx}',
+    'app/**/*.{js,jsx,ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
+    '!**/.next/**',
+    '!**/coverage/**',
+    '!**/__tests__/**',
+    '!**/templates/**',
   ],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
+    },
+  },
+  testMatch: [
+    '**/__tests__/**/*.(test|spec).[jt]s?(x)',
+    '**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname',
+  ],
+  globals: {
+    'ts-jest': {
+      tsconfig: {
+        jsx: 'react',
+      },
+    },
+  },
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

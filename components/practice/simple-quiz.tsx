@@ -266,13 +266,13 @@ export function SimpleQuiz({ mode, onComplete }: SimpleQuizProps) {
 
   if (!isQuizActive && questionNumber === 0) {
     return (
-      <div className="max-w-2xl mx-auto text-center space-y-6">
-        <h2 className="text-3xl font-bold">
+      <div className="max-w-2xl mx-auto space-y-8">
+        <h2 className="text-5xl font-black tracking-headlines">
           {mode === 'practice' ? 'Practice Quiz' : 'Challenge Quiz'}
         </h2>
         
-        <div className="space-y-4 text-left max-w-md mx-auto">
-          <div className="p-4 bg-muted rounded-lg">
+        <div className="space-y-4">
+          <div className="p-6 bg-background border-2 border-border rounded-xl">
             <h3 className="font-semibold mb-2">Quiz Rules:</h3>
             <ul className="space-y-1 text-sm">
               <li>• {totalQuestions} questions</li>
@@ -283,7 +283,7 @@ export function SimpleQuiz({ mode, onComplete }: SimpleQuizProps) {
           </div>
         </div>
         
-        <Button size="lg" onClick={startQuiz}>
+        <Button size="xl" onClick={startQuiz} className="mt-8">
           Start Quiz
         </Button>
       </div>
@@ -296,34 +296,34 @@ export function SimpleQuiz({ mode, onComplete }: SimpleQuizProps) {
     const duration = Math.round((Date.now() - quizStartTime) / 1000);
     
     return (
-      <div className="max-w-2xl mx-auto text-center space-y-6">
-        <h2 className="text-3xl font-bold">Quiz Complete!</h2>
+      <div className="max-w-2xl mx-auto space-y-8">
+        <h2 className="text-5xl font-black tracking-headlines text-center">Quiz Complete!</h2>
         
         <div className={cn(
-          "text-6xl font-bold",
-          passed ? "text-green-600" : "text-red-600"
+          "text-8xl font-black text-center tracking-headlines",
+          passed ? "text-success" : "text-error"
         )}>
           {accuracy}%
         </div>
         
-        <div className="text-xl">
-          {passed ? '✅ PASSED' : '❌ FAILED'}
+        <div className="text-2xl font-bold text-center">
+          {passed ? 'PASSED' : 'FAILED'}
         </div>
         
         <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto">
-          <div className="p-4 bg-muted rounded-lg">
-            <div className="text-2xl font-bold">{correctAnswers}/{totalQuestions}</div>
-            <div className="text-sm text-muted-foreground">Correct</div>
+          <div className="p-6 bg-background border-2 border-border rounded-xl">
+            <div className="text-3xl font-black">{correctAnswers}/{totalQuestions}</div>
+            <div className="text-base text-secondary">Correct</div>
           </div>
-          <div className="p-4 bg-muted rounded-lg">
-            <div className="text-2xl font-bold">{formatTime(duration)}</div>
-            <div className="text-sm text-muted-foreground">Time</div>
+          <div className="p-6 bg-background border-2 border-border rounded-xl">
+            <div className="text-3xl font-black">{formatTime(duration)}</div>
+            <div className="text-base text-secondary">Time</div>
           </div>
         </div>
         
         {!passed && (
-          <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg max-w-md mx-auto">
-            <p className="text-sm">
+          <div className="p-6 bg-warmAmber-50 dark:bg-warmAmber-900/20 border-2 border-warmAmber-200 rounded-xl max-w-md mx-auto">
+            <p className="text-base text-secondary">
               You need {passingScore}% to pass. Keep practicing!
             </p>
           </div>

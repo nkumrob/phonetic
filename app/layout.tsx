@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './premium-design.css';
-import { Header } from '@/components/layout/header';
+import { SimpleHeader } from '@/components/layout/simple-header';
 import { generateMetadata, structuredData } from '@/lib/seo/metadata';
-import { SessionProvider } from '@/lib/contexts/session-context';
-import { UnifiedStateProvider } from '@/lib/contexts/unified-state-context';
-import { SaveIndicator } from '@/components/ui/save-indicator';
+import { SimpleAppProvider } from '@/lib/contexts/simple-app-context';
 
 export const metadata: Metadata = generateMetadata();
 
@@ -21,17 +19,14 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <UnifiedStateProvider>
-          <SessionProvider>
-            <div className="min-h-screen bg-background">
-              <Header />
-              <main className="container mx-auto px-4 py-8">
-                {children}
-              </main>
-              <SaveIndicator />
-            </div>
-          </SessionProvider>
-        </UnifiedStateProvider>
+        <SimpleAppProvider>
+          <div className="min-h-screen bg-background">
+            <SimpleHeader />
+            <main className="flex-1">
+              {children}
+            </main>
+          </div>
+        </SimpleAppProvider>
       </body>
     </html>
   );

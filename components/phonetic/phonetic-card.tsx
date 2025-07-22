@@ -7,9 +7,7 @@ interface PhoneticCardProps {
   letter: string;
   codeWord: string;
   pronunciation: string;
-  ipa: string;
   isSpeaking?: boolean;
-  isFocused?: boolean;
   onClick: () => void;
   onSpeak: () => void;
   onFocus?: () => void;
@@ -19,9 +17,7 @@ export function PhoneticCard({
   letter,
   codeWord,
   pronunciation,
-  ipa,
   isSpeaking = false,
-  isFocused = false,
   onClick,
   onSpeak,
   onFocus,
@@ -56,8 +52,6 @@ export function PhoneticCard({
         }
       }}
     >
-      {/* Background Gradient on Hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-blue-500/0 to-amber-500/0 group-hover:from-blue-500/10 group-hover:via-transparent group-hover:to-amber-500/10 rounded-xl transition-all duration-500" />
       
       {/* Letter */}
       <div className="phonetic-letter">

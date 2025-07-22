@@ -12,13 +12,13 @@ export const metadata: Metadata = baseGenerateMetadata(
 
 export default function LearnPage() {
   return (
-    <div className="space-y-16">
-      {/* Hero Section */}
-      <section className="text-center py-8">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+    <div className="container mx-auto px-4 space-y-16 py-8">
+      {/* Hero Section - Mobile Optimized */}
+      <section className="space-y-4">
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-headlines leading-none">
           Learn the NATO Alphabet
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-lg sm:text-xl text-secondary max-w-2xl">
           Master each letter with interactive cards, audio pronunciation, and helpful mnemonics
         </p>
       </section>
@@ -30,12 +30,12 @@ export default function LearnPage() {
         </ErrorBoundary>
       </section>
 
-      {/* Download Section */}
-      <section className="text-center no-print">
-        <h2 className="text-2xl font-semibold mb-4">
+      {/* Download Section - Mobile Friendly */}
+      <section className="text-center no-print space-y-4">
+        <h2 className="text-3xl sm:text-4xl font-black tracking-largeText">
           Take It With You
         </h2>
-        <p className="text-muted-foreground mb-6">
+        <p className="text-base sm:text-lg text-secondary max-w-md mx-auto">
           Download or print a reference chart for offline use
         </p>
         <ErrorBoundary>

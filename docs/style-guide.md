@@ -1088,4 +1088,16 @@ Primary actions should use `btn-primary`. Maximum one per section.
 - Transform hover effects for tactile feedback
 ```
 
+Key Expectations
+  1. Design Token System - Create comprehensive tokens following the style guide specifications
+  2. Typography System - As directed
+  3. Color System - NO generic gradients, use warm neutral base (cream/brown,etc tones) and cool accents, proper text opacity hierarchy
+  4. Button Redesign - Following style guide with 2px borders, proper padding, transform hover effects
+  5. Card Components - Clean shadows (8px, 16px depths), proper hover states, removed excessive rounded corners
+  6. Hero Section -  Asymmetric split layout (1.2fr 1fr) following golden ratio principles
+  7. Animation System - Linear transitions with proper easing curves (easeOutCubic, easeOutBack)
+  8. Accessibility - Added WCAG AA compliant focus states, proper contrast ratios, skip links, reduced motion support
+  9. NO AI Slop - No generic gradients, excessive rounded corners, and inconsistent design patterns.
+  10. Resonsive Consistency: Apply consistently across ALL pages and components, with proper mobile optimization
+
 This system provides the mathematical precision, visual sophistication, and implementation detail needed to create consistently premium digital experiences that feel intentional rather than algorithmic.

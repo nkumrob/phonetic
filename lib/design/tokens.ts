@@ -1,5 +1,16 @@
-export const designTokens = {
-  // Typography System - Mathematical Scale
+/**
+ * Design Token System
+ * Based on the Complete AI Design Intelligence System Style Guide
+ * 
+ * Key Principles:
+ * - Typography: Inter at 900 weight for headlines, perfect fourth scale
+ * - Colors: Warm/cool balance, proper opacity hierarchy
+ * - Spacing: 8px grid system with mathematical progression
+ * - Animations: Proper easing curves, never linear
+ */
+
+export const tokens = {
+  // Typography System - Perfect Fourth Scale (1.333 ratio)
   typography: {
     fontFamily: {
       sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
@@ -27,7 +38,7 @@ export const designTokens = {
       semibold: '600',
       bold: '700',
       extrabold: '800',
-      black: '900',
+      black: '900', // Required for headlines
     },
     lineHeight: {
       none: '1',
@@ -37,74 +48,81 @@ export const designTokens = {
       relaxed: '1.625',
       loose: '2',
     },
+    // Letter spacing algorithm from style guide
     letterSpacing: {
-      tighter: '-0.05em',
-      tight: '-0.025em',
-      normal: '0em',
-      wide: '0.025em',
-      wider: '0.05em',
-      widest: '0.1em',
+      headlines: '-0.04em',    // For 48px+ headlines
+      largeText: '-0.025em',   // For 24-48px
+      bodyText: '-0.01em',     // For 16-24px
+      smallText: '0.01em',     // For 12-16px
+      widest: '0.1em',         // For uppercase labels
     },
   },
 
   // Color System with Proper Temperature Mixing
   colors: {
-    // Primary - Cool Blue
-    primary: {
-      50: '#eff6ff',
-      100: '#dbeafe',
-      200: '#bfdbfe',
-      300: '#93c5fd',
-      400: '#60a5fa',
-      500: '#3b82f6', // Main
-      600: '#2563eb',
-      700: '#1d4ed8',
-      800: '#1e40af',
-      900: '#1e3a8a',
+    // Warm Base Palette (Primary neutrals)
+    warmNeutral: {
+      50: '#FEF7ED',    // Cream
+      100: '#FEF3E2',
+      200: '#FAE5D3',
+      300: '#F8D5B4',
+      400: '#E8B68D',
+      500: '#D09062',
+      600: '#B67148',
+      700: '#925538',
+      800: '#744231',
+      900: '#5C3626',
+      950: '#3B1F14',   // Dark brown
     },
-    // Secondary - Warm Amber
-    secondary: {
-      50: '#fffbeb',
-      100: '#fef3c7',
-      200: '#fde68a',
-      300: '#fcd34d',
-      400: '#fbbf24',
-      500: '#f59e0b', // Main
-      600: '#d97706',
-      700: '#b45309',
-      800: '#92400e',
-      900: '#78350f',
+    // Cool Accent (Primary action)
+    coolBlue: {
+      50: '#EFF6FF',
+      100: '#DBEAFE',
+      200: '#BFDBFE',
+      300: '#93C5FD',
+      400: '#60A5FA',
+      500: '#3B82F6',   // Main action color
+      600: '#2563EB',
+      700: '#1D4ED8',
+      800: '#1E40AF',
+      900: '#1E3A8A',
+      950: '#172554',
     },
-    // Neutral - Gray with slight warmth
-    gray: {
-      50: '#fafaf9',
-      100: '#f5f5f4',
-      200: '#e7e5e4',
-      300: '#d6d3d1',
-      400: '#a8a29e',
-      500: '#78716c',
-      600: '#57534e',
-      700: '#44403c',
-      800: '#292524',
-      900: '#1c1917',
+    // Warm Accent (Secondary, attention)
+    warmAmber: {
+      50: '#FFFBEB',
+      100: '#FEF3C7',
+      200: '#FDE68A',
+      300: '#FCD34D',
+      400: '#FBBF24',
+      500: '#F59E0B',   // Secondary accent
+      600: '#D97706',
+      700: '#B45309',
+      800: '#92400E',
+      900: '#78350F',
     },
     // Semantic Colors
-    success: '#10b981',
-    error: '#ef4444',
-    warning: '#f59e0b',
-    info: '#3b82f6',
-    // Background Colors
-    background: {
-      primary: '#ffffff',
-      secondary: '#fafaf9',
-      tertiary: '#f5f5f4',
+    semantic: {
+      success: '#10B981',  // Green
+      error: '#EF4444',    // Red
+      warning: '#F59E0B',  // Amber
+      info: '#3B82F6',     // Blue
     },
-    // Text Colors with Proper Contrast
+    // Backgrounds - Based on warm neutrals
+    background: {
+      primary: '#FFFFFF',
+      secondary: '#FEF7ED', // warmNeutral.50
+      tertiary: '#FEF3E2',  // warmNeutral.100
+      elevated: '#FFFFFF',
+      overlay: 'rgba(28, 25, 23, 0.5)',
+    },
+    // Text - Proper opacity hierarchy
     text: {
-      primary: '#1c1917',    // ~95% opacity
-      secondary: '#44403c',   // ~70% opacity
-      tertiary: '#78716c',    // ~50% opacity
-      disabled: '#a8a29e',    // ~30% opacity
+      primary: 'rgba(28, 25, 23, 1)',      // 100% warmNeutral.900
+      secondary: 'rgba(28, 25, 23, 0.7)',  // 70%
+      tertiary: 'rgba(28, 25, 23, 0.5)',   // 50%
+      disabled: 'rgba(28, 25, 23, 0.3)',   // 30%
+      inverse: 'rgba(255, 255, 255, 0.95)',
     },
   },
 
@@ -155,37 +173,44 @@ export const designTokens = {
     full: '9999px',
   },
 
-  // Shadows with Proper Layering
+  // Shadow System - Z-axis layering with 8px, 16px, 32px depths
   shadows: {
-    sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-    md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    sm: '0 1px 3px rgba(0, 0, 0, 0.1)',
+    DEFAULT: '0 2px 8px rgba(0, 0, 0, 0.08)',
+    md: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    lg: '0 8px 25px rgba(0, 0, 0, 0.15)',
+    xl: '0 12px 40px rgba(0, 0, 0, 0.18)',
     '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+    // Interactive states
+    hover: '0 4px 12px rgba(0, 0, 0, 0.15)',
+    active: '0 2px 6px rgba(0, 0, 0, 0.1)',
+    focus: '0 0 0 3px rgba(59, 130, 246, 0.1)',
     inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
     none: 'none',
   },
 
-  // Animation Timing Functions
+  // Animation System - Proper easing curves from style guide
   animations: {
     timing: {
-      default: 'cubic-bezier(0.4, 0, 0.2, 1)',
-      linear: 'linear',
-      in: 'cubic-bezier(0.4, 0, 1, 1)',
-      out: 'cubic-bezier(0, 0, 0.2, 1)',
-      'in-out': 'cubic-bezier(0.4, 0, 0.2, 1)',
-      'out-back': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-      'out-expo': 'cubic-bezier(0.19, 1, 0.22, 1)',
+      // Primary timing functions
+      easeOutQuad: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      easeOutCubic: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
+      easeInOutCubic: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
+      easeOutBack: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+      easeOutExpo: 'cubic-bezier(0.19, 1, 0.22, 1)',
+      // Fallback timing
+      default: 'cubic-bezier(0.215, 0.61, 0.355, 1)', // easeOutCubic
+      linear: 'linear', // Avoid except for continuous animations
     },
     duration: {
-      '75': '75ms',
-      '100': '100ms',
-      '150': '150ms',
-      '200': '200ms',
-      '300': '300ms',
-      '500': '500ms',
-      '700': '700ms',
-      '1000': '1000ms',
+      75: '75ms',
+      100: '100ms',
+      150: '150ms',
+      200: '200ms',
+      300: '300ms',
+      500: '500ms',
+      700: '700ms',
+      1000: '1000ms',
     },
   },
 
@@ -214,4 +239,31 @@ export const designTokens = {
     popover: '1060',
     tooltip: '1070',
   },
+} as const;
+
+// Helper functions
+
+// Golden ratio for layouts
+export const goldenRatio = 1.618;
+
+// Get golden ratio grid columns
+export const getGoldenSplit = (reverse = false) => 
+  reverse ? `${goldenRatio}fr 1fr` : `1fr ${goldenRatio}fr`;
+
+// Get proper text opacity based on hierarchy
+export const getTextOpacity = (level: 'primary' | 'secondary' | 'tertiary' | 'disabled', isDark = false) => {
+  const lightOpacities = { primary: 1, secondary: 0.7, tertiary: 0.5, disabled: 0.3 };
+  const darkOpacities = { primary: 0.95, secondary: 0.75, tertiary: 0.55, disabled: 0.35 };
+  return isDark ? darkOpacities[level] : lightOpacities[level];
 };
+
+// Get proper letter spacing based on font size
+export const getLetterSpacing = (fontSize: number) => {
+  if (fontSize >= 48) return tokens.typography.letterSpacing.headlines; // -0.04em
+  if (fontSize >= 24) return tokens.typography.letterSpacing.largeText; // -0.025em
+  if (fontSize >= 16) return tokens.typography.letterSpacing.bodyText;  // -0.01em
+  return tokens.typography.letterSpacing.smallText; // 0.01em
+};
+
+// Default export for convenience
+export default tokens;

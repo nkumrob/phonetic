@@ -9,7 +9,13 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --maxWorkers=2",
+    "test:debug": "node --inspect-brk ./node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config jest.e2e.config.js",
+    "test:unit": "jest --testPathPattern='/__tests__/.*\\.test\\.[jt]sx?$'",
+    "test:integration": "jest --testPathPattern='/__tests__/.*\\.integration\\.test\\.[jt]sx?$'",
+    "precommit": "npm test -- --passWithNoTests --watchAll=false && npm run lint"
   },
   "dependencies": {
     "@fontsource/bebas-neue": "^5.2.6",
@@ -27,6 +33,7 @@
     "@eslint/eslintrc": "^3",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -35,7 +42,9 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.2",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.0.11",
     "jest": "^30.0.4",
+    "jest-axe": "^9.0.0",
     "jest-environment-jsdom": "^30.0.4",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",

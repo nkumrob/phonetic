@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { PhoneticCard } from './phonetic-card';
 import { PhoneticCardSkeleton } from '@/components/ui/skeleton';
@@ -26,12 +26,7 @@ export function AlphabetGrid() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCardClick = (letter: string, codeWord: string) => {
-    // Just play audio on click, don't select
-    handleSpeak(letter, codeWord);
-  };
-
-  const handleSpeak = (letter: string, codeWord: string) => {
+  const handleSpeak = useCallback((letter: string, codeWord: string) => {
     setSpeakingLetter(letter);
     
     // Use centralized speech manager that respects global settings
@@ -39,7 +34,12 @@ export function AlphabetGrid() {
     
     // Reset speaking state after a reasonable time
     setTimeout(() => setSpeakingLetter(null), 1500);
-  };
+  }, []);
+
+  const handleCardClick = useCallback((letter: string, codeWord: string) => {
+    // Just play audio on click, don't select
+    handleSpeak(letter, codeWord);
+  }, [handleSpeak]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -94,7 +94,7 @@ export function AlphabetGrid() {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focusedIndex]);
+  }, [focusedIndex, handleCardClick, handleSpeak]);
 
   // Focus the card when focusedIndex changes
   useEffect(() => {
@@ -126,9 +126,7 @@ export function AlphabetGrid() {
               letter={item.letter}
               codeWord={item.codeWord}
               pronunciation={item.pronunciation}
-              ipa={item.ipa}
               isSpeaking={speakingLetter === item.letter}
-              isFocused={index === focusedIndex}
               onClick={() => {
                 setFocusedIndex(index);
                 handleCardClick(item.letter, item.codeWord);
@@ -140,12 +138,23 @@ export function AlphabetGrid() {
         )}
       </div>
       
-      {/* Keyboard shortcuts guide */}
-      <div className="mt-6 text-center text-sm text-muted-foreground keyboard-shortcuts no-print">
-        <p>
-          <kbd className="px-2 py-1 bg-muted rounded text-xs">←→↑↓</kbd> Navigate • 
-          <kbd className="px-2 py-1 bg-muted rounded text-xs ml-2">Enter</kbd> Select • 
-          <kbd className="px-2 py-1 bg-muted rounded text-xs ml-2">S</kbd> Speak
+      {/* Keyboard shortcuts guide - Mobile friendly */}
+      <div className="mt-6 text-center text-sm text-secondary keyboard-shortcuts no-print">
+        <p className="flex flex-wrap justify-center items-center gap-2">
+          <span className="flex items-center gap-1">
+            <kbd className="px-2 py-1 bg-muted rounded-md text-xs font-mono">←→↑↓</kbd> 
+            <span>Navigate</span>
+          </span>
+          <span className="text-tertiary">•</span>
+          <span className="flex items-center gap-1">
+            <kbd className="px-2 py-1 bg-muted rounded-md text-xs font-mono">Enter</kbd> 
+            <span>Select</span>
+          </span>
+          <span className="text-tertiary">•</span>
+          <span className="flex items-center gap-1">
+            <kbd className="px-2 py-1 bg-muted rounded-md text-xs font-mono">S</kbd> 
+            <span>Speak</span>
+          </span>
         </p>
       </div>
     </div>

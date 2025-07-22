@@ -20,26 +20,26 @@ export default function Error({
       <div className="text-center space-y-6 max-w-md">
         {/* Error in phonetic */}
         <div className="space-y-2">
-          <h1 className="text-5xl font-bold text-error">Error</h1>
-          <p className="text-xl text-muted-foreground">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-headlines text-error">Error</h1>
+          <p className="text-lg sm:text-xl text-secondary">
             Echo - Romeo - Romeo - Oscar - Romeo
           </p>
         </div>
         
         {/* Message */}
         <div className="space-y-2">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-2xl sm:text-3xl font-black tracking-largeText">
             Something went wrong!
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-secondary">
             An unexpected error occurred. Please try again or contact support if the problem persists.
           </p>
         </div>
         
         {/* Error details (only in development) */}
         {process.env.NODE_ENV === 'development' && error.message && (
-          <div className="bg-muted p-4 rounded-md text-left">
-            <p className="text-sm font-mono text-muted-foreground">
+          <div className="bg-warmNeutral-100 dark:bg-warmNeutral-900 p-4 rounded-xl border-2 border-border text-left">
+            <p className="text-sm font-mono text-secondary">
               {error.message}
             </p>
           </div>

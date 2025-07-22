@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { generateMetadata as baseGenerateMetadata } from '@/lib/seo/metadata';
-import PracticeClient from './practice-client';
+import SimplePracticeClient from './simple-practice-client';
 
 export const metadata: Metadata = baseGenerateMetadata(
   'Practice NATO Phonetic Alphabet',
@@ -9,5 +9,5 @@ export const metadata: Metadata = baseGenerateMetadata(
 );
 
 export default function PracticePage() {
-  return <PracticeClient />;
+  return <SimplePracticeClient />;
 }

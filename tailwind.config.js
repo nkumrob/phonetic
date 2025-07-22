@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const { tokens } = require('./lib/design/tokens');
+
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -8,12 +10,15 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      // Use design tokens for consistent theming
       colors: {
+        // Map CSS variables for dynamic theming
         border: 'rgb(var(--border) / <alpha-value>)',
         input: 'rgb(var(--input) / <alpha-value>)',
         ring: 'rgb(var(--ring) / <alpha-value>)',
         background: 'rgb(var(--background) / <alpha-value>)',
         foreground: 'rgb(var(--foreground) / <alpha-value>)',
+        // Primary color system
         primary: {
           DEFAULT: 'rgb(var(--primary) / <alpha-value>)',
           foreground: 'rgb(var(--primary-foreground) / <alpha-value>)',
@@ -30,37 +35,30 @@ module.exports = {
           DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
           foreground: 'rgb(var(--accent-foreground) / <alpha-value>)',
         },
-        success: 'rgb(var(--success) / <alpha-value>)',
-        error: 'rgb(var(--error) / <alpha-value>)',
-        warning: 'rgb(var(--warning) / <alpha-value>)',
-        surface: {
-          light: '#f8fafc',
-          dark: '#1e293b',
-        },
+        // Import color tokens
+        warmNeutral: tokens.colors.warmNeutral,
+        coolBlue: tokens.colors.coolBlue,
+        warmAmber: tokens.colors.warmAmber,
+        // Semantic colors
+        success: tokens.colors.semantic.success,
+        error: tokens.colors.semantic.error,
+        warning: tokens.colors.semantic.warning,
+        info: tokens.colors.semantic.info,
       },
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
-        military: ['Bebas Neue', 'sans-serif'],
-      },
-      fontSize: {
-        'phonetic-lg': ['3rem', { lineHeight: '1.2', letterSpacing: '0.02em' }],
-        'phonetic-xl': ['4rem', { lineHeight: '1.1', letterSpacing: '0.02em' }],
-      },
-      borderRadius: {
-        card: '0.75rem',
-      },
-      gridTemplateColumns: {
-        'alphabet': 'repeat(auto-fit, minmax(80px, 1fr))',
-        'alphabet-lg': 'repeat(auto-fit, minmax(100px, 1fr))',
-      },
-      boxShadow: {
-        'card': '0 2px 8px rgba(0, 0, 0, 0.08)',
-        'card-hover': '0 4px 16px rgba(0, 0, 0, 0.12)',
-      },
+      fontFamily: tokens.typography.fontFamily,
+      fontSize: tokens.typography.fontSize,
+      fontWeight: tokens.typography.fontWeight,
+      letterSpacing: tokens.typography.letterSpacing,
+      lineHeight: tokens.typography.lineHeight,
+      spacing: tokens.spacing,
+      borderRadius: tokens.borderRadius,
+      boxShadow: tokens.shadows,
       animation: {
-        'fade-in': 'fadeIn 0.3s ease-in-out',
-        'slide-up': 'slideUp 0.3s ease-out',
+        // Define animations using proper timing functions
+        'fade-in': `fadeIn ${tokens.animations.duration[300]} ${tokens.animations.timing.easeOutCubic}`,
+        'slide-up': `slideUp ${tokens.animations.duration[300]} ${tokens.animations.timing.easeOutCubic}`,
+        'scale-in': `scaleIn ${tokens.animations.duration[200]} ${tokens.animations.timing.easeOutBack}`,
+        'lift': `lift ${tokens.animations.duration[200]} ${tokens.animations.timing.easeOutCubic}`,
       },
       keyframes: {
         fadeIn: {
@@ -68,10 +66,22 @@ module.exports = {
           '100%': { opacity: '1' },
         },
         slideUp: {
-          '0%': { transform: 'translateY(10px)', opacity: '0' },
+          '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
+        scaleIn: {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        lift: {
+          '0%': { transform: 'translateY(0)', boxShadow: tokens.shadows.DEFAULT },
+          '100%': { transform: 'translateY(-2px)', boxShadow: tokens.shadows.hover },
+        },
       },
+      transitionTimingFunction: tokens.animations.timing,
+      transitionDuration: tokens.animations.duration,
+      screens: tokens.breakpoints,
+      zIndex: tokens.zIndex,
     },
   },
   plugins: [],
