@@ -55,6 +55,36 @@ export default function ToolsPageClient() {
           </div>
         </section>
 
+        {/* PDF Download Section */}
+        <section className="mb-12 sm:mb-24">
+          <div className="bg-background border-2 border-border rounded-xl p-6 sm:p-8 lg:p-12 hover:border-primary hover:shadow-lg transition-all duration-200">
+            <div className="text-center mb-8 sm:mb-10">
+              <div className="w-16 h-16 bg-green-50 dark:bg-green-900/20 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                <Icons.download size={32} className="text-green-600" />
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-black tracking-largeText mb-3">Printable PDF & Download</h2>
+              <p className="text-base sm:text-lg text-secondary max-w-2xl mx-auto mb-8">
+                Download a professional NATO phonetic alphabet reference chart for offline use
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a 
+                  href="/api/pdf" 
+                  download="nato-phonetic-alphabet.html"
+                  className="btn btn-primary btn-lg inline-flex items-center gap-2"
+                >
+                  <Icons.download size={20} />
+                  Download PDF Chart
+                </a>
+                <div className="text-sm text-secondary">
+                  <p>• Professional A4 format</p>
+                  <p>• Clear pronunciation guide</p>
+                  <p>• Print-ready design</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Additional Features - Mobile Responsive */}
         <section className="grid sm:grid-cols-2 gap-4 sm:gap-8 mb-16">
           <div className="bg-background border-2 border-border rounded-xl p-6 hover:shadow-md transition-all duration-200">

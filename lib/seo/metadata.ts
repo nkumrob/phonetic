@@ -1,18 +1,29 @@
 import { Metadata } from 'next';
 
 export const siteConfig = {
-  name: 'NATO Phonetic Alphabet',
-  title: 'NATO Phonetic Alphabet - Learn Military & Aviation Radio Code',
-  description: 'Master the NATO phonetic alphabet (Alpha, Bravo, Charlie) with our interactive learning tool. Features audio pronunciation, converter, and printable charts.',
+  name: 'phoneticalphabet.com',
+  title: 'phoneticalphabet.com | NATO Phonetic Alphabet (A to Z) | Pronunciation & Chart',
+  description: 'Learn the NATO phonetic alphabet on phoneticalphabet.com: A–Z list, pronunciation guide, printable PDF, and interactive translator. Perfect for pilots, military, telecoms, and radio enthusiasts.',
   url: 'https://phoneticalphabet.com',
   author: 'Phonetic Alphabet Learning Platform',
   keywords: [
-    'NATO phonetic alphabet',
+    'nato phonetic',
+    'phonetic alphabet',
     'military alphabet',
+    'nato alphabet',
+    'nato phonetic alphabet',
+    'nato phonetic alphabet code',
+    'nato phonetic alphabet list',
+    'nato phonetic alphabet pdf',
+    'nato phonetic alphabet pronunciation',
+    'how to use nato phonetic alphabet',
+    'british phonetic alphabet',
+    'police phonetic alphabet',
+    'international phonetic alphabet',
+    'phonetic alphabet chart',
+    'alpha bravo charlie',
     'aviation alphabet',
     'radio alphabet',
-    'alpha bravo charlie',
-    'phonetic spelling',
     'ICAO alphabet',
     'spelling alphabet',
     'phonetic converter',
@@ -24,7 +35,7 @@ export const siteConfig = {
     siteName: 'NATO Phonetic Alphabet',
     images: [
       {
-        url: '/og-image.png',
+        url: '/api/og',
         width: 1200,
         height: 630,
         alt: 'NATO Phonetic Alphabet - Interactive Learning Tool'

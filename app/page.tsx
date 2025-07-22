@@ -19,7 +19,7 @@ export default function Home() {
               </div>
               
               <h1 className="text-7xl lg:text-8xl font-black tracking-headlines leading-none animate-slide-up">
-                Master the <span className="text-coolBlue-500">NATO Phonetic</span> Alphabet
+                NATO Phonetic Alphabet: A to Z
               </h1>
               
               <p className="text-xl text-secondary leading-relaxed max-w-2xl animate-slide-up" style={{ animationDelay: '100ms' }}>
@@ -72,10 +72,11 @@ export default function Home() {
       {/* Features Section with Cards */}
       <section className="container py-24">
         <div className="text-center mb-16">
-          <h2 className="h2 mb-4">Everything You Need to Master Phonetic Communication</h2>
+          <h2 className="h2 mb-4">What Is the NATO Phonetic Alphabet?</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto">
-            Comprehensive tools and interactive features designed to help you learn, practice, and perfect 
-            the NATO phonetic alphabet with confidence.
+            The NATO phonetic alphabet is a standardized set of 26 code words used to clearly communicate
+            letters over radio and telephone. Each letter from A to Z is assigned a specific word (Alpha, Bravo, Charlie, etc.)
+            to eliminate confusion in voice communications.
           </p>
         </div>
 
@@ -211,9 +212,9 @@ export default function Home() {
       {/* Quick Reference Preview */}
       <section className="container py-24">
         <div className="text-center mb-12">
-          <h2 className="h3 mb-4">Quick Reference</h2>
+          <h2 className="h2 mb-4">Complete NATO Phonetic Alphabet Chart</h2>
           <p className="text-body-lg text-secondary">
-            Get a glimpse of the NATO phonetic alphabet
+            Quick reference guide to all 26 NATO phonetic code words
           </p>
         </div>
 
@@ -237,6 +238,140 @@ export default function Home() {
               <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </Link>
+        </div>
+      </section>
+
+      {/* How to Use Section */}
+      <section className="container py-24">
+        <div className="text-center mb-12">
+          <h2 className="h2 mb-4">How to Use NATO Phonetic Code</h2>
+          <p className="text-body-lg text-secondary max-w-3xl mx-auto">
+            Follow these simple steps to master phonetic communication
+          </p>
+        </div>
+        
+        <div className="max-w-3xl mx-auto">
+          <div className="space-y-6">
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-coolBlue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Learn the Alphabet</h3>
+                <p className="text-secondary">Memorize the 26 code words from Alpha to Zulu using our interactive learning tools.</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-coolBlue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Practice Pronunciation</h3>
+                <p className="text-secondary">Use our audio guides to perfect your pronunciation of each phonetic word.</p>
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-coolBlue-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+              <div>
+                <h3 className="text-xl font-bold mb-2">Apply in Communication</h3>
+                <p className="text-secondary">Spell out important information letter by letter using the code words to ensure clarity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NATO vs Military Alphabet Section */}
+      <section className="py-24 bg-warmNeutral-50 dark:bg-warmNeutral-900">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="h2 mb-4">NATO vs. Military Alphabet: Key Differences</h2>
+            <p className="text-body-lg text-secondary max-w-3xl mx-auto">
+              While often used interchangeably, the NATO phonetic alphabet is the internationally 
+              standardized version adopted by ICAO, ITU, and military organizations worldwide.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="card p-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-xl font-bold mb-4">NATO/ICAO Standard</h3>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Internationally standardized since 1956
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Used by aviation, maritime, and emergency services
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Consistent across all NATO member countries
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-4">Historical Military Variants</h3>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      Various versions used before 1956
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      Some differences in specific services
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      Now largely replaced by NATO standard
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="container py-24">
+        <div className="text-center mb-12">
+          <h2 className="h2 mb-4">Frequently Asked Questions (FAQs)</h2>
+          <p className="text-body-lg text-secondary">
+            Common questions about the NATO phonetic alphabet
+          </p>
+        </div>
+        
+        <div className="max-w-3xl mx-auto space-y-6">
+          <div className="card p-6">
+            <h3 className="text-xl font-bold mb-3">What does each letter stand for in the NATO phonetic alphabet?</h3>
+            <p className="text-secondary">The NATO phonetic alphabet assigns a code word to each letter A–Z to ensure clarity over voice channels (e.g., Alpha for A, Bravo for B, Charlie for C).</p>
+          </div>
+          
+          <div className="card p-6">
+            <h3 className="text-xl font-bold mb-3">How do I pronounce the NATO phonetic alphabet correctly?</h3>
+            <p className="text-secondary">Each code word is pronounced with emphasis on its first syllable. Listen to our audio clips or follow our phonetic pronunciation guide for precise enunciation.</p>
+          </div>
+          
+          <div className="card p-6">
+            <h3 className="text-xl font-bold mb-3">Where can I download a printable NATO phonetic alphabet PDF?</h3>
+            <p className="text-secondary">Visit our Printable PDF & Download section or click the download button in our tools section for a free, optimized PDF.</p>
+          </div>
+          
+          <div className="card p-6">
+            <h3 className="text-xl font-bold mb-3">Is there an online NATO phonetic alphabet translator?</h3>
+            <p className="text-secondary">Yes! Try our interactive translator in the Tools section: type any message and see the instant phonetic conversion in real time.</p>
+          </div>
         </div>
       </section>
 
