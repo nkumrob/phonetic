@@ -25,8 +25,8 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
   // Play sound for current letter
   const playSound = () => {
     if (state.preferences.soundEnabled) {
-      // Speak the full phrase: "A for Alpha"
-      speechManager.speak(`${currentCard.letter} for ${currentCard.codeWord}`);
+      // Speak the full phrase: "A, for Alpha" with comma for natural pause
+      speechManager.speak(`${currentCard.letter}, for ${currentCard.codeWord}`);
     }
   };
 
@@ -97,14 +97,14 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
       {/* Header */}
       <div className="text-center space-y-2">
         <h2 className="text-5xl font-black tracking-headlines">Flashcards</h2>
-        <p className="text-muted-foreground">
+        <p className="text-secondary">
           Click the card to flip • Use arrow keys to navigate
         </p>
       </div>
 
       {/* Progress */}
       <div className="space-y-2">
-        <div className="flex justify-between text-sm">
+        <div className="flex justify-between text-sm font-medium">
           <span>Card {currentIndex + 1} of {totalCards}</span>
           <span>{reviewedCount} reviewed</span>
         </div>
@@ -153,11 +153,11 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
 
           {/* Back of card */}
           <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
-            <div className="h-full p-8 rounded-xl bg-warmAmber-500 text-white shadow-lg flex flex-col items-center justify-center">
+            <div className="h-full p-8 rounded-xl bg-warmAmber-600 text-white shadow-lg flex flex-col items-center justify-center">
               <div className="text-6xl font-black mb-4 tracking-headlines">{currentCard.codeWord}</div>
               <div className="text-3xl mb-2">{currentCard.letter} for {currentCard.codeWord}</div>
-              <div className="text-xl mb-2 opacity-90">{currentCard.pronunciation}</div>
-              <div className="text-lg opacity-80">IPA: {currentCard.ipa}</div>
+              <div className="text-xl mb-2">{currentCard.pronunciation}</div>
+              <div className="text-lg">IPA: {currentCard.ipa}</div>
               
               <Button
                 variant="secondary"
@@ -166,7 +166,7 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
                   e.stopPropagation();
                   playSound();
                 }}
-                className="bg-white/10 hover:bg-white/20 border-2 border-white/30"
+                className="bg-warmNeutral-900 text-white hover:bg-warmNeutral-800 border-2 border-warmNeutral-700 mt-6"
               >
                 🔊 Play Sound
               </Button>
@@ -226,7 +226,7 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
       )}
 
       {/* Keyboard Shortcuts */}
-      <div className="text-center text-sm text-muted-foreground">
+      <div className="text-center text-sm text-secondary">
         <p>Keyboard shortcuts: Space/Enter = Flip • ← → = Navigate • P = Play sound</p>
       </div>
     </div>
