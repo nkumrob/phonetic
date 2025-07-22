@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils/cn';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { CelebrationSystem, CELEBRATION_PRESETS } from './celebration-system';
 import { useSoundEffects } from '@/lib/hooks/use-sound-effects';
+import { useSession } from '@/lib/contexts/session-context';
+import { speechManager } from '@/lib/utils/speech-synthesis';
 
 interface OnboardingStep {
   id: string;
@@ -103,11 +105,7 @@ export function OnboardingFlow({ onComplete }: { onComplete: () => void }) {
             <Button
               variant="ghost"
               onClick={() => {
-                if ('speechSynthesis' in window) {
-                  const utterance = new SpeechSynthesisUtterance('Alpha');
-                  utterance.rate = 0.8;
-                  speechSynthesis.speak(utterance);
-                }
+                speechManager.speak('Alpha', { rate: 0.8 });
               }}
               className="mx-auto"
             >
@@ -375,11 +373,14 @@ function FeatureCard({ icon, title, description }: {
 // Hook to manage onboarding state
 export function useOnboarding() {
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
+  const { session } = useSession();
   
   useEffect(() => {
     const completed = localStorage.getItem('onboardingCompleted');
-    setNeedsOnboarding(!completed);
-  }, []);
+    // Don't show onboarding if already completed OR if user has XP/progress
+    const hasProgress = session.userProgress.experience > 0 || session.userProgress.level > 1;
+    setNeedsOnboarding(!completed && !hasProgress);
+  }, [session.userProgress.experience, session.userProgress.level]);
   
   const resetOnboarding = () => {
     localStorage.removeItem('onboardingCompleted');

@@ -3,19 +3,37 @@
 import { Metadata } from 'next';
 import { useSession } from '@/lib/contexts/session-context';
 import { Achievements } from '@/components/profile/achievements';
+import { ProfileCustomization } from '@/components/profile/profile-customization';
 import { Button } from '@/components/ui';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { useState, useEffect } from 'react';
 
 export default function ProfilePage() {
   const { session, resetSession } = useSession();
+  const [userName, setUserName] = useState('');
+  const [userAvatar, setUserAvatar] = useState('🧑‍✈️');
+
+  // Load user profile data
+  useEffect(() => {
+    const savedName = localStorage.getItem('userName') || '';
+    const savedAvatar = localStorage.getItem('userAvatar') || '🧑‍✈️';
+    setUserName(savedName);
+    setUserAvatar(savedAvatar);
+  }, []);
 
   return (
     <div className="space-y-16">
       {/* Profile Header */}
       <section className="text-center py-8">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Your Profile
-        </h1>
+        <div className="mb-6">
+          <div className="text-6xl mb-3">{userAvatar}</div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2">
+            {userName || 'Your Profile'}
+          </h1>
+          {!userName && (
+            <p className="text-muted-foreground">Set your name in the settings below</p>
+          )}
+        </div>
         <div className="flex justify-center gap-8 text-center">
           <div>
             <p className="text-3xl font-bold text-primary">{session.userProgress.level}</p>
@@ -27,7 +45,7 @@ export default function ProfilePage() {
           </div>
           <div>
             <p className="text-3xl font-bold text-primary">{session.userProgress.consecutiveDays}</p>
-            <p className="text-sm text-muted-foreground">Day Streak</p>
+            <p className="text-sm text-muted-foreground">Daily Streak</p>
           </div>
         </div>
       </section>
@@ -55,6 +73,13 @@ export default function ProfilePage() {
           <p className="text-2xl font-bold text-primary">{session.userProgress.bestStreak}</p>
           <p className="text-sm text-muted-foreground">Best Streak</p>
         </div>
+      </section>
+
+      {/* Profile Customization */}
+      <section>
+        <ErrorBoundary>
+          <ProfileCustomization />
+        </ErrorBoundary>
       </section>
 
       {/* Achievements Section */}

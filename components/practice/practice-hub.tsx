@@ -273,7 +273,7 @@ export function PracticeHub({ onModeSelect }: PracticeHubProps = {}) {
                           onModeSelect(mode.id);
                         }
                       }}
-                      disabled={isLocked}
+                      disabled={!!isLocked}
                       className={cn(
                         "relative p-6 rounded-xl border-2 transition-all text-left space-y-4",
                         isLocked 

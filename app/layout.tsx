@@ -4,6 +4,7 @@ import './premium-design.css';
 import { Header } from '@/components/layout/header';
 import { generateMetadata, structuredData } from '@/lib/seo/metadata';
 import { SessionProvider } from '@/lib/contexts/session-context';
+import { UnifiedStateProvider } from '@/lib/contexts/unified-state-context';
 import { SaveIndicator } from '@/components/ui/save-indicator';
 
 export const metadata: Metadata = generateMetadata();
@@ -20,15 +21,17 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
-        <SessionProvider>
-          <div className="min-h-screen bg-background">
-            <Header />
-            <main className="container mx-auto px-4 py-8">
-              {children}
-            </main>
-            <SaveIndicator />
-          </div>
-        </SessionProvider>
+        <UnifiedStateProvider>
+          <SessionProvider>
+            <div className="min-h-screen bg-background">
+              <Header />
+              <main className="container mx-auto px-4 py-8">
+                {children}
+              </main>
+              <SaveIndicator />
+            </div>
+          </SessionProvider>
+        </UnifiedStateProvider>
       </body>
     </html>
   );

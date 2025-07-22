@@ -6,10 +6,12 @@ import { usePathname } from 'next/navigation';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useSession } from '@/lib/contexts/session-context';
 import { cn } from '@/lib/utils/cn';
+import { Settings } from 'lucide-react';
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [userAvatar, setUserAvatar] = useState('🧑‍✈️');
   const pathname = usePathname();
   const { session } = useSession();
 
@@ -20,6 +22,12 @@ export function Header() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Load user avatar
+  useEffect(() => {
+    const savedAvatar = localStorage.getItem('userAvatar') || '🧑‍✈️';
+    setUserAvatar(savedAvatar);
   }, []);
 
   const navigation = [
@@ -87,12 +95,25 @@ export function Header() {
               )}
             >
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🏆</span>
+                <span className="text-2xl">{userAvatar}</span>
                 <div className="text-sm">
                   <div className="font-semibold text-primary">Level {session.userProgress.level}</div>
                   <div className="text-xs text-secondary">{session.userProgress.experience} XP</div>
                 </div>
               </div>
+            </Link>
+
+            {/* Settings Link */}
+            <Link
+              href="/settings"
+              className={cn(
+                "p-2 rounded-lg transition-colors",
+                "hover:bg-gray-100 dark:hover:bg-gray-800",
+                pathname === '/settings' && "bg-gray-100 dark:bg-gray-800"
+              )}
+              aria-label="Settings"
+            >
+              <Settings className="w-5 h-5 text-gray-700 dark:text-gray-300" />
             </Link>
 
             <ThemeToggle />

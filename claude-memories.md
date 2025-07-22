@@ -105,3 +105,61 @@
 - **XP Calculation Bug**: XP was being subtracted during level-ups! Now store total XP, calculate level from that
 - **Multiple Streak Systems**: Quiz has session streak (resets each quiz), global streak (persistent), daily streak (goals)
 - **Race Conditions**: localStorage saves debounced 500ms can cause XP updates to overwrite each other
+- **Enhanced Flashcards**: Replaced old flashcards with gamified version - XP rewards, mastery tracking, review/test modes
+- **Flashcard Mastery System**: 0-5 star rating per letter, XP scaled by mastery level, visual progress indicators
+
+## Internationalization (i18n) Implementation (2025-01-22) - REMOVED
+- **Attempted Setup**: Implemented next-intl with [locale] routing, 5 languages, translation files
+- **Issues Found**: Language selector navigation complexity, translation overhead for simple app
+- **Decision**: Removed i18n implementation per user request - app remains English-only
+- **Key Learning**: NATO alphabet is international standard - code words don't change per language
+- **Future Option**: Can use free services like LibreTranslate API or community translations if needed
+
+## Critical Practice/Quiz System Analysis (2025-01-22)
+- **XP Display Bug**: XP bar shows total XP (600) instead of current level XP (0-99), causing impossible displays like 600/500
+- **Race Conditions**: Multiple simultaneous XP updates with 500ms debounced saves cause lost progress
+- **Failed Quiz Handling**: Failed quizzes don't save any progress, only passed quizzes are recorded
+- **Multiple Streak Types**: Session streak, best streak, current streak (unused), daily streak cause confusion
+- **Daily Goals Reset Bug**: Can reset on page refresh instead of midnight due to poor date checking
+- **State Fragmentation**: Game state split across 7+ localStorage keys instead of single source of truth
+- **Level Calculation Duplication**: Level calculated differently in session-context vs xp-calculations
+- **Missing Spaced Repetition**: SM-2 algorithm implemented but never used for adaptive learning
+- **Onboarding Repeat Bug**: Shows again if localStorage fails, no fallback check for existing progress
+- **Root Cause**: Incremental feature additions without refactoring core state management system
+
+## XP/Progress System Fixes (2025-01-22)
+- **Fixed XP Calculation**: Created centralized xp-system.ts for consistent XP calculations across components
+- **Fixed XP Display**: Now shows correct XP (e.g., "+10 XP +5 streak" not "2024 XP")
+- **Fixed Negative XP**: Wrong answers now properly deduct XP with floor of -50 (was showing 0)
+- **Fixed Onboarding Loop**: Added check for existing progress not just localStorage flag
+- **Fixed Race Conditions**: Immediate saves for XP updates, 500ms debounce for non-critical updates
+- **Fixed Failed Quiz Saves**: Quiz results now always saved for tracking, not just when passed
+- **Reduced Debounce**: From 500ms to 100ms for faster saves (later reverted to 500ms for non-XP)
+- **Key Insight**: XP updates need immediate saves, other updates can be debounced for performance
+- **Streak Consolidation**: Created unified streak types definition documenting all 5 streak systems
+- **Daily Goals Reset**: Logic is correct - uses date comparison and checks every minute
+- **Unused Code**: Spaced repetition algorithm exists but never integrated into quiz system
+
+## State Management Refactoring (2025-01-22)
+- **Created Unified State System**: Single source of truth in nato_game_state_v3
+- **Centralized Level System**: LevelSystem class handles all level calculations
+- **State Migration**: Automatic migration from 11+ localStorage keys to unified state
+- **React Hook**: useUnifiedState hook for easy component integration
+- **Type Safety**: Full TypeScript types for entire game state
+- **Immediate XP Saves**: Critical updates save immediately, others debounced
+- **Backwards Compatible**: Migration preserves all existing user data
+- **Adaptive Quiz System**: Integrated spaced repetition (SM-2) algorithm for intelligent learning
+- **Letter Memory Tracking**: Each letter tracked with interval, ease factor, and performance
+- **Context Variation**: Questions adapt type based on user performance (audio, visual, spelling)
+- **Migration Layer**: useSessionCompat provides backwards compatibility during transition
+- **SSR Fix**: Added window checks to prevent localStorage access on server side
+- **Level Calculation Fix**: Removed duplicate level calculation in addQuizResult that was subtracting XP
+- **Reset Progress Fix**: Added clearing of nato_game_state_v3 to resetSession function
+- **Hydration Error Fix**: Added isClient checks to prevent server/client mismatches in PracticeHubV2
+- **Streak Systems Analysis**: Found 5 different streak types: sessionStreak (per quiz), globalBestStreak, dailyPracticeStreak, dailyGoalStreak, currentStreak (deprecated)
+- **Streak Display Components**: StreakDisplay component with fire animations, StreakCalendar for daily tracking
+- **Streak Storage**: globalBestStreak in stats, dailyPracticeStreak in stats, dailyGoalStreak in daily goals localStorage, sessionStreak temporary per quiz
+- **Streak Achievements**: streakMaster (20 streak), dailyPlayer (7 days), shown in profile and practice hub
+- **Potential Issues**: Multiple overlapping streak concepts may confuse users, currentStreak field deprecated but still in interfaces
+- **Sound Settings Not Reactive**: Fixed by adding React state to track settings, initialized from localStorage
+- **Speech Synthesis Volume**: Created centralized speechManager utility that respects global sound settings across all components

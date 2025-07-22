@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { PracticeHub } from '@/components/practice/practice-hub';
+import { PracticeHubV2 } from '@/components/practice/practice-hub-v2';
 import { UnifiedQuiz } from '@/components/practice/unified-quiz';
-import { Flashcards } from '@/components/learning/flashcards';
+import { EnhancedFlashcards } from '@/components/learning/enhanced-flashcards';
 import { ErrorBoundary } from '@/components/error-boundary';
 
 export default function PracticeClient() {
@@ -25,7 +25,7 @@ export default function PracticeClient() {
   if (activeMode === 'hub') {
     return (
       <ErrorBoundary>
-        <PracticeHub onModeSelect={handleModeSelect} />
+        <PracticeHubV2 onModeSelect={handleModeSelect} />
       </ErrorBoundary>
     );
   }
@@ -46,7 +46,7 @@ export default function PracticeClient() {
                 Back to Practice Hub
               </button>
             </div>
-            <Flashcards />
+            <EnhancedFlashcards />
           </div>
         )}
         

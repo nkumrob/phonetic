@@ -13,7 +13,9 @@ import {
 } from '@/components/gamification';
 import { useSoundEffects } from '@/lib/hooks/use-sound-effects';
 import { useDailyGoals } from '@/components/gamification/daily-goals';
+import { speechManager } from '@/lib/utils/speech-synthesis';
 import { DistractorGenerator, getQuizDifficulty } from '@/lib/quiz/distractor-generator';
+import { calculateCorrectAnswerXP, calculateWrongAnswerPenalty, formatXPDisplay } from '@/lib/utils/xp-system';
 
 type QuizMode = 'practice' | 'challenge';
 type QuestionType = 'letter-to-code' | 'code-to-letter' | 'audio-to-code' | 'spell-word';
@@ -131,14 +133,10 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
           points: 15 // Not used anymore, but keeping for interface compatibility
         };
         
-        // Play audio
-        if ('speechSynthesis' in window) {
-          setTimeout(() => {
-            const utterance = new SpeechSynthesisUtterance(correctItem.codeWord);
-            utterance.rate = 0.8;
-            window.speechSynthesis.speak(utterance);
-          }, 500);
-        }
+        // Play audio using centralized speech manager
+        setTimeout(() => {
+          speechManager.speak(correctItem.codeWord, { rate: 0.8 });
+        }, 500);
         break;
         
       case 'spell-word':
@@ -239,29 +237,26 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
     const isCorrect = answer === currentQuestion?.correctAnswer;
     
     if (isCorrect) {
-      // Base XP: 10 for practice, 20 for challenge
-      const baseXP = mode === 'practice' ? 10 : 20;
-      // Streak bonus for both modes (max +50 XP)
-      const streakBonus = Math.min(streak * 5, 50);
-      const totalPoints = baseXP + streakBonus;
+      // Use centralized XP calculation
+      const xpCalc = calculateCorrectAnswerXP(mode, streak);
       
-      setScore(prev => prev + totalPoints);
+      setScore(prev => prev + xpCalc.totalXP);
       setStreak(prev => prev + 1);
       setQuestionsAnswered(prev => ({ ...prev, correct: prev.correct + 1 }));
       
       // Play sound with pitch based on streak
       playCorrect(streak);
       
-      // Show XP gain animation
+      // Show XP gain animation with the TOTAL XP
       const rect = (document.activeElement as HTMLElement)?.getBoundingClientRect();
-      showXPGain(totalPoints, {
+      showXPGain(xpCalc.totalXP, {
         x: rect?.left + rect?.width / 2 || window.innerWidth / 2,
         y: rect?.top || window.innerHeight / 2,
         multiplier: streak >= 5 ? 1 + Math.floor(streak / 5) * 0.5 : undefined
       });
       
-      // Update XP immediately
-      updateProgress({ experience: session.userProgress.experience + totalPoints });
+      // Update XP immediately with TOTAL XP
+      updateProgress({ experience: session.userProgress.experience + xpCalc.totalXP });
       
       // Check for streak milestones
       const newStreak = streak + 1;
@@ -283,13 +278,16 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
       setStreak(0);
       playIncorrect();
       
-      // XP penalty for wrong answer (-3 XP, but can't go below 0)
-      const newXP = Math.max(0, session.userProgress.experience - 3);
+      // Use centralized penalty calculation
+      const penalty = calculateWrongAnswerPenalty(mode);
+      
+      // Allow negative XP but with a floor of -50
+      const newXP = Math.max(-50, session.userProgress.experience - penalty.amount);
       updateProgress({ experience: newXP });
       
       // Show XP loss animation
       const rect = (document.activeElement as HTMLElement)?.getBoundingClientRect();
-      showXPGain(-3, {
+      showXPGain(-penalty.amount, {
         x: rect?.left + rect?.width / 2 || window.innerWidth / 2,
         y: rect?.top || window.innerHeight / 2,
       });
@@ -312,6 +310,7 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
     const passRequirement = mode === 'practice' ? 70 : 80;
     const passed = accuracy >= passRequirement;
     
+    
     const result = {
       mode: mode === 'practice' ? 'practice' : 'challenge',
       difficulty: 'adaptive',
@@ -323,11 +322,11 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
       timestamp: new Date().toISOString()
     };
     
+    // Always save quiz results for tracking
+    addQuizResult(result);
+    onSessionSaved();
+    
     if (passed) {
-      // Only save result and update progress if passed
-      addQuizResult(result);
-      onSessionSaved();
-      
       // Update daily quiz goal only if passed
       updateQuizGoal();
       
@@ -382,7 +381,7 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
             <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto">
               <div className="p-4 rounded-lg bg-background border">
                 <p className="text-2xl font-bold">{accuracy}%</p>
-                <p className="text-sm text-muted-foreground">Your Score</p>
+                <p className="text-sm text-muted-foreground">Accuracy</p>
               </div>
               <div className="p-4 rounded-lg bg-background border">
                 <p className="text-2xl font-bold">{passRequirement}%</p>
@@ -397,6 +396,7 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
             <div className="text-sm text-muted-foreground space-y-1">
               <p>✓ {questionsAnswered.correct} correct answers</p>
               <p>✗ {questionsAnswered.incorrect} incorrect answers</p>
+              <p>🏆 {score} XP earned this quiz</p>
               {retryAttempt > 1 && (
                 <p className="text-orange-600">Attempt #{retryAttempt} (-{mode === 'practice' ? 5 : 10} XP penalty)</p>
               )}
@@ -456,8 +456,20 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
         </div>
         
         <div className="text-right space-y-1">
-          <p className="text-2xl font-bold">{score.toLocaleString()}</p>
-          <p className="text-sm text-muted-foreground">Score</p>
+          <p className={cn(
+            "text-2xl font-bold",
+            (() => {
+              const passThreshold = Math.ceil(totalQuestions * (mode === 'practice' ? 0.7 : 0.8));
+              if (questionsAnswered.correct >= passThreshold) return "text-green-600";
+              if (questionsAnswered.correct + (totalQuestions - questionNumber + 1) < passThreshold) return "text-red-600";
+              return "text-primary";
+            })()
+          )}>
+            {questionsAnswered.correct}/{totalQuestions}
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Correct (need {Math.ceil(totalQuestions * (mode === 'practice' ? 0.7 : 0.8))})
+          </p>
         </div>
       </div>
       
@@ -506,11 +518,7 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
               size="sm"
               className="mt-3"
               onClick={() => {
-                if ('speechSynthesis' in window) {
-                  const utterance = new SpeechSynthesisUtterance(currentQuestion.correctAnswer as string);
-                  utterance.rate = 0.8;
-                  window.speechSynthesis.speak(utterance);
-                }
+                speechManager.speak(currentQuestion.correctAnswer as string, { rate: 0.8 });
               }}
             >
               <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -580,12 +588,13 @@ export function UnifiedQuiz({ mode, onComplete, onSessionSaved }: UnifiedQuizPro
             <p className="text-lg font-semibold">
               {selectedAnswer === currentQuestion.correctAnswer 
                 ? (() => {
-                    const baseXP = mode === 'practice' ? 10 : 20;
-                    const streakBonus = Math.min(streak * 5, 50);
-                    const total = baseXP + streakBonus;
-                    return `Correct! +${total} XP${streakBonus > 0 ? ` (${baseXP} + ${streakBonus} streak)` : ''}`;
+                    const xpCalc = calculateCorrectAnswerXP(mode, streak - 1); // streak-1 because we already incremented
+                    return formatXPDisplay(xpCalc).message;
                   })()
-                : 'Incorrect (-3 XP)'}
+                : (() => {
+                    const penalty = calculateWrongAnswerPenalty(mode);
+                    return penalty.reason;
+                  })()}
             </p>
           </div>
         )}

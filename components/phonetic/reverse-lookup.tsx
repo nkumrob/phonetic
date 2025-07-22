@@ -7,6 +7,7 @@ import { searchPhoneticWords, getCommonMisspellings, type SearchResult } from '@
 import { cn } from '@/lib/utils/cn';
 import { PHONETIC_MNEMONICS } from '@/lib/constants/mnemonics';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
+import { speechManager } from '@/lib/utils/speech-synthesis';
 
 export function ReverseLookup() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -104,12 +105,8 @@ export function ReverseLookup() {
   };
 
   const handleSpeak = () => {
-    if (selectedLetter && 'speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(selectedLetter.codeWord);
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      utterance.volume = 1;
-      window.speechSynthesis.speak(utterance);
+    if (selectedLetter) {
+      speechManager.speak(selectedLetter.codeWord, { rate: 0.9 });
     }
   };
 

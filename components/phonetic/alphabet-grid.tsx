@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { PhoneticCard } from './phonetic-card';
 import { PhoneticCardSkeleton } from '@/components/ui/skeleton';
+import { speechManager } from '@/lib/utils/speech-synthesis';
 
 export function AlphabetGrid() {
   const [speakingLetter, setSpeakingLetter] = useState<string | null>(null);
@@ -33,27 +34,11 @@ export function AlphabetGrid() {
   const handleSpeak = (letter: string, codeWord: string) => {
     setSpeakingLetter(letter);
     
-    // Use browser's text-to-speech
-    if ('speechSynthesis' in window) {
-      // Chrome workaround: speak empty string first
-      const dummy = new SpeechSynthesisUtterance('');
-      window.speechSynthesis.speak(dummy);
-      
-      // Then speak actual text with a small delay
-      setTimeout(() => {
-        const utterance = new SpeechSynthesisUtterance(codeWord);
-        utterance.rate = 0.9; // Slightly slower for clarity
-        utterance.pitch = 1;
-        utterance.volume = 1;
-        
-        // Reset speaking state when done
-        utterance.onend = () => setSpeakingLetter(null);
-        utterance.onerror = () => setSpeakingLetter(null);
-        
-        // Speak the code word
-        window.speechSynthesis.speak(utterance);
-      }, 50);
-    }
+    // Use centralized speech manager that respects global settings
+    speechManager.speak(codeWord);
+    
+    // Reset speaking state after a reasonable time
+    setTimeout(() => setSpeakingLetter(null), 1500);
   };
 
   // Keyboard navigation

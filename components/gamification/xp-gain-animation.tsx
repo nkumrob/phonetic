@@ -153,7 +153,7 @@ export function useXPAnimation() {
 
   return {
     gains,
-    showXPGain: (amount: number, options?: any) => xpAnimationManager.showXPGain(amount, options),
+    showXPGain: (amount: number, options?: { x?: number; y?: number; multiplier?: number; reason?: string }) => xpAnimationManager.showXPGain(amount, options),
     clearGains: () => xpAnimationManager.clear(),
     XPGainDisplay: () => <XPGainAnimation gains={gains} onComplete={() => {}} />
   };

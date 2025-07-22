@@ -1,19 +1,20 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import { unifiedStateManager } from '@/lib/state/unified-state-manager';
 
 interface UserProgress {
   totalQuizzesTaken: number;
   totalCorrectAnswers: number;
   totalIncorrectAnswers: number;
-  bestStreak: number;
-  currentStreak: number;
+  bestStreak: number; // Global best streak across all sessions
+  currentStreak: number; // @deprecated - Not used, kept for backwards compatibility
   level: number;
   experience: number;
   achievements: string[];
   unlockedModes: string[];
   lastPlayed: string;
-  consecutiveDays: number;
+  consecutiveDays: number; // Daily practice streak (consecutive days)
 }
 
 interface QuizResult {
@@ -76,6 +77,7 @@ const SessionContext = createContext<SessionContextType | undefined>(undefined);
 export function SessionProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<SessionData>(defaultSession);
   const [isSaving, setIsSaving] = useState(false);
+  const saveQueueRef = useRef<{ updates: Partial<UserProgress>[], timeout: NodeJS.Timeout | null }>({ updates: [], timeout: null });
 
   // Load session from localStorage on mount
   useEffect(() => {
@@ -131,7 +133,19 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   // Track if session has been initialized from localStorage
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Save session to localStorage on changes with debouncing
+  // Immediate save function for critical updates
+  const saveProgressImmediately = (sessionData: SessionData) => {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const dataToSave = JSON.stringify(sessionData);
+      localStorage.setItem('phoneticSession', dataToSave);
+    } catch (error) {
+      console.error('Error saving session immediately:', error);
+    }
+  };
+  
+  // Save session to localStorage on changes with debouncing for non-critical updates
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
@@ -151,12 +165,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         console.error('Error saving session to localStorage:', error);
         setIsSaving(false);
       }
-    }, 500); // Debounce by 500ms
+    }, 500); // Regular debounce for non-critical updates
     
     return () => clearTimeout(timeoutId);
   }, [session, isInitialized]);
 
   const updateProgress = (updates: Partial<UserProgress>) => {
+    // For XP updates, save immediately to prevent race conditions
+    const isXPUpdate = 'experience' in updates;
+    
     setSession(prev => {
       const newProgress = {
         ...prev.userProgress,
@@ -197,10 +214,17 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         newProgress.experience = totalXP; // Store total XP, not remaining
       }
       
-      return {
+      const newSession = {
         ...prev,
         userProgress: newProgress,
       };
+      
+      // Save XP updates immediately
+      if (isXPUpdate) {
+        saveProgressImmediately(newSession);
+      }
+      
+      return newSession;
     });
   };
 
@@ -228,26 +252,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       // XP is now added per answer in the quiz component, not at the end
       // This prevents double XP addition and allows for proper animations
       
-      // Check for level up based on current experience
-      const xpForNextLevel = newSession.userProgress.level * 100;
-      if (newSession.userProgress.experience >= xpForNextLevel) {
-        newSession.userProgress.level += 1;
-        newSession.userProgress.experience -= xpForNextLevel;
-        
-        // Unlock new modes
-        if (newSession.userProgress.level === 3 && !newSession.userProgress.unlockedModes.includes('medium')) {
-          newSession.userProgress.unlockedModes.push('medium');
-        }
-        if (newSession.userProgress.level === 5 && !newSession.userProgress.unlockedModes.includes('hard')) {
-          newSession.userProgress.unlockedModes.push('hard');
-        }
-        if (newSession.userProgress.level === 10 && !newSession.userProgress.unlockedModes.includes('expert')) {
-          newSession.userProgress.unlockedModes.push('expert');
-        }
-        if (newSession.userProgress.level === 15 && !newSession.userProgress.unlockedModes.includes('nightmare')) {
-          newSession.userProgress.unlockedModes.push('nightmare');
-        }
-      }
+      // Level calculation is already done in updateProgress when XP is added
+      // This is redundant and can cause inconsistencies
+      // Remove this duplicate level calculation logic
       
       return newSession;
     });
@@ -282,6 +289,13 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('userName');
     localStorage.removeItem('soundEnabled');
     localStorage.removeItem('soundVolume');
+    
+    // IMPORTANT: Also clear the new unified state
+    localStorage.removeItem('nato_game_state_v3');
+    localStorage.removeItem('nato_migration_completed');
+    
+    // Reset the unified state manager instance
+    unifiedStateManager.reset();
     
     // Force immediate save of empty session
     setIsInitialized(false);

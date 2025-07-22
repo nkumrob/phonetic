@@ -3,6 +3,8 @@
  * Uses Web Audio API for low-latency, high-quality sound playback
  */
 
+import { useState, useEffect } from 'react';
+
 interface SoundConfig {
   volume?: number;
   pitch?: number;
@@ -16,9 +18,18 @@ class SoundEffectsManager {
   private masterVolume: number = 0.5;
 
   constructor() {
-    if (typeof window !== 'undefined' && 'AudioContext' in window) {
-      this.audioContext = new AudioContext();
-      this.preloadSounds();
+    if (typeof window !== 'undefined') {
+      // Load saved preferences
+      const savedEnabled = localStorage.getItem('soundEnabled');
+      const savedVolume = localStorage.getItem('soundVolume');
+      
+      this.enabled = savedEnabled === null ? true : savedEnabled === 'true';
+      this.masterVolume = savedVolume ? parseFloat(savedVolume) : 0.5;
+      
+      if ('AudioContext' in window) {
+        this.audioContext = new AudioContext();
+        this.preloadSounds();
+      }
     }
   }
 
@@ -241,10 +252,26 @@ class SoundEffectsManager {
 
   setEnabled(enabled: boolean) {
     this.enabled = enabled;
+    // Save to localStorage immediately
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('soundEnabled', enabled.toString());
+    }
   }
 
   setMasterVolume(volume: number) {
     this.masterVolume = Math.max(0, Math.min(1, volume));
+    // Save to localStorage immediately
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('soundVolume', this.masterVolume.toString());
+    }
+  }
+
+  get isEnabled() {
+    return this.enabled;
+  }
+
+  get currentVolume() {
+    return this.masterVolume;
   }
 }
 
@@ -252,10 +279,29 @@ class SoundEffectsManager {
 let soundManager: SoundEffectsManager | null = null;
 
 export function useSoundEffects() {
-  // Initialize on first use
-  if (!soundManager && typeof window !== 'undefined') {
-    soundManager = new SoundEffectsManager();
-  }
+  // Use React state to track settings - initialize with saved values
+  const [soundEnabled, setSoundEnabledState] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('soundEnabled');
+      return saved === null ? true : saved === 'true';
+    }
+    return true;
+  });
+  
+  const [volume, setVolumeState] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('soundVolume');
+      return saved ? parseFloat(saved) : 0.5;
+    }
+    return 0.5;
+  });
+
+  // Initialize sound manager
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !soundManager) {
+      soundManager = new SoundEffectsManager();
+    }
+  }, []);
 
   const playSound = (soundName: string, config?: SoundConfig) => {
     soundManager?.play(soundName, config);
@@ -294,19 +340,13 @@ export function useSoundEffects() {
   };
 
   const setSoundEnabled = (enabled: boolean) => {
+    setSoundEnabledState(enabled);
     soundManager?.setEnabled(enabled);
-    // Save preference
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('soundEnabled', enabled.toString());
-    }
   };
 
   const setVolume = (volume: number) => {
+    setVolumeState(volume);
     soundManager?.setMasterVolume(volume);
-    // Save preference
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('soundVolume', volume.toString());
-    }
   };
 
   return {
@@ -320,5 +360,7 @@ export function useSoundEffects() {
     playClick,
     setSoundEnabled,
     setVolume,
+    soundEnabled,
+    volume,
   };
 }
