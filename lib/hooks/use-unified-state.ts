@@ -22,9 +22,9 @@ export function useUnifiedState() {
     return unsubscribe;
   }, []);
   
-  // Computed values
-  const levelInfo = LevelSystem.calculateLevel(state.progress.totalXP);
-  const unlockInfo = LevelSystem.getUnlockInfo(levelInfo.level);
+  // Computed values - use confirmed level from state
+  const levelInfo = LevelSystem.getLevelInfo(state.progress.currentLevel, state.progress.totalXP);
+  const unlockInfo = LevelSystem.getUnlockInfo(state.progress.currentLevel);
   
   // Helper functions
   const updateXP = useCallback((xpChange: number) => {
@@ -64,9 +64,9 @@ export function useUnifiedState() {
   );
   
   const resetState = useCallback(() => {
-    if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
-      unifiedStateManager.reset();
-    }
+    // Preserve user's name from localStorage
+    const savedUserName = localStorage.getItem('userName');
+    unifiedStateManager.reset(savedUserName || undefined);
   }, []);
   
   const addAchievement = useCallback((achievementId: string) => {
@@ -95,6 +95,17 @@ export function useUnifiedState() {
     []
   );
   
+  const subscribeLevelUp = useCallback(
+    (callback: (oldLevel: number, newLevel: number) => void) => {
+      return unifiedStateManager.subscribeLevelUp(callback);
+    },
+    []
+  );
+  
+  const confirmLevelUp = useCallback(() => {
+    return unifiedStateManager.confirmLevelUp();
+  }, []);
+
   return {
     // State
     state,
@@ -109,6 +120,8 @@ export function useUnifiedState() {
     resetState,
     addAchievement,
     updateFlashcardProgress,
+    subscribeLevelUp,
+    confirmLevelUp,
     
     // Computed values
     isNewUser: state.progress.totalXP === 0 && !state.user.onboardingCompleted,

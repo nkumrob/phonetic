@@ -163,3 +163,31 @@
 - **Potential Issues**: Multiple overlapping streak concepts may confuse users, currentStreak field deprecated but still in interfaces
 - **Sound Settings Not Reactive**: Fixed by adding React state to track settings, initialized from localStorage
 - **Speech Synthesis Volume**: Created centralized speechManager utility that respects global sound settings across all components
+- **Quiz Accuracy Closure Bug**: Fixed state closure issue in endQuiz callback causing 0% accuracy - now passes finalStats parameter explicitly
+- **Level-Up Animation Loop**: Fixed infinite loop caused by 3 components (UnifiedQuiz, PracticeHub, PracticeHubV2) all showing ceremony for same event
+- **Level-Up Duplicate Fix**: Only UnifiedQuiz shows ceremony now, others just clear the event or play sounds
+- **XP Streak Bonus Discovery**: Each consecutive correct answer adds +5 XP streak bonus - 5 correct in a row = 100 XP total (triggers level 2)
+- **Level-Up During Quiz**: Fixed confusing mid-quiz level-ups by deferring ceremony until quiz completion, shows pending indicator instead
+- **Question Counter Skip Bug**: Fixed double nextQuestion() calls on timeout causing quiz to skip questions (e.g., showing Q4 with only 2 answers)
+- **Testing Strategy**: Always analyze fully before making changes, create regression tests to prevent breaking existing functionality
+- **Test-Driven Development**: Implemented comprehensive TDD methodology with templates, utilities, and CI/CD pipeline for maintaining code quality
+- **TDD Structure**: Created test templates for components, hooks, and integration tests with proper mocking and assertions
+- **Testing Dependencies**: Added @testing-library/user-event, jest-axe for accessibility, husky for pre-commit hooks
+- **CI/CD Pipeline**: GitHub Actions workflow runs tests on every push/PR with coverage reporting to ensure quality
+- **Test Coverage**: Set 80% minimum coverage thresholds for branches, functions, lines, and statements
+- **Pre-commit Hooks**: Husky runs tests and linting before commits to catch issues early in development
+- **Misleading Quiz Failure Message**: Fixed "no XP awarded" text that confused users - XP is earned per correct answer during quiz, not at end
+- **XP Progress Bar Visibility**: Added border and minimum background color to make empty progress bar visible, set minimum width to 0.5% for 0 XP states
+- **Level Calculation Mismatch**: Fixed issue where Level 2 with 309 XP showed as 0/150 XP - added fallbacks and total XP display for debugging
+- **Progress Section Fix (2025-01-22)**: Fixed incorrect progress display by migrating profile, header, achievements to use unified state via useSessionCompat hook
+- **Dual State Management Issue**: App was using both old session-context and new unified-state-manager causing data inconsistencies - migrated components to unified state
+- **XP Display Consistency**: All components now calculate level from total XP using LevelSystem.calculateLevel() ensuring consistent display across profile, header, practice hub
+- **XP Not Saving Bug (2025-01-22)**: Quiz earned XP wasn't persisting - fixed by migrating UnifiedQuiz and EnhancedFlashcards to use useSessionCompat instead of old useSession hook
+- **Unified State Migration**: Critical components (quiz, flashcards) were still using old session context causing XP updates to be lost - now all use unified state manager
+- **Level-Up Gating System (2025-01-22)**: Implemented proper level progression requiring BOTH sufficient XP AND passing quiz (70%+ accuracy) - prevents awkward mid-quiz level-ups
+- **Pending Level-Up State**: Added currentLevel and pendingLevelUp fields to track when XP is enough but quiz completion required for actual level advancement
+- **Level Confirmation Flow**: XP accumulates but level only increases after confirmLevelUp() called on successful quiz - ensures competency before progression
+- **XP Display Fix (2025-01-22)**: Quiz failure screen was misleadingly showing earned XP without deductions - now shows net XP (earned minus penalties) matching navbar
+- **XP Display Consistency (2025-01-22)**: Fixed confusing XP displays - header now shows level progress (96/200 XP) instead of total XP, matching progress section for clarity
+- **Total XP Location**: Total XP is shown in profile page prominently and as a separate line item in practice hub stats to avoid confusion with level progress
+- **Daily Goals Reset Fix (2025-01-22)**: Daily goals weren't clearing on reset - fixed by adding localStorage.removeItem('dailyGoals_v2') to UnifiedStateManager.reset() method

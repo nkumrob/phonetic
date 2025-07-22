@@ -7,6 +7,7 @@ import { UnifiedGameState, createDefaultState } from './types';
 import { StateMigration } from './migrations';
 import { LevelSystem } from '@/lib/core/level-system';
 import { migrateToV2 } from './migrate-v2';
+import { migrateToV3 } from './migrate-v3';
 
 type StateListener = (state: UnifiedGameState) => void;
 type StateUpdater<K extends keyof UnifiedGameState> = (
@@ -17,6 +18,7 @@ export class UnifiedStateManager {
   private static instance: UnifiedStateManager;
   private state: UnifiedGameState;
   private listeners: Set<StateListener> = new Set();
+  private levelUpListeners: Set<(oldLevel: number, newLevel: number) => void> = new Set();
   private saveTimeout: NodeJS.Timeout | null = null;
   private readonly STORAGE_KEY = 'nato_game_state_v3';
   private readonly SAVE_DELAY = 100; // ms
@@ -49,7 +51,12 @@ export class UnifiedStateManager {
         // Apply migrations if needed
         if (parsed.version === 1) {
           parsed = migrateToV2(parsed);
-          // Save migrated state immediately
+        }
+        if (parsed.version === 2) {
+          parsed = migrateToV3(parsed);
+        }
+        // Save migrated state immediately
+        if (parsed.version !== 3) {
           localStorage.setItem(this.STORAGE_KEY, JSON.stringify(parsed));
         }
         // Validate version and structure
@@ -104,22 +111,57 @@ export class UnifiedStateManager {
     const currentXP = this.state.progress.totalXP;
     const newXP = Math.max(-50, currentXP + xpChange); // Floor of -50
     
-    const oldLevel = LevelSystem.calculateLevel(currentXP).level;
-    const newLevel = LevelSystem.calculateLevel(newXP).level;
+    console.log('[UnifiedStateManager] updateXP called:', {
+      currentXP,
+      xpChange,
+      newXP,
+      currentLevel: this.state.progress.currentLevel,
+      caller: new Error().stack?.split('\n')[2]
+    });
+    
+    const potentialLevel = LevelSystem.calculateLevel(newXP).level;
+    const hasPendingLevelUp = potentialLevel > this.state.progress.currentLevel;
     
     this.update('progress', (progress) => ({
       ...progress,
       totalXP: newXP,
-      unlockedModes: LevelSystem.getUnlockedModes(newLevel),
+      pendingLevelUp: hasPendingLevelUp,
+      // Don't update currentLevel or unlockedModes here - wait for quiz completion
     }));
-    
-    // Check for level up
-    if (newLevel > oldLevel) {
-      this.onLevelUp(oldLevel, newLevel);
-    }
     
     // Save XP changes immediately
     this.saveImmediately();
+  }
+  
+  /**
+   * Confirm pending level-up after successful quiz
+   */
+  confirmLevelUp(): boolean {
+    if (!this.state.progress.pendingLevelUp) {
+      return false;
+    }
+    
+    const potentialLevel = LevelSystem.calculateLevel(this.state.progress.totalXP).level;
+    const oldLevel = this.state.progress.currentLevel;
+    
+    if (potentialLevel > oldLevel) {
+      this.update('progress', (progress) => ({
+        ...progress,
+        currentLevel: potentialLevel,
+        pendingLevelUp: false,
+        unlockedModes: LevelSystem.getUnlockedModes(potentialLevel),
+      }));
+      
+      // Notify level-up listeners
+      this.onLevelUp(oldLevel, potentialLevel);
+      
+      // Save immediately
+      this.saveImmediately();
+      
+      return true;
+    }
+    
+    return false;
   }
   
   /**
@@ -174,6 +216,14 @@ export class UnifiedStateManager {
   }
   
   /**
+   * Subscribe to level-up events
+   */
+  subscribeLevelUp(listener: (oldLevel: number, newLevel: number) => void): () => void {
+    this.levelUpListeners.add(listener);
+    return () => this.levelUpListeners.delete(listener);
+  }
+  
+  /**
    * Notify all listeners of state change
    */
   private notifyListeners(): void {
@@ -205,7 +255,13 @@ export class UnifiedStateManager {
     }
     
     try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(state));
+      const dataToSave = JSON.stringify(state);
+      console.log('[UnifiedStateManager] Saving state:', {
+        totalXP: state.progress.totalXP,
+        level: LevelSystem.calculateLevel(state.progress.totalXP).level,
+        storageKey: this.STORAGE_KEY
+      });
+      localStorage.setItem(this.STORAGE_KEY, dataToSave);
     } catch (e) {
       console.error('Failed to save state:', e);
     }
@@ -222,8 +278,8 @@ export class UnifiedStateManager {
    * Handle level up event
    */
   private onLevelUp(oldLevel: number, newLevel: number): void {
-    // Could trigger celebrations, achievements, etc.
-    console.log(`Level up! ${oldLevel} -> ${newLevel}`);
+    // Notify all level-up listeners
+    this.levelUpListeners.forEach(listener => listener(oldLevel, newLevel));
     
     // Check for level-based achievements
     if (newLevel >= 10 && !this.state.progress.achievements.includes('level10')) {
@@ -237,8 +293,24 @@ export class UnifiedStateManager {
   /**
    * Reset all state
    */
-  reset(): void {
-    this.state = createDefaultState();
+  reset(preservedUserName?: string): void {
+    const newState = createDefaultState();
+    
+    // Preserve user name if provided
+    if (preservedUserName) {
+      newState.user.name = preservedUserName;
+    }
+    
+    // Clear all related localStorage items
+    if (typeof window !== 'undefined') {
+      // Clear daily goals
+      localStorage.removeItem('dailyGoals_v2');
+      
+      // Clear any other app-specific localStorage items
+      // Keep userName and userAvatar as they're preserved
+    }
+    
+    this.state = newState;
     this.saveImmediately();
     this.notifyListeners();
   }
