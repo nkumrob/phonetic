@@ -107,20 +107,18 @@ export function Achievements() {
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center space-y-4">
         <h2 className="text-3xl font-bold">Your Achievements</h2>
-        <div className="flex items-center justify-center gap-4">
-          <div className="text-center">
-            <p className="text-4xl font-bold text-primary">{earnedCount}</p>
-            <p className="text-sm text-muted-foreground">Earned</p>
+        <div className="flex items-center justify-center gap-8">
+          <div className="text-center px-4">
+            <p className="text-5xl font-bold text-primary">{earnedCount}</p>
+            <p className="text-sm text-muted-foreground mt-1">Earned</p>
           </div>
-          <div className="text-center">
-            <p className="text-4xl font-bold">{totalCount}</p>
-            <p className="text-sm text-muted-foreground">Total</p>
-          </div>
-          <div className="text-center">
-            <p className="text-4xl font-bold text-primary">{overallProgress}%</p>
-            <p className="text-sm text-muted-foreground">Complete</p>
+          <div className="text-center text-3xl font-light text-muted-foreground">/</div>
+          <div className="text-center px-4">
+            <p className="text-5xl font-bold">{totalCount}</p>
+            <p className="text-sm text-muted-foreground mt-1">Total</p>
           </div>
         </div>
+        <p className="text-2xl font-semibold text-primary">{overallProgress}% Complete</p>
       </div>
 
       {/* Overall Progress Bar */}

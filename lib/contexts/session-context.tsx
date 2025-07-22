@@ -64,7 +64,7 @@ const defaultSession: SessionData = {
     achievements: [],
     unlockedModes: ['easy'],
     lastPlayed: new Date().toISOString(),
-    consecutiveDays: 1,
+    consecutiveDays: 0, // Should start at 0, not 1
   },
   quizHistory: [],
   flashcardProgress: {},
