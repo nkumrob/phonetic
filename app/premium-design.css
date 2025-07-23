@@ -595,7 +595,7 @@ h4, .h4 {
 /* Alphabet Grid */
 .alphabet-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-4);
   width: 100%;
   max-width: 1200px;
@@ -603,6 +603,13 @@ h4, .h4 {
 }
 
 @media (min-width: 640px) {
+  .alphabet-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-5);
+  }
+}
+
+@media (min-width: 768px) {
   .alphabet-grid {
     grid-template-columns: repeat(6, 1fr);
     gap: var(--space-5);
@@ -613,13 +620,6 @@ h4, .h4 {
   .alphabet-grid {
     grid-template-columns: repeat(6, 1fr);
     gap: var(--space-6);
-  }
-}
-
-@media (max-width: 480px) {
-  .alphabet-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
   }
 }
 
@@ -641,6 +641,8 @@ h4, .h4 {
   gap: var(--space-2);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
+  width: 100%;
+  aspect-ratio: 1 / 1.2;
 }
 
 .phonetic-card:hover {
@@ -664,7 +666,8 @@ h4, .h4 {
 @media (max-width: 640px) {
   .phonetic-card {
     padding: var(--space-4) var(--space-3);
-    min-height: 150px;
+    min-height: 140px;
+    aspect-ratio: 1 / 1.15;
   }
   
   .phonetic-letter {
@@ -677,6 +680,25 @@ h4, .h4 {
   
   .phonetic-pronunciation {
     font-size: var(--text-sm);
+  }
+}
+
+/* Ensure last row alignment */
+.alphabet-grid > :nth-child(25) {
+  grid-column: 1 / 2;
+}
+
+.alphabet-grid > :nth-child(26) {
+  grid-column: 2 / 3;
+}
+
+@media (min-width: 640px) {
+  .alphabet-grid > :nth-child(25) {
+    grid-column: auto;
+  }
+  
+  .alphabet-grid > :nth-child(26) {
+    grid-column: auto;
   }
 }
 

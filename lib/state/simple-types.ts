@@ -52,7 +52,7 @@ export function createDefaultSimpleState(): SimpleAppState {
     
     user: {
       name: '',
-      avatar: '🧑‍✈️',
+      avatar: '✈️',
       createdAt: new Date().toISOString(),
     },
     

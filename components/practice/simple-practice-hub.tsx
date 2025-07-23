@@ -83,7 +83,7 @@ export function SimplePracticeHub({ onModeSelect }: SimplePracticeHubProps = {})
   ];
 
   const userName = state.user.name || 'Learner';
-  const userAvatar = state.user.avatar || '🧑‍✈️';
+  const userAvatar = state.user.avatar || '✈️';
   
   return (
     <div className="max-w-7xl mx-auto">

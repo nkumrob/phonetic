@@ -5,22 +5,21 @@ import { Button } from '@/components/ui';
 import { User, Save } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
-// Avatar options
+// Avatar options - using simple emojis to avoid hydration issues
 const AVATAR_OPTIONS = [
-  '🧑‍✈️', '👨‍✈️', '👩‍✈️', '🧑', '👨', '👩', 
-  '🦸', '🦸‍♂️', '🦸‍♀️', '🧑‍🚀', '👨‍🚀', '👩‍🚀',
-  '🎓', '🥷', '🤖', '🦊', '🐻', '🐯'
+  '✈️', '🚁', '🦅', '🎯', '📡', '🗺️',
+  '⚡', '🌟', '🚀', '🛡️', '📻', '🎖️'
 ];
 
 export function ProfileCustomization() {
   const [userName, setUserName] = useState('');
-  const [selectedAvatar, setSelectedAvatar] = useState('🧑‍✈️');
+  const [selectedAvatar, setSelectedAvatar] = useState('✈️');
   const [isSaving, setIsSaving] = useState(false);
 
   // Load saved profile data
   useEffect(() => {
     const savedName = localStorage.getItem('userName') || '';
-    const savedAvatar = localStorage.getItem('userAvatar') || '🧑‍✈️';
+    const savedAvatar = localStorage.getItem('userAvatar') || '✈️';
     setUserName(savedName);
     setSelectedAvatar(savedAvatar);
   }, []);

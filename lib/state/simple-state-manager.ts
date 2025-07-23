@@ -4,6 +4,8 @@
  */
 
 import { SimpleAppState, createDefaultSimpleState, QuizRecord } from './simple-types';
+import { logger } from '@/lib/utils/logger';
+
 
 type StateListener = (state: SimpleAppState) => void;
 type StateUpdater<K extends keyof SimpleAppState> = (
@@ -48,7 +50,7 @@ export class SimpleStateManager {
           return parsed;
         }
       } catch (e) {
-        console.error('Failed to parse stored state:', e);
+        logger.error('Failed to parse stored state:', e);
       }
     }
     
@@ -204,7 +206,7 @@ export class SimpleStateManager {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.state));
     } catch (e) {
-      console.error('Failed to save state:', e);
+      logger.error('Failed to save state:', e);
     }
   }
   

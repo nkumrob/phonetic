@@ -1,34 +1,50 @@
 'use client';
 
-import { useSimpleAppState } from '@/lib/contexts/simple-app-context';
-import { Button } from '@/components/ui';
 import { Volume2, Moon, Sun, Monitor } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils/cn';
+import { useTheme } from '@/lib/hooks/use-theme';
+import { useSoundEffects } from '@/lib/hooks/use-sound-effects';
 
 function SettingsContent() {
-  const { state, updatePreferences } = useSimpleAppState();
-  const [soundEnabled, setSoundEnabled] = useState(state.preferences.soundEnabled);
-  const [soundVolume, setSoundVolume] = useState(state.preferences.soundVolume);
-  const [theme, setTheme] = useState(state.preferences.theme);
-  const [saved, setSaved] = useState(false);
-
-  const handleSave = () => {
-    updatePreferences({
-      soundEnabled,
-      soundVolume,
-      theme,
-    });
-    
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
+  const { theme, setTheme } = useTheme();
+  const { soundEnabled, volume, setSoundEnabled, setVolume, playSound } = useSoundEffects();
+  const [showVolumeTest, setShowVolumeTest] = useState(false);
+  const volumeTestTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const themes = [
     { value: 'light' as const, label: 'Light', icon: Sun },
     { value: 'dark' as const, label: 'Dark', icon: Moon },
     { value: 'system' as const, label: 'System', icon: Monitor },
   ];
+
+  const handleVolumeChange = (newVolume: number) => {
+    setVolume(newVolume);
+    // Play a test sound when volume changes
+    playSound('correct');
+    
+    // Show volume test indicator
+    setShowVolumeTest(true);
+    
+    // Clear any existing timer
+    if (volumeTestTimeoutRef.current) {
+      clearTimeout(volumeTestTimeoutRef.current);
+    }
+    
+    volumeTestTimeoutRef.current = setTimeout(() => {
+      setShowVolumeTest(false);
+      volumeTestTimeoutRef.current = null;
+    }, 1000);
+  };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (volumeTestTimeoutRef.current) {
+        clearTimeout(volumeTestTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
@@ -49,7 +65,13 @@ function SettingsContent() {
               </label>
               <button
                 id="sound-enabled"
-                onClick={() => setSoundEnabled(!soundEnabled)}
+                onClick={() => {
+                  setSoundEnabled(!soundEnabled);
+                  if (!soundEnabled) {
+                    // Play a sound when enabling
+                    setTimeout(() => playSound('correct'), 100);
+                  }
+                }}
                 className={cn(
                   "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
                   soundEnabled ? "bg-coolBlue-500" : "bg-warmNeutral-300"
@@ -66,16 +88,23 @@ function SettingsContent() {
 
             {soundEnabled && (
               <div className="space-y-2">
-                <label htmlFor="sound-volume" className="text-sm font-medium">
-                  Volume: {Math.round(soundVolume * 100)}%
-                </label>
+                <div className="flex items-center justify-between">
+                  <label htmlFor="sound-volume" className="text-sm font-medium">
+                    Volume: {Math.round(volume * 100)}%
+                  </label>
+                  {showVolumeTest && (
+                    <span className="text-xs text-coolBlue-500 animate-fade-out">
+                      Testing volume...
+                    </span>
+                  )}
+                </div>
                 <input
                   id="sound-volume"
                   type="range"
                   min="0"
                   max="100"
-                  value={soundVolume * 100}
-                  onChange={(e) => setSoundVolume(Number(e.target.value) / 100)}
+                  value={volume * 100}
+                  onChange={(e) => handleVolumeChange(Number(e.target.value) / 100)}
                   className="w-full"
                 />
               </div>
@@ -93,7 +122,10 @@ function SettingsContent() {
               return (
                 <button
                   key={t.value}
-                  onClick={() => setTheme(t.value)}
+                  onClick={() => {
+                    setTheme(t.value);
+                    playSound('click');
+                  }}
                   className={cn(
                     "p-4 rounded-lg border-2 transition-all",
                     "hover:border-coolBlue-500 hover:shadow-md",
@@ -110,40 +142,9 @@ function SettingsContent() {
           </div>
         </section>
 
-        {/* Data Management */}
-        <section className="bg-background border-2 border-border rounded-xl p-6 sm:p-8 space-y-4 hover:shadow-md transition-all duration-200">
-          <h2 className="text-2xl sm:text-3xl font-black tracking-largeText">Data Management</h2>
-          
-          <div className="space-y-3">
-            <p className="text-sm text-muted-foreground">
-              Your progress is saved locally in your browser.
-            </p>
-            
-            <div className="flex gap-3">
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  const data = JSON.stringify(state, null, 2);
-                  const blob = new Blob([data], { type: 'application/json' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `nato-phonetic-progress-${new Date().toISOString().split('T')[0]}.json`;
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-              >
-                Export Progress
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Save Button */}
-        <div className="flex justify-end">
-          <Button onClick={handleSave} disabled={saved}>
-            {saved ? 'Settings Saved!' : 'Save Settings'}
-          </Button>
+        {/* Settings Info */}
+        <div className="text-center text-sm text-muted-foreground">
+          <p>Settings are saved automatically</p>
         </div>
       </div>
     </div>
@@ -151,5 +152,25 @@ function SettingsContent() {
 }
 
 export default function SimpleSettingsPage() {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  if (!mounted) {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-2xl">
+        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-headlines mb-8">Settings</h1>
+        <div className="space-y-8">
+          {/* Loading skeleton */}
+          <div className="bg-background border-2 border-border rounded-xl p-6 sm:p-8 h-40 animate-pulse" />
+          <div className="bg-background border-2 border-border rounded-xl p-6 sm:p-8 h-40 animate-pulse" />
+          <div className="bg-background border-2 border-border rounded-xl p-6 sm:p-8 h-40 animate-pulse" />
+        </div>
+      </div>
+    );
+  }
+  
   return <SettingsContent />;
 }

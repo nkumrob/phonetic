@@ -6,6 +6,7 @@ import { generateMetadata, structuredData } from '@/lib/seo/metadata';
 import { faqSchema, organizationSchema } from '@/lib/seo/faq-schema';
 import { SimpleAppProvider } from '@/lib/contexts/simple-app-context';
 import { AnalyticsProvider } from '@/components/analytics/analytics-provider';
+import { inter } from './fonts';
 
 export const metadata: Metadata = generateMetadata();
 
@@ -31,11 +32,14 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#3b82f6" />
-        <meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" />
+        {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
+          <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION} />
+        )}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </head>
-      <body className="antialiased font-sans" suppressHydrationWarning>
+      <body className={`${inter.variable} antialiased font-sans`} suppressHydrationWarning>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }}

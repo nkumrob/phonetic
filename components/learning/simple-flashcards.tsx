@@ -93,11 +93,11 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
   }, [currentIndex, isFlipped]);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="text-center space-y-2">
-        <h2 className="text-5xl font-black tracking-headlines">Flashcards</h2>
-        <p className="text-secondary">
+      <div className="text-center space-y-1 sm:space-y-2">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-headlines">Flashcards</h2>
+        <p className="text-xs sm:text-base text-secondary px-4">
           Click the card to flip • Use arrow keys to navigate
         </p>
       </div>
@@ -135,7 +135,7 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
       </div>
 
       {/* Flashcard */}
-      <div className="relative h-96 perspective-1000">
+      <div className="relative h-80 sm:h-96 perspective-1000">
         <div
           className={cn(
             "absolute inset-0 w-full h-full transition-transform duration-500 transform-style-preserve-3d cursor-pointer",
@@ -145,19 +145,19 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
         >
           {/* Front of card */}
           <div className="absolute inset-0 w-full h-full backface-hidden">
-            <div className="h-full p-8 rounded-xl bg-coolBlue-500 text-white shadow-lg flex flex-col items-center justify-center">
-              <div className="text-8xl font-black mb-4 tracking-headlines">{currentCard.letter}</div>
-              <p className="text-lg">Click to reveal</p>
+            <div className="h-full p-4 sm:p-8 rounded-xl bg-coolBlue-500 text-white shadow-lg flex flex-col items-center justify-center">
+              <div className="text-6xl sm:text-8xl font-black mb-4 tracking-headlines">{currentCard.letter}</div>
+              <p className="text-base sm:text-lg">Click to reveal</p>
             </div>
           </div>
 
           {/* Back of card */}
           <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
-            <div className="h-full p-8 rounded-xl bg-warmAmber-600 text-white shadow-lg flex flex-col items-center justify-center">
-              <div className="text-6xl font-black mb-4 tracking-headlines">{currentCard.codeWord}</div>
-              <div className="text-3xl mb-2">{currentCard.letter} for {currentCard.codeWord}</div>
-              <div className="text-xl mb-2">{currentCard.pronunciation}</div>
-              <div className="text-lg">IPA: {currentCard.ipa}</div>
+            <div className="h-full p-4 sm:p-8 rounded-xl bg-warmAmber-600 text-white shadow-lg flex flex-col items-center justify-center">
+              <div className="text-4xl sm:text-6xl font-black mb-2 sm:mb-4 tracking-headlines">{currentCard.codeWord}</div>
+              <div className="text-xl sm:text-3xl mb-1 sm:mb-2">{currentCard.letter} for {currentCard.codeWord}</div>
+              <div className="text-lg sm:text-xl mb-1 sm:mb-2">{currentCard.pronunciation}</div>
+              <div className="text-base sm:text-lg">IPA: {currentCard.ipa}</div>
               
               <Button
                 variant="secondary"
@@ -176,27 +176,42 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
       </div>
 
       {/* Navigation Controls */}
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-2 sm:gap-4">
         <Button
           variant="secondary"
           onClick={previousCard}
           disabled={mode === 'random'}
+          className="text-sm sm:text-base px-3 sm:px-4"
         >
-          ← Previous
+          <span className="hidden sm:inline">← Previous</span>
+          <span className="sm:hidden">←</span>
         </Button>
         
         <Button
           variant="secondary"
           onClick={handleFlip}
+          className="text-sm sm:text-base px-3 sm:px-4"
         >
-          {isFlipped ? 'Show Letter' : 'Show Code'}
+          {isFlipped ? (
+            <>
+              <span className="hidden sm:inline">Show Letter</span>
+              <span className="sm:hidden">Letter</span>
+            </>
+          ) : (
+            <>
+              <span className="hidden sm:inline">Show Code</span>
+              <span className="sm:hidden">Code</span>
+            </>
+          )}
         </Button>
         
         <Button
           variant="secondary"
           onClick={nextCard}
+          className="text-sm sm:text-base px-3 sm:px-4"
         >
-          Next →
+          <span className="hidden sm:inline">Next →</span>
+          <span className="sm:hidden">→</span>
         </Button>
       </div>
 
@@ -225,8 +240,8 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
         </div>
       )}
 
-      {/* Keyboard Shortcuts */}
-      <div className="text-center text-sm text-secondary">
+      {/* Keyboard Shortcuts - Hidden on mobile */}
+      <div className="hidden sm:block text-center text-sm text-secondary">
         <p>Keyboard shortcuts: Space/Enter = Flip • ← → = Navigate • P = Play sound</p>
       </div>
     </div>

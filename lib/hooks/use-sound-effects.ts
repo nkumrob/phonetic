@@ -4,6 +4,8 @@
  */
 
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/utils/logger';
+
 
 interface SoundConfig {
   volume?: number;
@@ -216,7 +218,7 @@ class SoundEffectsManager {
 
     const buffer = this.sounds.get(soundName);
     if (!buffer) {
-      console.warn(`Sound "${soundName}" not found`);
+      logger.warn(`Sound "${soundName}" not found`);
       return;
     }
 

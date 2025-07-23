@@ -11,6 +11,7 @@ export function AlphabetGrid() {
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const gridRef = useRef<HTMLDivElement>(null);
+  const speakingTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize loading state
   useEffect(() => {
@@ -32,8 +33,16 @@ export function AlphabetGrid() {
     // Use centralized speech manager that respects global settings
     speechManager.speak(codeWord);
     
+    // Clear any existing timer
+    if (speakingTimerRef.current) {
+      clearTimeout(speakingTimerRef.current);
+    }
+    
     // Reset speaking state after a reasonable time
-    setTimeout(() => setSpeakingLetter(null), 1500);
+    speakingTimerRef.current = setTimeout(() => {
+      setSpeakingLetter(null);
+      speakingTimerRef.current = null;
+    }, 1500);
   }, []);
 
   const handleCardClick = useCallback((letter: string, codeWord: string) => {
@@ -103,6 +112,15 @@ export function AlphabetGrid() {
       (cards[focusedIndex] as HTMLElement).focus();
     }
   }, [focusedIndex]);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (speakingTimerRef.current) {
+        clearTimeout(speakingTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="w-full">

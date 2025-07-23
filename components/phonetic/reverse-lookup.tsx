@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Input, LoadingSpinner } from '@/components/ui';
 import { useDebounce } from '@/lib/hooks/use-debounce';
 import { searchPhoneticWords, getCommonMisspellings, type SearchResult } from '@/lib/utils/fuzzy-search';
@@ -8,6 +8,8 @@ import { cn } from '@/lib/utils/cn';
 import { PHONETIC_MNEMONICS } from '@/lib/constants/mnemonics';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { speechManager } from '@/lib/utils/speech-synthesis';
+import { logger } from '@/lib/utils/logger';
+
 
 export function ReverseLookup() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -16,6 +18,7 @@ export function ReverseLookup() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [selectedLetter, setSelectedLetter] = useState<SearchResult & { mnemonic?: string; pronunciation?: string; ipa?: string } | null>(null);
   const [copied, setCopied] = useState(false);
+  const copyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   const debouncedQuery = useDebounce(searchQuery, 300);
 
@@ -97,9 +100,18 @@ export function ReverseLookup() {
       try {
         await navigator.clipboard.writeText(selectedLetter.letter);
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        
+        // Clear any existing timer
+        if (copyTimeoutRef.current) {
+          clearTimeout(copyTimeoutRef.current);
+        }
+        
+        copyTimeoutRef.current = setTimeout(() => {
+          setCopied(false);
+          copyTimeoutRef.current = null;
+        }, 2000);
       } catch (err) {
-        console.error('Failed to copy:', err);
+        logger.error('Failed to copy:', err);
       }
     }
   };
@@ -115,6 +127,15 @@ export function ReverseLookup() {
     setSelectedLetter(null);
     setResults([]);
   };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6">

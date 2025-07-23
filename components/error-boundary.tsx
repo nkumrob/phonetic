@@ -2,6 +2,9 @@
 
 import React, { Component, ReactNode } from 'react';
 import { Button } from '@/components/ui';
+import { logger } from '@/lib/utils/logger';
+import { env } from '@/lib/config/env';
+
 
 interface Props {
   children: ReactNode;
@@ -24,7 +27,7 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    logger.error('Error caught by boundary:', error, errorInfo);
   }
 
   render() {
@@ -42,7 +45,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <p className="text-muted-foreground">
               This component encountered an error. Please try refreshing the page.
             </p>
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {env.isDevelopment() && this.state.error && (
               <div className="bg-muted p-3 rounded text-left">
                 <p className="text-sm font-mono text-muted-foreground">
                   {this.state.error.message}

@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fade-out {
+  animation: fade-out 1s ease-out forwards;
+}
+
+/* Font variable from Next.js font optimization */
+:root {
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 @layer base {
   :root {
     /* Light mode - Warm neutral base with cool accents */
@@ -505,13 +523,7 @@
   /* Remove automatic header since we have a better one now */
 }
 
-/* Custom font imports */
-@import '@fontsource/inter/400.css';
-@import '@fontsource/inter/500.css';
-@import '@fontsource/inter/600.css';
-@import '@fontsource/inter/700.css';
-@import '@fontsource/jetbrains-mono/400.css';
-@import '@fontsource/bebas-neue/400.css';
+/* Font optimization: Using Next.js font loading instead of @fontsource */
 
 /* Remove AI slop - No generic gradients or excessive effects */
 

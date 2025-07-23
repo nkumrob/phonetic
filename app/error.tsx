@@ -2,6 +2,9 @@
 
 import { useEffect } from 'react';
 import { Button } from '@/components/ui';
+import { logger } from '@/lib/utils/logger';
+import { env } from '@/lib/config/env';
+
 
 export default function Error({
   error,
@@ -12,7 +15,7 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error('Error:', error);
+    logger.error('Error:', error);
   }, [error]);
 
   return (
@@ -37,7 +40,7 @@ export default function Error({
         </div>
         
         {/* Error details (only in development) */}
-        {process.env.NODE_ENV === 'development' && error.message && (
+        {env.isDevelopment() && error.message && (
           <div className="bg-warmNeutral-100 dark:bg-warmNeutral-900 p-4 rounded-xl border-2 border-border text-left">
             <p className="text-sm font-mono text-secondary">
               {error.message}

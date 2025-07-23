@@ -3,6 +3,8 @@
  */
 
 import { SimpleAppState, createDefaultSimpleState } from './simple-types';
+import { logger } from '@/lib/utils/logger';
+
 
 export function migrateToSimpleState(): SimpleAppState | null {
   if (typeof window === 'undefined') {
@@ -29,7 +31,7 @@ export function migrateToSimpleState(): SimpleAppState | null {
       const oldState = JSON.parse(unifiedState);
       return migrateFromUnifiedBasic(oldState);
     } catch (e) {
-      console.error('Failed to migrate from unified state:', e);
+      logger.error('Failed to migrate from unified state:', e);
     }
   }
   
@@ -40,7 +42,7 @@ export function migrateToSimpleState(): SimpleAppState | null {
       const oldSession = JSON.parse(sessionState);
       return migrateFromSession(oldSession);
     } catch (e) {
-      console.error('Failed to migrate from session:', e);
+      logger.error('Failed to migrate from session:', e);
     }
   }
   
@@ -90,7 +92,7 @@ function migrateFromSession(oldSession: LegacySession): SimpleAppState {
   
   // Migrate user data
   newState.user.name = localStorage.getItem('userName') || '';
-  newState.user.avatar = localStorage.getItem('userAvatar') || '🧑‍✈️';
+  newState.user.avatar = localStorage.getItem('userAvatar') || '✈️';
   
   // Migrate progress
   if (oldSession.userProgress) {
@@ -133,7 +135,7 @@ export function performMigration(): boolean {
     // Mark migration as complete
     localStorage.setItem('migration_to_simple_complete', 'true');
     
-    console.log('Successfully migrated to simple state');
+    logger.info('Successfully migrated to simple state');
     return true;
   }
   

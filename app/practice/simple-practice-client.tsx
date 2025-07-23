@@ -1,9 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { SimplePracticeHub } from '@/components/practice/simple-practice-hub';
-import { SimpleQuiz } from '@/components/practice/simple-quiz';
-import { SimpleFlashcards } from '@/components/learning/simple-flashcards';
+import { LazySimplePracticeHub, LazySimpleQuiz, LazySimpleFlashcards } from '@/components/lazy';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Button } from '@/components/ui';
 import { ArrowLeft } from 'lucide-react';
@@ -31,33 +29,34 @@ export default function SimplePracticeClient() {
   return (
     <div className="container mx-auto px-4 py-8">
       {currentMode !== 'hub' && (
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <Button
             variant="ghost"
             onClick={handleBack}
-            className="flex items-center gap-2"
+            className="flex items-center gap-1 sm:gap-2 text-sm sm:text-base px-2 sm:px-4"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Practice Hub
+            <span className="hidden sm:inline">Back to Practice Hub</span>
+            <span className="sm:hidden">Back</span>
           </Button>
         </div>
       )}
       
       <ErrorBoundary>
         {currentMode === 'hub' && (
-          <SimplePracticeHub onModeSelect={handleModeSelect} />
+          <LazySimplePracticeHub onModeSelect={handleModeSelect} />
         )}
         
         {currentMode === 'learn' && (
-          <SimpleFlashcards onComplete={handleBack} />
+          <LazySimpleFlashcards onComplete={handleBack} />
         )}
         
         {currentMode === 'practice' && (
-          <SimpleQuiz mode="practice" onComplete={handleQuizComplete} />
+          <LazySimpleQuiz mode="practice" onComplete={handleQuizComplete} />
         )}
         
         {currentMode === 'challenge' && (
-          <SimpleQuiz mode="challenge" onComplete={handleQuizComplete} />
+          <LazySimpleQuiz mode="challenge" onComplete={handleQuizComplete} />
         )}
       </ErrorBoundary>
     </div>

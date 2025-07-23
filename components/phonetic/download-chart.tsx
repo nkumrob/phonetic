@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui';
 import { pdf } from '@react-pdf/renderer';
 import { PhoneticChartPDF } from '@/lib/pdf/phonetic-chart';
+import { logger } from '@/lib/utils/logger';
+import { ChartPreview } from './chart-preview';
+
 
 export function DownloadChart() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -36,7 +39,7 @@ export function DownloadChart() {
         URL.revokeObjectURL(url);
       }, 100);
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      logger.error('Error generating PDF:', error);
       // Show user-friendly error
       alert('Sorry, there was an error generating the PDF. Please try again or use the Print option instead.');
     } finally {
@@ -49,8 +52,10 @@ export function DownloadChart() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-3 justify-center">
-      <Button
+    <div>
+      <ChartPreview />
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <Button
         onClick={handleDownloadPDF}
         disabled={isGenerating}
         size="lg"
@@ -121,6 +126,7 @@ export function DownloadChart() {
         </svg>
         Print Chart
       </Button>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/utils/logger';
+import { withRateLimit } from '@/lib/middleware/with-rate-limit';
+import { getCacheHeaders, cacheConfigs } from '@/lib/utils/cache-headers';
+
 
 const natoAlphabet = [
   { letter: 'A', code: 'Alpha', pronunciation: 'AL-fah' },
@@ -29,7 +33,7 @@ const natoAlphabet = [
   { letter: 'Z', code: 'Zulu', pronunciation: 'ZOO-loo' },
 ];
 
-export async function GET() {
+async function handleGet(request: NextRequest) {
   try {
     // Create a simple HTML structure that browsers will convert to PDF
     const html = `
@@ -146,14 +150,26 @@ export async function GET() {
       </html>
     `;
 
-    return new NextResponse(html, {
-      headers: {
-        'Content-Type': 'text/html',
-        'Content-Disposition': 'attachment; filename="nato-phonetic-alphabet.html"',
-      },
+    const headers = new Headers({
+      'Content-Type': 'text/html',
+      'Content-Disposition': 'attachment; filename="nato-phonetic-alphabet.html"',
     });
+    
+    // Add cache headers for static content
+    const cacheHeaders = getCacheHeaders(cacheConfigs.static);
+    cacheHeaders.forEach((value, key) => {
+      headers.set(key, value);
+    });
+    
+    return new NextResponse(html, { headers });
   } catch (error) {
-    console.error('Error generating PDF:', error);
+    logger.error('Error generating PDF:', error);
     return NextResponse.json({ error: 'Failed to generate PDF' }, { status: 500 });
   }
 }
+
+// Export rate-limited handler
+export const GET = withRateLimit(handleGet, {
+  max: 20, // 20 PDF downloads per window
+  windowMs: 60 * 60 * 1000, // 1 hour window
+});

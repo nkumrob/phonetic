@@ -1,7 +1,6 @@
 'use client';
 
-import { TextConverter } from '@/components/phonetic/text-converter-fixed';
-import { ReverseLookup } from '@/components/phonetic/reverse-lookup';
+import { LazyTextConverter, LazyReverseLookup } from '@/components/lazy';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Icons } from '@/components/ui/icons';
 
@@ -32,7 +31,7 @@ export default function ToolsPageClient() {
               </p>
             </div>
             <ErrorBoundary>
-              <TextConverter />
+              <LazyTextConverter />
             </ErrorBoundary>
           </div>
         </section>
@@ -50,7 +49,7 @@ export default function ToolsPageClient() {
               </p>
             </div>
             <ErrorBoundary>
-              <ReverseLookup />
+              <LazyReverseLookup />
             </ErrorBoundary>
           </div>
         </section>

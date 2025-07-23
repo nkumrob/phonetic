@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
+import { config } from '@/lib/config/env';
 
 export const siteConfig = {
   name: 'phoneticalphabet.com',
   title: 'phoneticalphabet.com | NATO Phonetic Alphabet (A to Z) | Pronunciation & Chart',
   description: 'Learn the NATO phonetic alphabet on phoneticalphabet.com: A–Z list, pronunciation guide, printable PDF, and interactive translator. Perfect for pilots, military, telecoms, and radio enthusiasts.',
-  url: 'https://phoneticalphabet.com',
+  url: config.siteUrl,
   author: 'Phonetic Alphabet Learning Platform',
   keywords: [
     'nato phonetic',

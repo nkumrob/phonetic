@@ -6,6 +6,8 @@ import { textToPhonetic } from '@/lib/utils/phonetic-converter';
 import { cn } from '@/lib/utils/cn';
 import { TextConverterSkeleton } from '@/components/ui/skeleton';
 import { Share2 } from 'lucide-react';
+import { logger } from '@/lib/utils/logger';
+
 
 const MAX_CHARACTERS = 1000;
 
@@ -72,7 +74,7 @@ export function TextConverter() {
       setIsCopied(true);
       setTimeout(() => setIsCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy:', err);
+      logger.error('Failed to copy:', err);
     }
   };
 
@@ -86,7 +88,7 @@ export function TextConverter() {
         });
       } catch (err) {
         // User cancelled or error
-        console.log('Share cancelled or failed:', err);
+        logger.info('Share cancelled or failed:', err);
       } finally {
         setIsSharing(false);
       }

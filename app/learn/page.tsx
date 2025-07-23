@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
-import { AlphabetGrid } from '@/components/phonetic/alphabet-grid';
-import { DownloadChart } from '@/components/phonetic/download-chart';
+import { LazyAlphabetGrid, LazyDownloadChart } from '@/components/lazy';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { generateMetadata as baseGenerateMetadata } from '@/lib/seo/metadata';
 
@@ -14,11 +13,11 @@ export default function LearnPage() {
   return (
     <div className="container mx-auto px-4 space-y-16 py-8">
       {/* Hero Section - Mobile Optimized */}
-      <section className="space-y-4">
+      <section className="text-center space-y-4">
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-headlines leading-none">
           Learn the NATO Alphabet
         </h1>
-        <p className="text-lg sm:text-xl text-secondary max-w-2xl">
+        <p className="text-lg sm:text-xl text-secondary max-w-2xl mx-auto">
           Master each letter with interactive cards, audio pronunciation, and helpful mnemonics
         </p>
       </section>
@@ -26,7 +25,7 @@ export default function LearnPage() {
       {/* Alphabet Grid */}
       <section>
         <ErrorBoundary>
-          <AlphabetGrid />
+          <LazyAlphabetGrid />
         </ErrorBoundary>
       </section>
 
@@ -39,7 +38,7 @@ export default function LearnPage() {
           Download or print a reference chart for offline use
         </p>
         <ErrorBoundary>
-          <DownloadChart />
+          <LazyDownloadChart />
         </ErrorBoundary>
       </section>
 

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { AudioAlphabetTable } from '@/components/phonetic/audio-alphabet-table';
 
 export default function Home() {
   return (
@@ -218,17 +219,9 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-          {['A-Alpha', 'B-Bravo', 'C-Charlie', 'D-Delta', 'E-Echo', 'F-Foxtrot'].map((item, index) => (
-            <div 
-              key={item} 
-              className="p-6 bg-background border-2 border-border rounded-xl hover:border-primary hover:shadow-md transition-all duration-200 animate-scale-in"
-              style={{ animationDelay: `${index * 50}ms` }}
-            >
-              <span className="text-3xl font-black text-coolBlue-500 block mb-2">{item.split('-')[0]}</span>
-              <span className="text-sm font-semibold text-secondary">{item.split('-')[1]}</span>
-            </div>
-          ))}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold text-center mb-6">Interactive Audio Pronunciation Guide</h3>
+          <AudioAlphabetTable />
         </div>
 
         <div className="text-center">

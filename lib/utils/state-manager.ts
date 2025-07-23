@@ -1,3 +1,4 @@
+import { logger } from '@/lib/utils/logger';
 /**
  * Single source of truth for game state
  * Prevents race conditions and ensures consistency
@@ -143,7 +144,7 @@ class GameStateManager {
         return JSON.parse(stored);
       }
     } catch (error) {
-      console.error('Failed to load game state:', error);
+      logger.error('Failed to load game state:', error);
     }
     
     // Return default state
@@ -192,7 +193,7 @@ class GameStateManager {
       // Also update legacy keys for backward compatibility
       this.updateLegacyStorage(this.memoryState);
     } catch (error) {
-      console.error('Failed to save game state:', error);
+      logger.error('Failed to save game state:', error);
     }
   }
   
@@ -214,7 +215,7 @@ class GameStateManager {
       
       oldKeys.forEach(key => localStorage.removeItem(key));
     } catch (error) {
-      console.error('Failed to update legacy storage:', error);
+      logger.error('Failed to update legacy storage:', error);
     }
   }
   

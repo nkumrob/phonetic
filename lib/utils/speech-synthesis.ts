@@ -1,3 +1,4 @@
+import { logger } from '@/lib/utils/logger';
 /**
  * Centralized speech synthesis utility that respects global sound settings
  */
@@ -23,7 +24,7 @@ class SpeechManager {
   speak(text: string, options: SpeechOptions = {}) {
     // Check if speech synthesis is available
     if (!('speechSynthesis' in window)) {
-      console.warn('Speech synthesis not available');
+      logger.warn('Speech synthesis not available');
       return;
     }
     
