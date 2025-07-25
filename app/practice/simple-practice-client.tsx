@@ -27,7 +27,7 @@ export default function SimplePracticeClient() {
   };
   
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 mb-24">
       {currentMode !== 'hub' && (
         <div className="mb-4 sm:mb-6">
           <Button

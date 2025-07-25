@@ -350,7 +350,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="container py-24">
+      <section className="container py-24" id="faq">
         <div className="text-center mb-12">
           <h2 className="h2 mb-4">Frequently Asked Questions (FAQs)</h2>
           <p className="text-body-lg text-secondary">

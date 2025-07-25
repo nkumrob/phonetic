@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSimpleAppState } from '@/lib/contexts/simple-app-context';
 import { cn } from '@/lib/utils/cn';
 import { calculateOverallAccuracy, getRecentQuizStats } from '@/lib/state/simple-types';
@@ -24,6 +24,11 @@ export function SimplePracticeHub({ onModeSelect }: SimplePracticeHubProps = {})
   const { state } = useSimpleAppState();
   const overallAccuracy = calculateOverallAccuracy(state);
   const recentStats = getRecentQuizStats(state);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleModeSelect = (mode: 'learn' | 'practice' | 'challenge') => {
     if (onModeSelect) {
@@ -82,8 +87,9 @@ export function SimplePracticeHub({ onModeSelect }: SimplePracticeHubProps = {})
     },
   ];
 
-  const userName = state.user.name || 'Learner';
-  const userAvatar = state.user.avatar || '✈️';
+  // Use default values on server, actual values on client
+  const userName = mounted ? (state.user.name || 'Learner') : 'Learner';
+  const userAvatar = mounted ? (state.user.avatar || '✈️') : '✈️';
   
   return (
     <div className="max-w-7xl mx-auto">
@@ -162,21 +168,21 @@ export function SimplePracticeHub({ onModeSelect }: SimplePracticeHubProps = {})
             <div className="space-y-3 pt-3 border-t">
               <div className="flex justify-between">
                 <span className="text-sm text-secondary">Total Quizzes</span>
-                <span className="text-sm font-bold">{state.progress.totalQuizzesTaken}</span>
+                <span className="text-sm font-bold">{mounted ? state.progress.totalQuizzesTaken : 0}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-secondary">Overall Accuracy</span>
-                <span className="text-sm font-bold">{overallAccuracy}%</span>
+                <span className="text-sm font-bold">{mounted ? overallAccuracy : 0}%</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-secondary">Recent Performance</span>
-                <span className="text-sm font-bold">{recentStats.averageAccuracy}%</span>
+                <span className="text-sm font-bold">{mounted ? recentStats.averageAccuracy : 0}%</span>
               </div>
             </div>
           </div>
 
           {/* Recent Activity */}
-          {state.progress.quizHistory.length > 0 && (
+          {mounted && state.progress.quizHistory.length > 0 && (
             <div className="p-6 rounded-xl bg-warmNeutral-50 dark:bg-warmNeutral-900 border-2 border-border space-y-3">
               <h3 className="text-lg font-bold">Recent Activity</h3>
               <div className="space-y-2">

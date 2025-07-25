@@ -4,7 +4,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="bg-warmNeutral-100 dark:bg-warmNeutral-900 border-t border-border mt-24">
+    <footer className="bg-warmNeutral-100 dark:bg-warmNeutral-900 border-t border-border">
       <div className="container py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
@@ -54,14 +54,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/practice#flashcards" className="text-sm text-secondary hover:text-primary transition-colors">
+                <Link href="/practice" className="text-sm text-secondary hover:text-primary transition-colors">
                   Flashcards
                 </Link>
               </li>
               <li>
-                <a href="#pronunciation-guide" className="text-sm text-secondary hover:text-primary transition-colors">
+                <Link href="/learn" className="text-sm text-secondary hover:text-primary transition-colors">
                   Pronunciation Guide
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -71,17 +71,17 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Tools</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/tools#converter" className="text-sm text-secondary hover:text-primary transition-colors">
+                <Link href="/tools" className="text-sm text-secondary hover:text-primary transition-colors">
                   Text Converter
                 </Link>
               </li>
               <li>
-                <Link href="/tools#lookup" className="text-sm text-secondary hover:text-primary transition-colors">
+                <Link href="/tools" className="text-sm text-secondary hover:text-primary transition-colors">
                   Reverse Lookup
                 </Link>
               </li>
               <li>
-                <Link href="/tools#pdf" className="text-sm text-secondary hover:text-primary transition-colors">
+                <Link href="/tools" className="text-sm text-secondary hover:text-primary transition-colors">
                   PDF Generator
                 </Link>
               </li>
@@ -98,9 +98,9 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Resources</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#faq" className="text-sm text-secondary hover:text-primary transition-colors">
+                <Link href="/#faq" className="text-sm text-secondary hover:text-primary transition-colors">
                   FAQ
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href="/sitemap.xml" className="text-sm text-secondary hover:text-primary transition-colors">
@@ -134,8 +134,8 @@ export function Footer() {
               <Link href="/terms" className="text-sm text-secondary hover:text-primary transition-colors">
                 Terms of Use
               </Link>
-              <Link href="/accessibility" className="text-sm text-secondary hover:text-primary transition-colors">
-                Accessibility
+              <Link href="/contact" className="text-sm text-secondary hover:text-primary transition-colors">
+                Contact
               </Link>
             </div>
           </div>

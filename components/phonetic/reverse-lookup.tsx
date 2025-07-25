@@ -138,16 +138,33 @@ export function ReverseLookup() {
   }, []);
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
-      <div className="relative">
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="bg-white dark:bg-warmNeutral-800 rounded-xl shadow-lg border border-warmNeutral-200 dark:border-warmNeutral-700 p-6 space-y-4">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-foreground">
+            Phonetic Word Search
+          </h3>
+          {searchQuery && (
+            <button
+              onClick={handleClear}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        {/* Search Input Section */}
         <div className="relative">
-          <Input
+          <div className="relative">
+            <Input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search for a phonetic word (e.g., Alpha, Bravo, Charlie...)"
-            className="pr-10"
+            className="w-full pl-4 pr-10 py-3 rounded-lg border border-warmNeutral-300 dark:border-warmNeutral-600 bg-warmNeutral-50 dark:bg-warmNeutral-900 text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-coolBlue-500 focus:border-transparent transition-all"
             aria-label="Search phonetic words"
             aria-autocomplete="list"
             aria-controls="search-results"
@@ -176,21 +193,21 @@ export function ReverseLookup() {
           </div>
         </div>
 
-        {/* Search Results Dropdown */}
-        {results.length > 0 && (
-          <div
-            id="search-results"
-            className="absolute z-10 w-full mt-2 bg-background border border-border rounded-md shadow-lg overflow-hidden"
-            role="listbox"
-          >
+          {/* Search Results Dropdown */}
+          {results.length > 0 && (
+            <div
+              id="search-results"
+              className="absolute z-10 w-full mt-2 bg-white dark:bg-warmNeutral-800 border border-warmNeutral-200 dark:border-warmNeutral-700 rounded-lg shadow-xl overflow-hidden"
+              role="listbox"
+            >
             <div className="max-h-60 overflow-y-auto">
               {results.map((result, index) => (
                 <div
                   key={`${result.letter}-${index}`}
                   className={cn(
                     'px-4 py-3 cursor-pointer transition-colors',
-                    'hover:bg-muted',
-                    selectedIndex === index && 'bg-muted',
+                    'hover:bg-warmNeutral-100 dark:hover:bg-warmNeutral-700',
+                    selectedIndex === index && 'bg-warmNeutral-100 dark:bg-warmNeutral-700',
                     result.matchType === 'fuzzy' && 'opacity-80'
                   )}
                   onClick={() => handleSelectResult(result)}
@@ -219,32 +236,37 @@ export function ReverseLookup() {
         )}
       </div>
 
-      {/* Selected Letter Display */}
-      {selectedLetter && (
-        <div className="card p-8 space-y-6 animate-fade-in">
-          <div className="text-center">
-            <div className="text-8xl font-black text-gradient mb-4">
-              {selectedLetter.letter}
-            </div>
-            <div className="text-3xl font-bold mb-2">
-              {selectedLetter.codeWord}
-            </div>
-            <div className="text-xl text-secondary italic mb-4">
-              {selectedLetter.pronunciation}
-            </div>
-            {selectedLetter.mnemonic && (
-              <div className="mt-4 p-4 bg-muted rounded-lg max-w-md mx-auto">
-                <p className="text-sm italic">{selectedLetter.mnemonic}</p>
+        {/* Selected Letter Display */}
+        {selectedLetter && (
+          <div className="mt-6 space-y-6">
+            <div className="text-center bg-gradient-to-br from-coolBlue-50 to-warmAmber-50 dark:from-coolBlue-900/20 dark:to-warmAmber-900/20 rounded-lg p-6 border border-warmNeutral-200 dark:border-warmNeutral-700">
+              <div className="text-6xl font-black text-foreground mb-4">
+                {selectedLetter.letter}
               </div>
-            )}
-          </div>
+              <div className="text-2xl font-bold mb-2">
+                {selectedLetter.codeWord}
+              </div>
+              <div className="text-lg text-secondary italic mb-4">
+                {selectedLetter.pronunciation}
+              </div>
+              {selectedLetter.mnemonic && (
+                <div className="mt-4 p-4 bg-warmNeutral-100 dark:bg-warmNeutral-700 rounded-lg max-w-md mx-auto">
+                  <p className="text-sm italic text-muted-foreground">{selectedLetter.mnemonic}</p>
+                </div>
+              )}
+            </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-center gap-3">
-            <button
-              onClick={handleCopyLetter}
-              className="btn btn-secondary"
-            >
+            {/* Action Buttons */}
+            <div className="flex justify-center gap-3">
+              <button
+                onClick={handleCopyLetter}
+                className={cn(
+                  'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all',
+                  copied
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                    : 'bg-warmNeutral-100 text-warmNeutral-700 hover:bg-warmNeutral-200 dark:bg-warmNeutral-700 dark:text-warmNeutral-300 dark:hover:bg-warmNeutral-600'
+                )}
+              >
               {copied ? (
                 <>
                   <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -260,47 +282,48 @@ export function ReverseLookup() {
                   Copy Letter
                 </>
               )}
-            </button>
-            
-            <button
-              onClick={handleSpeak}
-              className="btn btn-secondary"
-            >
+              </button>
+              
+              <button
+                onClick={handleSpeak}
+                className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all bg-warmNeutral-100 text-warmNeutral-700 hover:bg-warmNeutral-200 dark:bg-warmNeutral-700 dark:text-warmNeutral-300 dark:hover:bg-warmNeutral-600"
+              >
               <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
               </svg>
               Play Sound
-            </button>
-            
-            <button
-              onClick={handleClear}
-              className="btn btn-secondary"
-            >
+              </button>
+              
+              <button
+                onClick={handleClear}
+                className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all bg-warmNeutral-100 text-warmNeutral-700 hover:bg-warmNeutral-200 dark:bg-warmNeutral-700 dark:text-warmNeutral-300 dark:hover:bg-warmNeutral-600"
+              >
               <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
               Clear
-            </button>
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* No results message */}
-      {searchQuery && debouncedQuery && !isSearching && results.length === 0 && !selectedLetter && (
-        <div className="text-center text-muted-foreground">
-          <p>No phonetic words found for &quot;{debouncedQuery}&quot;</p>
-          <p className="text-sm mt-1">Try searching for Alpha, Bravo, Charlie, etc.</p>
-        </div>
-      )}
+        {/* No results message */}
+        {searchQuery && debouncedQuery && !isSearching && results.length === 0 && !selectedLetter && (
+          <div className="text-center text-muted-foreground mt-4">
+            <p>No phonetic words found for &quot;{debouncedQuery}&quot;</p>
+            <p className="text-sm mt-1">Try searching for Alpha, Bravo, Charlie, etc.</p>
+          </div>
+        )}
 
-      {/* Instructions */}
-      {!searchQuery && !selectedLetter && (
-        <div className="text-center text-sm text-muted-foreground space-y-2">
-          <p>Search for NATO phonetic code words to find their corresponding letters.</p>
-          <p>Supports partial matches and common misspellings.</p>
-          <p className="text-xs">Use ↑↓ arrow keys to navigate, Enter to select, Esc to close</p>
-        </div>
-      )}
+        {/* Instructions */}
+        {!searchQuery && !selectedLetter && (
+          <div className="text-center text-sm text-muted-foreground space-y-2 mt-4">
+            <p>Search for NATO phonetic code words to find their corresponding letters.</p>
+            <p>Supports partial matches and common misspellings.</p>
+            <p className="text-xs">Use ↑↓ arrow keys to navigate, Enter to select, Esc to close</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

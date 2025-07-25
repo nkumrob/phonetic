@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui';
 import { textToPhonetic } from '@/lib/utils/phonetic-converter';
 import { cn } from '@/lib/utils/cn';
-import { TextConverterSkeleton } from '@/components/ui/skeleton';
 import { Share2, Volume2 } from 'lucide-react';
 import { logger } from '@/lib/utils/logger';
 import { speechManager } from '@/lib/utils/speech-synthesis';
@@ -32,16 +31,6 @@ export function TextConverter({ showHistory = true }: TextConverterProps = {}) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [showHistoryState, setShowHistoryState] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Initialize loading state
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 300);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const converted = textToPhonetic(inputText);
@@ -146,40 +135,57 @@ export function TextConverter({ showHistory = true }: TextConverterProps = {}) {
   const characterCount = inputText.length;
   const characterPercentage = (characterCount / MAX_CHARACTERS) * 100;
 
-  if (isLoading) {
-    return <TextConverterSkeleton />;
-  }
-
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
-      {/* Input Section */}
-      <div className="space-y-2">
-        <div className="flex justify-between items-center">
-          <label htmlFor="input-text" className="text-sm font-medium">
-            Enter Text to Convert
-          </label>
-          <span
-            className={cn(
-              'text-sm',
-              characterCount > MAX_CHARACTERS * 0.9
-                ? 'text-error'
-                : 'text-muted-foreground'
-            )}
-          >
-            {characterCount} / {MAX_CHARACTERS}
-          </span>
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="bg-white dark:bg-warmNeutral-800 rounded-xl shadow-lg border border-warmNeutral-200 dark:border-warmNeutral-700 p-6 space-y-4">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-foreground">
+            NATO Phonetic Translator
+          </h3>
+          {inputText && (
+            <button
+              onClick={handleClear}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Clear
+            </button>
+          )}
         </div>
-        <div className="relative">
+
+        {/* Input Section */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center mb-1">
+            <label htmlFor="input-text" className="text-sm font-medium text-secondary">
+              Enter text to convert
+            </label>
+            <span
+              className={cn(
+                'text-sm',
+                characterCount > MAX_CHARACTERS * 0.9
+                  ? 'text-error'
+                  : 'text-muted-foreground'
+              )}
+            >
+              {characterCount} / {MAX_CHARACTERS}
+            </span>
+          </div>
           <textarea
             id="input-text"
             value={inputText}
             onChange={handleInputChange}
             placeholder="Type or paste your text here..."
-            className="w-full min-h-[120px] p-4 rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 resize-y"
+            className={cn(
+              'w-full min-h-[100px] p-3 rounded-lg border border-warmNeutral-300 dark:border-warmNeutral-600',
+              'bg-warmNeutral-50 dark:bg-warmNeutral-900/50 text-foreground',
+              'placeholder-muted-foreground',
+              'focus:ring-2 focus:ring-coolBlue-500 focus:border-transparent',
+              'resize-none transition-all'
+            )}
             spellCheck={false}
           />
           {/* Character limit progress bar */}
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted rounded-b-md overflow-hidden">
+          <div className="mt-1 h-1 bg-muted rounded-full overflow-hidden">
             <div
               className={cn(
                 'h-full transition-all duration-300',
@@ -189,127 +195,100 @@ export function TextConverter({ showHistory = true }: TextConverterProps = {}) {
             />
           </div>
         </div>
-      </div>
 
-      {/* Output Section */}
-      <div className="space-y-2">
-        <div className="flex justify-between items-center">
-          <label className="text-sm font-medium">
-            Phonetic Spelling
-          </label>
-          <div className="flex gap-2">
-            {inputText && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleClear}
-                className="h-8"
-              >
-                Clear
-              </Button>
+        {/* Output Section */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center">
+            <label className="text-sm font-medium text-secondary">
+              Phonetic Output
+            </label>
+            {outputText && (
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSpeak}
+                  disabled={isSpeaking}
+                  className={cn(
+                    'flex items-center gap-1 px-2 py-1 rounded-md',
+                    'text-xs font-medium transition-all',
+                    isSpeaking
+                      ? 'bg-coolBlue-100 text-coolBlue-700 dark:bg-coolBlue-900/30 dark:text-coolBlue-300'
+                      : 'bg-warmNeutral-100 text-warmNeutral-700 hover:bg-warmNeutral-200 dark:bg-warmNeutral-700 dark:text-warmNeutral-300 dark:hover:bg-warmNeutral-600'
+                  )}
+                >
+                  <Volume2 className={cn("w-3 h-3", isSpeaking && "animate-pulse")} />
+                  {isSpeaking ? 'Speaking...' : 'Speak'}
+                </button>
+                
+                <button
+                  onClick={handleCopy}
+                  className={cn(
+                    'flex items-center gap-1 px-2 py-1 rounded-md',
+                    'text-xs font-medium transition-all',
+                    isCopied
+                      ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                      : 'bg-warmNeutral-100 text-warmNeutral-700 hover:bg-warmNeutral-200 dark:bg-warmNeutral-700 dark:text-warmNeutral-300 dark:hover:bg-warmNeutral-600'
+                  )}
+                >
+                  {isCopied ? (
+                    <>
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Copied
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                      </svg>
+                      Copy
+                    </>
+                  )}
+                </button>
+                
+                {typeof navigator !== 'undefined' && 'share' in navigator && (
+                  <button
+                    onClick={handleShare}
+                    disabled={isSharing}
+                    className={cn(
+                      'flex items-center gap-1 px-2 py-1 rounded-md',
+                      'text-xs font-medium transition-all',
+                      'bg-warmNeutral-100 text-warmNeutral-700 hover:bg-warmNeutral-200',
+                      'dark:bg-warmNeutral-700 dark:text-warmNeutral-300 dark:hover:bg-warmNeutral-600'
+                    )}
+                  >
+                    <Share2 className="w-3 h-3" />
+                    Share
+                  </button>
+                )}
+              </div>
             )}
           </div>
-        </div>
-        <div className="relative">
           <div
             className={cn(
-              'min-h-[120px] p-4 rounded-md border bg-muted/50',
-              outputText ? 'border-border' : 'border-border/50'
+              'w-full p-3 rounded-lg',
+              'bg-gradient-to-br from-coolBlue-50 to-warmAmber-50 dark:from-coolBlue-900/20 dark:to-warmAmber-900/20',
+              'border border-warmNeutral-200 dark:border-warmNeutral-700',
+              'min-h-[100px] max-h-[300px] overflow-y-auto'
             )}
           >
             {outputText ? (
-              <p className="text-lg leading-relaxed font-mono">{outputText}</p>
+              <p className="font-mono text-foreground leading-relaxed">
+                {outputText}
+              </p>
             ) : (
               <p className="text-muted-foreground italic">
-                Your phonetic spelling will appear here...
+                Phonetic translation will appear here...
               </p>
             )}
           </div>
-          
-          {/* Action Buttons */}
-          {outputText && (
-            <div className="absolute bottom-4 right-4 flex gap-2">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={handleSpeak}
-                disabled={isSpeaking}
-                className="h-8"
-              >
-                <Volume2 className={cn("w-4 h-4 mr-1", isSpeaking && "animate-pulse")} />
-                {isSpeaking ? 'Speaking...' : 'Speak'}
-              </Button>
-              
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={handleCopy}
-                className="h-8"
-              >
-                {isCopied ? (
-                  <>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4 mr-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                    Copied!
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4 mr-1"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184"
-                      />
-                    </svg>
-                    Copy
-                  </>
-                )}
-              </Button>
-              
-              {typeof navigator !== 'undefined' && 'share' in navigator && (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={handleShare}
-                  disabled={isSharing}
-                  className="h-8"
-                >
-                  <Share2 className="w-4 h-4 mr-1" />
-                  Share
-                </Button>
-              )}
-            </div>
-          )}
         </div>
-      </div>
 
-      {/* Examples */}
-      <div className="text-center text-sm text-muted-foreground">
-        <p>Try: &quot;Hello World&quot; → &quot;Hotel Echo Lima Lima Oscar (space) Whiskey Oscar Romeo Lima Delta&quot;</p>
       </div>
 
       {/* History Section */}
       {showHistory && history.length > 0 && (
-        <div className="mt-8">
+        <div className="mt-6">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">Recent Conversions</h3>
             <Button

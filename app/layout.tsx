@@ -60,7 +60,7 @@ export default function RootLayout({
         />
         <AnalyticsProvider>
           <SimpleAppProvider>
-            <div className="min-h-screen bg-background">
+            <div className="min-h-screen bg-background flex flex-col">
               <SimpleHeader />
               <main className="flex-1">
                 {children}
