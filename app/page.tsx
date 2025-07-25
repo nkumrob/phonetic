@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { AudioAlphabetTable } from '@/components/phonetic/audio-alphabet-table';
+import { TextConverter } from '@/components/phonetic/text-converter';
 
 export default function Home() {
   return (
@@ -208,6 +209,18 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Text Translator Section */}
+      <section className="container py-24">
+        <div className="text-center mb-12">
+          <h2 className="h2 mb-4">Instant NATO Phonetic Translator</h2>
+          <p className="text-body-lg text-secondary max-w-3xl mx-auto">
+            Convert any text to NATO phonetic alphabet instantly. Type your message and hear it spoken in both regular and phonetic form.
+          </p>
+        </div>
+        
+        <TextConverter showHistory={false} />
       </section>
 
       {/* Quick Reference Preview */}

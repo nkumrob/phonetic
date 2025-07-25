@@ -5,8 +5,10 @@ import { Button } from '@/components/ui';
 import { textToPhonetic } from '@/lib/utils/phonetic-converter';
 import { cn } from '@/lib/utils/cn';
 import { TextConverterSkeleton } from '@/components/ui/skeleton';
-import { Share2 } from 'lucide-react';
+import { Share2, Volume2 } from 'lucide-react';
 import { logger } from '@/lib/utils/logger';
+import { speechManager } from '@/lib/utils/speech-synthesis';
+import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 
 
 const MAX_CHARACTERS = 1000;
@@ -18,13 +20,18 @@ interface HistoryItem {
   timestamp: number;
 }
 
-export function TextConverter() {
+interface TextConverterProps {
+  showHistory?: boolean;
+}
+
+export function TextConverter({ showHistory = true }: TextConverterProps = {}) {
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [isCopied, setIsCopied] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
+  const [showHistoryState, setShowHistoryState] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Initialize loading state
@@ -104,6 +111,36 @@ export function TextConverter() {
   const handleClear = () => {
     setInputText('');
     setOutputText('');
+  };
+
+  const handleSpeak = async () => {
+    if (!inputText.trim()) return;
+    
+    setIsSpeaking(true);
+    
+    // First speak the original text
+    speechManager.speak(inputText);
+    
+    // Wait a bit for the original text to finish
+    await new Promise(resolve => setTimeout(resolve, inputText.length * 100 + 500));
+    
+    // Then speak the phonetic version letter by letter
+    const letters = inputText.toUpperCase().split('');
+    
+    for (const char of letters) {
+      if (char === ' ') {
+        speechManager.speak('space');
+        await new Promise(resolve => setTimeout(resolve, 800));
+      } else {
+        const phoneticItem = NATO_ALPHABET.find(item => item.letter === char);
+        if (phoneticItem) {
+          speechManager.speak(`${phoneticItem.letter}, for ${phoneticItem.codeWord}`);
+          await new Promise(resolve => setTimeout(resolve, 1500));
+        }
+      }
+    }
+    
+    setIsSpeaking(false);
   };
 
   const characterCount = inputText.length;
@@ -195,6 +232,17 @@ export function TextConverter() {
               <Button
                 variant="secondary"
                 size="sm"
+                onClick={handleSpeak}
+                disabled={isSpeaking}
+                className="h-8"
+              >
+                <Volume2 className={cn("w-4 h-4 mr-1", isSpeaking && "animate-pulse")} />
+                {isSpeaking ? 'Speaking...' : 'Speak'}
+              </Button>
+              
+              <Button
+                variant="secondary"
+                size="sm"
                 onClick={handleCopy}
                 className="h-8"
               >
@@ -260,20 +308,20 @@ export function TextConverter() {
       </div>
 
       {/* History Section */}
-      {history.length > 0 && (
+      {showHistory && history.length > 0 && (
         <div className="mt-8">
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-lg font-semibold">Recent Conversions</h3>
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setShowHistory(!showHistory)}
+              onClick={() => setShowHistoryState(!showHistoryState)}
             >
-              {showHistory ? 'Hide' : 'Show'} History
+              {showHistoryState ? 'Hide' : 'Show'} History
             </Button>
           </div>
           
-          {showHistory && (
+          {showHistoryState && (
             <div className="space-y-2">
               {history.map((item) => (
                 <div

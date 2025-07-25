@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './premium-design.css';
 import { SimpleHeader } from '@/components/layout/simple-header';
+import { Footer } from '@/components/layout/footer';
 import { generateMetadata, structuredData } from '@/lib/seo/metadata';
 import { faqSchema, organizationSchema } from '@/lib/seo/faq-schema';
 import { SimpleAppProvider } from '@/lib/contexts/simple-app-context';
@@ -64,6 +65,7 @@ export default function RootLayout({
               <main className="flex-1">
                 {children}
               </main>
+              <Footer />
             </div>
           </SimpleAppProvider>
         </AnalyticsProvider>
