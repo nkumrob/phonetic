@@ -256,3 +256,4 @@
 - **Hydration Error Fix in SimplePracticeHub (2025-07-25)**: Fixed React hydration mismatch by adding mounted state to handle client-side localStorage values (userName, stats) - prevents server/client rendering differences
 - **Speech Cancel on Navigation (2025-07-25)**: Enhanced speech synthesis cancellation with multiple cancel calls, pause/cancel combo, and explicit onClick handlers on all nav links to stop speech
 - **Text Converter State Clear on Navigation (2025-07-25)**: Added pathname detection to clear text converter input/output state on route changes - prevents stale translations after navigation
+- **Light Mode as Default (2025-07-25)**: Changed default theme from system preference to light mode - removed automatic dark mode switching, users can still change to dark/system in settings
