@@ -7,10 +7,12 @@ interface SpeechOptions {
   rate?: number;
   pitch?: number;
   voice?: SpeechSynthesisVoice | null;
+  onEnd?: () => void;
 }
 
 class SpeechManager {
   private static instance: SpeechManager;
+  private currentUtterance: SpeechSynthesisUtterance | null = null;
   
   private constructor() {}
   
@@ -40,6 +42,9 @@ class SpeechManager {
     // Parse volume (default to 0.5 if not set)
     const volume = soundVolume ? parseFloat(soundVolume) : 0.5;
     
+    // Cancel any ongoing speech BEFORE creating new utterance
+    this.cancel();
+    
     // Chrome workaround: speak empty string first
     const dummy = new SpeechSynthesisUtterance('');
     window.speechSynthesis.speak(dummy);
@@ -55,14 +60,50 @@ class SpeechManager {
         utterance.voice = options.voice;
       }
       
+      // Store reference for potential cancellation
+      this.currentUtterance = utterance;
+      
+      // Clear reference when done
+      utterance.onend = () => {
+        this.currentUtterance = null;
+        if (options.onEnd) {
+          options.onEnd();
+        }
+      };
+      
+      utterance.onerror = () => {
+        this.currentUtterance = null;
+        if (options.onEnd) {
+          options.onEnd();
+        }
+      };
+      
       window.speechSynthesis.speak(utterance);
     }, 50);
   }
   
   cancel() {
+    logger.info('SpeechManager cancel called');
     if ('speechSynthesis' in window) {
+      logger.info('Cancelling speech synthesis', {
+        speaking: window.speechSynthesis.speaking,
+        pending: window.speechSynthesis.pending
+      });
       window.speechSynthesis.cancel();
+      this.currentUtterance = null;
     }
+  }
+  
+  stop() {
+    // Alias for cancel for clarity
+    this.cancel();
+  }
+  
+  isSpeaking(): boolean {
+    if ('speechSynthesis' in window) {
+      return window.speechSynthesis.speaking;
+    }
+    return false;
   }
   
   getVoices(): Promise<SpeechSynthesisVoice[]> {

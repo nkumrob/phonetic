@@ -24,7 +24,11 @@ export function AlphabetGrid() {
       }
     }, 300);
     
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      // Cleanup speech on unmount
+      speechManager.stop();
+    };
   }, []);
 
   const handleSpeak = useCallback((letter: string, codeWord: string) => {

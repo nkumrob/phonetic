@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LazyReverseLookup } from '@/components/lazy';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Icons } from '@/components/ui/icons';
@@ -19,6 +19,8 @@ function InlineTextConverter() {
   const [isCopied, setIsCopied] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const isSpeakingRef = useRef(false);
+  const speakingTimeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
   useEffect(() => {
     const converted = textToPhonetic(inputText);
@@ -65,41 +67,83 @@ function InlineTextConverter() {
   };
 
   const handleClear = () => {
+    // Stop any ongoing speech
+    if (isSpeaking) {
+      stopSpeaking();
+    }
     setInputText('');
     setOutputText('');
   };
 
-  const handleSpeak = async () => {
+  const stopSpeaking = () => {
+    // Cancel all speech
+    speechManager.stop();
+    
+    // Clear all timeouts
+    speakingTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    speakingTimeoutsRef.current = [];
+    
+    // Reset state
+    setIsSpeaking(false);
+    isSpeakingRef.current = false;
+  };
+
+  const handleSpeak = () => {
     if (!inputText.trim()) return;
     
+    if (isSpeaking) {
+      stopSpeaking();
+      return;
+    }
+    
     setIsSpeaking(true);
+    isSpeakingRef.current = true;
     
-    // First speak the original text
-    speechManager.speak(inputText);
+    // Clear any existing timeouts
+    speakingTimeoutsRef.current = [];
     
-    // Wait a bit for the original text to finish
-    await new Promise(resolve => setTimeout(resolve, inputText.length * 100 + 500));
+    // Build a single utterance with pauses
+    let fullText = inputText + '. ';
     
-    // Then speak the phonetic version letter by letter
+    // Add pause
+    fullText += '... ... ... ';
+    
+    // Build phonetic version
     const letters = inputText.toUpperCase().split('');
+    const phoneticParts: string[] = [];
     
     for (const char of letters) {
       if (char === ' ') {
-        speechManager.speak('space');
-        await new Promise(resolve => setTimeout(resolve, 800));
+        phoneticParts.push('space');
       } else {
         const phoneticItem = NATO_ALPHABET.find(item => item.letter === char);
         if (phoneticItem) {
-          speechManager.speak(`${phoneticItem.letter}, for ${phoneticItem.codeWord}`);
-          await new Promise(resolve => setTimeout(resolve, 1500));
+          phoneticParts.push(`${phoneticItem.letter}, for ${phoneticItem.codeWord}`);
         }
       }
     }
     
-    setIsSpeaking(false);
+    fullText += phoneticParts.join('. ... ');
+    
+    // Speak the entire text as one utterance
+    speechManager.speak(fullText, { 
+      rate: 0.8,
+      onEnd: () => {
+        setIsSpeaking(false);
+        isSpeakingRef.current = false;
+        speakingTimeoutsRef.current = [];
+      }
+    });
   };
 
   const characterCount = inputText.length;
+  
+  // Cleanup speech on unmount
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
+  }, []);
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -175,7 +219,6 @@ function InlineTextConverter() {
                 <>
                   <button
                     onClick={handleSpeak}
-                    disabled={isSpeaking}
                     className={cn(
                       'flex items-center gap-1 px-3 py-1.5 rounded-md text-sm font-medium transition-all',
                       isSpeaking
@@ -183,8 +226,19 @@ function InlineTextConverter() {
                         : 'bg-warmNeutral-100 text-warmNeutral-700 hover:bg-warmNeutral-200 dark:bg-warmNeutral-700 dark:text-warmNeutral-300 dark:hover:bg-warmNeutral-600'
                     )}
                   >
-                    <Volume2 className={cn("w-4 h-4", isSpeaking && "animate-pulse")} />
-                    {isSpeaking ? 'Speaking...' : 'Speak'}
+                    {isSpeaking ? (
+                      <>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        Stop
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-4 h-4" />
+                        Speak
+                      </>
+                    )}
                   </button>
                   
                   <button

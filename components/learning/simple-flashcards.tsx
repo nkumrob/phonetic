@@ -89,7 +89,11 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
     };
 
     window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+      // Cleanup speech on unmount
+      speechManager.stop();
+    };
   }, [currentIndex, isFlipped, handleFlip, nextCard, playSound, previousCard]);
 
   return (

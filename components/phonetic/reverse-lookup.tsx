@@ -128,12 +128,13 @@ export function ReverseLookup() {
     setResults([]);
   };
 
-  // Cleanup timer on unmount
+  // Cleanup timer and speech on unmount
   useEffect(() => {
     return () => {
       if (copyTimeoutRef.current) {
         clearTimeout(copyTimeoutRef.current);
       }
+      speechManager.stop();
     };
   }, []);
 
