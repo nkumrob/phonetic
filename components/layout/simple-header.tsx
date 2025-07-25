@@ -7,6 +7,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { cn } from '@/lib/utils/cn';
 import { Settings } from 'lucide-react';
 import { useSimpleAppState } from '@/lib/contexts/simple-app-context';
+import { speechManager } from '@/lib/utils/speech-synthesis';
 
 export function SimpleHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,11 +30,20 @@ export function SimpleHeader() {
       <nav className="container mx-auto px-4" aria-label="Global">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
+          <Link 
+            href="/" 
+            className="flex items-center space-x-2 group"
+            onClick={() => {
+              speechManager.cancel();
+              // Dispatch custom event to clear text converters
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new Event('clear-text-converters'));
+              }
+            }}
+          >
             <div className="bg-coolBlue-500 text-white font-black text-sm sm:text-xl px-2 sm:px-4 py-1 sm:py-2 rounded-lg">
-              NATO
+              NATO Phonetic
             </div>
-            <span className="text-lg sm:text-xl font-black text-foreground hidden xs:inline tracking-largeText">Phonetic</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -51,6 +61,7 @@ export function SimpleHeader() {
                       ? "text-primary" 
                       : "text-secondary hover:text-primary"
                   )}
+                  onClick={() => speechManager.cancel()}
                 >
                   <span className="text-lg">{item.icon}</span>
                   <span>{item.name}</span>
@@ -154,7 +165,10 @@ export function SimpleHeader() {
                         ? "bg-primary/10 text-primary" 
                         : "hover:bg-gray-100 dark:hover:bg-gray-800"
                     )}
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      speechManager.cancel();
+                    }}
                   >
                     <span className="text-xl">{item.icon}</span>
                     {item.name}

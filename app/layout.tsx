@@ -9,6 +9,7 @@ import { SimpleAppProvider } from '@/lib/contexts/simple-app-context';
 import { AnalyticsProvider } from '@/components/analytics/analytics-provider';
 import { Analytics } from '@vercel/analytics/next';
 import { inter } from './fonts';
+import { RouteSpeechHandler } from '@/components/speech/route-speech-handler';
 
 export const metadata: Metadata = generateMetadata();
 
@@ -60,6 +61,7 @@ export default function RootLayout({
         />
         <AnalyticsProvider>
           <SimpleAppProvider>
+            <RouteSpeechHandler />
             <div className="min-h-screen bg-background flex flex-col">
               <SimpleHeader />
               <main className="flex-1">

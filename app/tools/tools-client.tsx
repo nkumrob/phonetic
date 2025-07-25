@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { LazyReverseLookup } from '@/components/lazy';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Icons } from '@/components/ui/icons';
@@ -288,6 +289,26 @@ function InlineTextConverter() {
 }
 
 export default function ToolsPageClient() {
+  const pathname = usePathname();
+  const [converterKey, setConverterKey] = useState(0);
+
+  useEffect(() => {
+    // Force remount on pathname change
+    setConverterKey(prev => prev + 1);
+  }, [pathname]);
+
+  useEffect(() => {
+    // Listen for custom clear event
+    const handleClear = () => {
+      setConverterKey(prev => prev + 1);
+    };
+
+    window.addEventListener('clear-text-converters', handleClear);
+    return () => {
+      window.removeEventListener('clear-text-converters', handleClear);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen">
       {/* Hero Section - Mobile Optimized */}
@@ -303,7 +324,7 @@ export default function ToolsPageClient() {
       <div className="container max-w-6xl mx-auto px-4">
         {/* Text Converter Section */}
         <section className="mb-16">
-          <InlineTextConverter />
+          <InlineTextConverter key={converterKey} />
         </section>
 
         {/* Reverse Lookup Section */}

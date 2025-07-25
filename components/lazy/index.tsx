@@ -54,7 +54,7 @@ export const LazyAudioAlphabetTable = dynamic(
 
 // Tools components
 export const LazyTextConverter = dynamic(
-  () => import('@/components/phonetic/text-converter-fixed').then(mod => mod.TextConverter),
+  () => import('@/components/phonetic/text-converter-wrapper').then(mod => mod.TextConverterWrapper),
   {
     loading: LoadingFallback,
     ssr: true,

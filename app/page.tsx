@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { AudioAlphabetTable } from '@/components/phonetic/audio-alphabet-table';
-import { TextConverter } from '@/components/phonetic/text-converter';
+import { TextConverterWrapper } from '@/components/phonetic/text-converter-wrapper';
 
 export default function Home() {
   return (
@@ -220,7 +220,7 @@ export default function Home() {
           </p>
         </div>
         
-        <TextConverter showHistory={false} />
+        <TextConverterWrapper showHistory={false} />
       </section>
 
       {/* Quick Reference Preview */}

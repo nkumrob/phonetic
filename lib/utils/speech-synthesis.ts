@@ -14,7 +14,25 @@ class SpeechManager {
   private static instance: SpeechManager;
   private currentUtterance: SpeechSynthesisUtterance | null = null;
   
-  private constructor() {}
+  private constructor() {
+    // Stop all speech on page unload/refresh
+    if (typeof window !== 'undefined') {
+      // Cancel any ongoing speech immediately on initialization
+      window.speechSynthesis.cancel();
+      
+      // Stop on page unload/refresh
+      window.addEventListener('beforeunload', () => {
+        this.cancel();
+      });
+      
+      // Stop when page visibility changes (tab loses focus)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.cancel();
+        }
+      });
+    }
+  }
   
   static getInstance(): SpeechManager {
     if (!SpeechManager.instance) {
@@ -86,10 +104,24 @@ class SpeechManager {
     logger.info('SpeechManager cancel called');
     if ('speechSynthesis' in window) {
       logger.info('Cancelling speech synthesis', {
-        speaking: window.speechSynthesis.speaking,
-        pending: window.speechSynthesis.pending
+        context: 'speech-synthesis',
+        metadata: {
+          speaking: window.speechSynthesis.speaking,
+          pending: window.speechSynthesis.pending
+        }
       });
+      
+      // Cancel multiple times to ensure it stops
       window.speechSynthesis.cancel();
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.cancel();
+      
+      // Also pause if still speaking
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.cancel();
+      }
+      
       this.currentUtterance = null;
     }
   }

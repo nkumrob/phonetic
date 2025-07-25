@@ -254,3 +254,5 @@
 - **Enhanced Text Translator (2025-07-25)**: Added TextConverter to home page with audio feature - speaks original text first, then phonetic translation letter by letter ("hello" then "H for Hotel, E for Echo...")
 - **SEO-Optimized Footer (2025-07-25)**: Created semantic footer with sitemap links, social media, resources, schema.org markup, and proper navigation structure for improved SEO
 - **Hydration Error Fix in SimplePracticeHub (2025-07-25)**: Fixed React hydration mismatch by adding mounted state to handle client-side localStorage values (userName, stats) - prevents server/client rendering differences
+- **Speech Cancel on Navigation (2025-07-25)**: Enhanced speech synthesis cancellation with multiple cancel calls, pause/cancel combo, and explicit onClick handlers on all nav links to stop speech
+- **Text Converter State Clear on Navigation (2025-07-25)**: Added pathname detection to clear text converter input/output state on route changes - prevents stale translations after navigation
