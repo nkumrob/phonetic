@@ -1,0 +1,725 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-fade-out {
+  animation: fade-out 1s ease-out forwards;
+}
+
+/* Font variable from Next.js font optimization */
+:root {
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+@layer base {
+  :root {
+    /* Light mode - Warm neutral base with cool accents */
+    --background: 255 255 255; /* white */
+    --foreground: 28 25 23; /* warmNeutral.900 */
+    --muted: 254 247 237; /* warmNeutral.50 */
+    --muted-foreground: 116 66 49; /* warmNeutral.700 with 70% */
+    --border: 231 229 228; /* warmNeutral.200 */
+    --input: 231 229 228; /* warmNeutral.200 */
+    --ring: 59 130 246; /* coolBlue.500 */
+    
+    /* Primary colors - Cool blue */
+    --primary: 59 130 246; /* coolBlue.500 */
+    --primary-foreground: 255 255 255; /* white */
+    
+    /* Accent colors - Warm amber */
+    --accent: 245 158 11; /* warmAmber.500 */
+    --accent-foreground: 28 25 23; /* warmNeutral.900 */
+    
+    /* Semantic colors */
+    --success: 16 185 129; /* green.500 */
+    --error: 239 68 68; /* red.500 */
+    --warning: 245 158 11; /* warmAmber.500 */
+    
+    /* Radius - Using design tokens */
+    --radius: 0.75rem; /* borderRadius.md */
+  }
+  
+  .dark {
+    /* Dark mode - Cool neutrals with warm accents */
+    --background: 28 25 23; /* warmNeutral.900 */
+    --foreground: 254 243 226; /* warmNeutral.100 */
+    --muted: 68 64 60; /* warmNeutral.700 */
+    --muted-foreground: 214 211 209; /* warmNeutral.300 */
+    --border: 87 83 78; /* warmNeutral.600 */
+    --input: 87 83 78; /* warmNeutral.600 */
+    
+    /* Primary colors - Lighter blue for dark mode */
+    --primary: 96 165 250; /* coolBlue.400 */
+    --primary-foreground: 28 25 23; /* warmNeutral.900 */
+    
+    /* Accent colors - Brighter amber for dark mode */
+    --accent: 251 191 36; /* warmAmber.400 */
+    --accent-foreground: 28 25 23; /* warmNeutral.900 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply scroll-m-20;
+  }
+  
+  /* Typography with proper weight and tracking */
+  h1 {
+    @apply text-5xl font-black lg:text-7xl;
+    letter-spacing: -0.04em; /* Headlines need tight tracking */
+  }
+  
+  h2 {
+    @apply text-4xl font-black lg:text-5xl;
+    letter-spacing: -0.025em;
+  }
+  
+  h3 {
+    @apply text-3xl font-extrabold;
+    letter-spacing: -0.025em;
+  }
+  
+  h4 {
+    @apply text-2xl font-bold;
+    letter-spacing: -0.01em;
+  }
+  
+  p {
+    @apply leading-relaxed [&:not(:first-child)]:mt-6;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Focus styles - WCAG AA Compliant */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+    @apply rounded-sm; /* Ensure focus ring follows element shape */
+  }
+  
+  /* High contrast focus for interactive elements */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    @apply ring-offset-4;
+  }
+  
+  /* Remove focus outline for mouse users */
+  *:focus:not(:focus-visible) {
+    @apply outline-none ring-0;
+  }
+  
+  /* Text opacity hierarchy - WCAG AA contrast ratios */
+  .text-primary {
+    @apply text-foreground; /* 100% - 15:1 contrast on white */
+  }
+  
+  .text-secondary {
+    @apply text-foreground/70; /* 70% - 7:1 contrast on white */
+  }
+  
+  .text-tertiary {
+    @apply text-foreground/50; /* 50% - 4.5:1 contrast on white */
+  }
+  
+  .text-disabled {
+    @apply text-foreground/30; /* 30% - for disabled states only */
+  }
+  
+  /* Skip to content link for keyboard users */
+  .skip-to-content {
+    @apply absolute -top-10 left-4 z-50;
+    @apply bg-primary text-primary-foreground px-4 py-2 rounded-md;
+    @apply focus:top-4 transition-all duration-200;
+  }
+  
+  /* Screen reader only content */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Ensure interactive elements meet minimum size (44x44px) */
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Card System - Proper shadows and hover states */
+  .card {
+    @apply bg-background border border-border;
+    @apply transition-all duration-200;
+    border-radius: 1rem; /* 16px */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: rgb(var(--primary) / 0.3);
+  }
+  
+  /* Button System - Following style guide specifications */
+  .btn {
+    @apply inline-flex items-center justify-center font-semibold;
+    @apply transition-all duration-150;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none;
+    border-radius: 0.75rem; /* 12px */
+    letter-spacing: -0.01em;
+  }
+  
+  /* Primary Button - Main action */
+  .btn-primary {
+    @apply btn bg-primary text-primary-foreground;
+    @apply border-2 border-primary;
+    @apply hover:transform hover:-translate-y-px hover:shadow-lg;
+    @apply active:translate-y-0 active:shadow-md;
+    padding: 0.75rem 1.5rem; /* 12px 24px */
+  }
+  
+  /* Secondary Button - Outline style */
+  .btn-secondary {
+    @apply btn bg-transparent text-primary;
+    @apply border-2 border-primary;
+    @apply hover:bg-primary hover:text-primary-foreground;
+    @apply hover:transform hover:-translate-y-px hover:shadow-md;
+    @apply active:translate-y-0 active:shadow;
+    padding: calc(0.75rem - 2px) calc(1.5rem - 2px); /* Account for border */
+  }
+  
+  /* Ghost Button - Minimal style */
+  .btn-ghost {
+    @apply btn text-foreground;
+    @apply hover:bg-muted;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  /* Alphabet grid - Clean grid layout */
+  .alphabet-grid {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+  
+  /* Phonetic letter card - No excessive animations */
+  .phonetic-card {
+    @apply relative cursor-pointer p-6 text-center;
+    @apply bg-background border border-border;
+    @apply transition-all duration-200;
+    @apply hover:transform hover:-translate-y-px hover:shadow-md;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary;
+    min-height: 160px;
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .phonetic-card-active {
+    @apply bg-muted border-primary shadow-md;
+    transform: translateY(-2px);
+  }
+  
+  /* Pulse animation for speaking */
+  @keyframes pulse-slow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  .animate-pulse-slow {
+    animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+@layer utilities {
+  /* Animation utilities */
+  .animate-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+  
+  .animate-stagger {
+    animation: fadeIn 0.4s ease-out;
+    animation-fill-mode: both;
+  }
+  
+  /* Stagger children animations */
+  .stagger-children > * {
+    animation: fadeIn 0.4s ease-out;
+    animation-fill-mode: both;
+  }
+  
+  .stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+  .stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+  .stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+  .stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+  .stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+  .stagger-children > *:nth-child(7) { animation-delay: 0.35s; }
+  .stagger-children > *:nth-child(8) { animation-delay: 0.4s; }
+  
+  /* Text balance for better readability */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Prevent transition on page load */
+.no-transition * {
+  transition: none !important;
+}
+
+/* 3D Flashcard styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Print styles */
+@media print {
+  /* Reset all CSS variables to ensure print compatibility */
+  :root, * {
+    --color-primary: 0 0 0 !important;
+    --color-text-primary: 0 0 0 !important;
+    --color-text-secondary: 0 0 0 !important;
+    --color-text-tertiary: 0 0 0 !important;
+  }
+  
+  /* Hide non-essential elements */
+  header,
+  footer,
+  nav,
+  .no-print,
+  button,
+  .keyboard-shortcuts,
+  .download-section {
+    display: none !important;
+  }
+  
+  /* Page setup */
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
+  
+  /* Reset colors for print */
+  * {
+    color: black !important;
+    background: white !important;
+  }
+  
+  /* Hide the original alphabet grid in print to avoid duplication */
+  .alphabet-grid {
+    display: none !important;
+  }
+  
+  .phonetic-card {
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+    padding: 0.5rem !important;
+    min-height: auto !important;
+  }
+  
+  /* Ensure text is visible */
+  .text-primary {
+    color: black !important;
+    font-weight: bold !important;
+  }
+  
+  /* Phonetic card text styles for print */
+  .phonetic-letter {
+    font-size: 24pt !important;
+    font-weight: bold !important;
+    color: #000000 !important;
+    margin-bottom: 4pt !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  .phonetic-word {
+    font-size: 14pt !important;
+    font-weight: 600 !important;
+    color: #000000 !important;
+    margin-bottom: 2pt !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  .phonetic-pronunciation {
+    font-size: 10pt !important;
+    color: #333333 !important;
+    font-style: italic !important;
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure all text in phonetic cards is black */
+  .phonetic-card * {
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  /* Override CSS variables for print */
+  body,
+  .phonetic-card,
+  .phonetic-letter,
+  .phonetic-word,
+  .phonetic-pronunciation,
+  .text-primary,
+  .text-secondary,
+  .text-tertiary,
+  h1, h2, h3, h4, h5, h6,
+  p, span, div {
+    color: #000000 !important;
+  }
+  
+  /* Force text visibility */
+  * {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Ensure loading states don't hide content */
+  .skeleton,
+  .loading,
+  [data-loading="true"] {
+    display: none !important;
+  }
+  
+  /* Force phonetic content to be visible */
+  .alphabet-grid > * {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Remove automatic header since we have a better one now */
+}
+
+/* Font optimization: Using Next.js font loading instead of @fontsource */
+
+/* Remove AI slop - No generic gradients or excessive effects */
+
+/* Gamification Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fill-right {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: var(--target-width, 100%);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-float-up {
+  animation: float-up 2s ease-out forwards;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-fill-right {
+  animation: fill-right 1s ease-out forwards;
+}
+
+/* Flame effects for streaks */
+.flame-small {
+  filter: drop-shadow(0 0 3px rgba(255, 69, 0, 0.5));
+  animation: flicker 2s ease-in-out infinite;
+}
+
+.flame-medium {
+  filter: drop-shadow(0 0 6px rgba(255, 69, 0, 0.7));
+  animation: flicker 1.5s ease-in-out infinite;
+}
+
+.flame-intense {
+  filter: drop-shadow(0 0 10px rgba(255, 69, 0, 0.9));
+  animation: flicker 1s ease-in-out infinite;
+}
+
+.flame-legendary {
+  filter: drop-shadow(0 0 15px rgba(255, 69, 0, 1));
+  animation: flicker 0.5s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% {
+    transform: scale(1) rotate(-2deg);
+  }
+  25% {
+    transform: scale(1.05) rotate(2deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(-1deg);
+  }
+  75% {
+    transform: scale(1.05) rotate(1deg);
+  }
+}
+
+/* Shimmer effect */
+.shimmer {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+}
+
+/* Fire particles */
+.fire-particles::before,
+.fire-particles::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #ff4500;
+  border-radius: 50%;
+  animation: fire-particle 1s ease-out infinite;
+}
+
+.fire-particles::after {
+  animation-delay: 0.5s;
+  left: 5px;
+}
+
+@keyframes fire-particle {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-30px) translateX(10px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Glow effect */
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 10px currentColor);
+}
