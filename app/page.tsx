@@ -10,27 +10,27 @@ export default function Home() {
   return (
     <>
       {/* Hero Section - Asymmetric Split Layout */}
-      <section className="min-h-[90vh] flex items-center py-24 overflow-hidden relative">
+      <section className="py-12 overflow-hidden relative">
         {/* Warm neutral background */}
         <div className="absolute inset-0 -z-10 bg-warmNeutral-50 dark:bg-warmNeutral-900" />
 
         <div className="container">
           <div className="grid lg:grid-cols-[1.2fr,1fr] gap-16 items-center">
             {/* Content */}
-            <div className="space-y-8">
+            <div className="space-y-6">
               <div className="inline-block px-4 py-2 bg-coolBlue-50 dark:bg-coolBlue-900/20 text-coolBlue-600 dark:text-coolBlue-400 text-sm font-semibold uppercase tracking-widest rounded-full animate-fade-in">
                 International Radiotelephony Spelling Alphabet
               </div>
-              
-              <h1 className="text-7xl lg:text-8xl font-black tracking-headlines leading-none animate-slide-up">
+
+              <h1 className="text-6xl lg:text-7xl font-black tracking-headlines leading-none animate-slide-up">
                 NATO Phonetic Alphabet: A to Z
               </h1>
-              
+
               <p className="text-xl text-secondary leading-relaxed max-w-2xl animate-slide-up" style={{ animationDelay: '100ms' }}>
-                Learn the universal communication standard used by military forces, aviation professionals, 
+                Learn the universal communication standard used by military forces, aviation professionals,
                 and emergency services worldwide. Interactive lessons and real-time practice.
               </p>
-          
+
               <div className="flex flex-wrap gap-4 animate-slide-up" style={{ animationDelay: '200ms' }}>
                 <Link href="/learn" className="btn btn-primary btn-xl">
                   Start Learning Now
@@ -44,7 +44,7 @@ export default function Home() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="pt-12 animate-fade-in" style={{ animationDelay: '300ms' }}>
+              <div className="pt-6 animate-fade-in" style={{ animationDelay: '300ms' }}>
                 <p className="text-sm text-tertiary uppercase tracking-widest mb-4">Trusted by professionals</p>
                 <div className="flex flex-wrap items-center gap-8">
                   <span className="text-lg font-semibold text-secondary">✈️ Aviation</span>
@@ -74,8 +74,8 @@ export default function Home() {
       </section>
 
       {/* Features Section with Cards */}
-      <section className="container py-24">
-        <div className="text-center mb-16">
+      <section className="container pt-12 pb-16">
+        <div className="text-center mb-12">
           <h2 className="h2 mb-4">What Is the NATO Phonetic Alphabet?</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto">
             The NATO phonetic alphabet is a standardized set of 26 code words used to clearly communicate
@@ -190,7 +190,7 @@ export default function Home() {
       </section>
 
       {/* Statistics Section */}
-      <section className="py-24 bg-warmNeutral-50 dark:bg-warmNeutral-900">
+      <section className="py-16 bg-warmNeutral-50 dark:bg-warmNeutral-900">
         <div className="container">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div className="animate-scale-in">
@@ -214,19 +214,19 @@ export default function Home() {
       </section>
 
       {/* Text Translator Section */}
-      <section className="container py-24">
+      <section className="container py-16">
         <div className="text-center mb-12">
           <h2 className="h2 mb-4">Instant NATO Phonetic Translator</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto">
             Convert any text to NATO phonetic alphabet instantly. Type your message and hear it spoken in both regular and phonetic form.
           </p>
         </div>
-        
+
         <TextConverterWrapper showHistory={false} />
       </section>
 
       {/* Quick Reference Preview */}
-      <section className="container py-24">
+      <section className="container py-16">
         <div className="text-center mb-12">
           <h2 className="h2 mb-4">Complete NATO Phonetic Alphabet Chart</h2>
           <p className="text-body-lg text-secondary">
@@ -250,7 +250,7 @@ export default function Home() {
       </section>
 
       {/* How to Use Section */}
-      <section className="container py-24">
+      <section className="container py-16">
         <div className="text-center mb-12">
           <h2 className="h2 mb-4">How to Use NATO Phonetic Code</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto">
@@ -286,12 +286,12 @@ export default function Home() {
       </section>
 
       {/* NATO vs Military Alphabet Section */}
-      <section className="py-24 bg-warmNeutral-50 dark:bg-warmNeutral-900">
+      <section className="py-16 bg-warmNeutral-50 dark:bg-warmNeutral-900">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="h2 mb-4">NATO vs. Military Alphabet: Key Differences</h2>
             <p className="text-body-lg text-secondary max-w-3xl mx-auto">
-              While often used interchangeably, the NATO phonetic alphabet is the internationally 
+              While often used interchangeably, the NATO phonetic alphabet is the internationally
               standardized version adopted by ICAO, ITU, and military organizations worldwide.
             </p>
           </div>
@@ -352,7 +352,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="container py-24" id="faq">
+      <section className="container py-16" id="faq">
         <div className="text-center mb-12">
           <h2 className="h2 mb-4">Frequently Asked Questions (FAQs)</h2>
           <p className="text-body-lg text-secondary">
@@ -384,7 +384,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-24 bg-warmNeutral-50 dark:bg-warmNeutral-900">
+      <section className="py-16 bg-warmNeutral-50 dark:bg-warmNeutral-900">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="h2 mb-4">What Our Users Say</h2>
@@ -417,7 +417,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-coolBlue-50 dark:bg-coolBlue-900/10">
+      <section className="py-16 bg-coolBlue-50 dark:bg-coolBlue-900/10">
         <div className="container text-center">
           <h2 className="text-5xl font-black mb-6 tracking-headlines">Ready to Master Professional Communication?</h2>
           <p className="text-xl text-secondary max-w-2xl mx-auto mb-8">
