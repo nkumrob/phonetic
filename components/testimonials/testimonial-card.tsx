@@ -9,17 +9,17 @@ interface TestimonialCardProps {
 
 export function TestimonialCard({ name, role, avatar, rating, date, content }: TestimonialCardProps) {
   return (
-    <div className="card p-5 hover:shadow-lg transition-shadow flex flex-col h-full">
+    <div className="card p-4 md:p-5 hover:shadow-lg transition-shadow flex flex-col h-full">
       {/* Header */}
       <div className="flex items-start justify-between mb-3 gap-2">
-        <div className="flex items-start gap-2.5 min-w-0 flex-1">
+        <div className="flex items-start gap-2 md:gap-2.5 min-w-0 flex-1">
           <img
             src={avatar}
             alt={name}
-            className="w-10 h-10 rounded-full object-cover flex-shrink-0 ring-2 ring-coolBlue-100 dark:ring-coolBlue-900/20"
+            className="w-9 h-9 md:w-10 md:h-10 rounded-full object-cover flex-shrink-0 ring-2 ring-coolBlue-100 dark:ring-coolBlue-900/20"
           />
           <div className="min-w-0 flex-1 -space-y-0.5">
-            <h4 className="font-bold text-base leading-none truncate">{name}</h4>
+            <h4 className="font-bold text-sm md:text-base leading-none truncate">{name}</h4>
             <p className="text-xs text-tertiary leading-none pt-1">{role}</p>
           </div>
         </div>
@@ -27,7 +27,7 @@ export function TestimonialCard({ name, role, avatar, rating, date, content }: T
           {[...Array(5)].map((_, i) => (
             <svg
               key={i}
-              className={`w-4 h-4 ${i < rating ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}`}
+              className={`w-3.5 h-3.5 md:w-4 md:h-4 ${i < rating ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}`}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -38,7 +38,7 @@ export function TestimonialCard({ name, role, avatar, rating, date, content }: T
       </div>
 
       {/* Content - flex-grow to push date to bottom */}
-      <p className="text-secondary leading-relaxed mb-3 flex-grow text-sm">{content}</p>
+      <p className="text-secondary leading-relaxed mb-3 flex-grow text-xs md:text-sm">{content}</p>
 
       {/* Date */}
       <p className="text-xs text-tertiary font-medium">{date}</p>

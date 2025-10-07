@@ -104,16 +104,16 @@ export function TestimonialsGrid() {
     <div className="relative mb-12 py-4">
       {/* Scrolling container */}
       <div className="overflow-hidden">
-        <div className="flex gap-6 animate-scroll-horizontal items-stretch">
+        <div className="flex gap-4 md:gap-6 animate-scroll-horizontal items-stretch">
           {/* First set of testimonials */}
           {testimonials.map((testimonial, index) => (
-            <div key={`first-${index}`} className="flex-shrink-0 w-[350px] h-[320px]">
+            <div key={`first-${index}`} className="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px] h-[320px]">
               <TestimonialCard {...testimonial} />
             </div>
           ))}
           {/* Duplicate set for seamless loop */}
           {testimonials.map((testimonial, index) => (
-            <div key={`second-${index}`} className="flex-shrink-0 w-[350px] h-[320px]">
+            <div key={`second-${index}`} className="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px] h-[320px]">
               <TestimonialCard {...testimonial} />
             </div>
           ))}
@@ -121,8 +121,8 @@ export function TestimonialsGrid() {
       </div>
 
       {/* Gradient overlays for fade effect */}
-      <div className="absolute top-0 left-0 bottom-0 w-20 bg-gradient-to-r from-warmNeutral-50 dark:from-warmNeutral-900 to-transparent pointer-events-none z-10"></div>
-      <div className="absolute top-0 right-0 bottom-0 w-20 bg-gradient-to-l from-warmNeutral-50 dark:from-warmNeutral-900 to-transparent pointer-events-none z-10"></div>
+      <div className="absolute top-0 left-0 bottom-0 w-12 md:w-20 bg-gradient-to-r from-warmNeutral-50 dark:from-warmNeutral-900 to-transparent pointer-events-none z-10"></div>
+      <div className="absolute top-0 right-0 bottom-0 w-12 md:w-20 bg-gradient-to-l from-warmNeutral-50 dark:from-warmNeutral-900 to-transparent pointer-events-none z-10"></div>
 
       <style jsx>{`
         @keyframes scroll-horizontal {
