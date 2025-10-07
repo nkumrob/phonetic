@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { AudioAlphabetTable } from '@/components/phonetic/audio-alphabet-table';
 import { TextConverterWrapper } from '@/components/phonetic/text-converter-wrapper';
+import { FamewallWidget } from '@/components/famewall';
+import { TestimonialsGrid } from '@/components/testimonials';
 
 export default function Home() {
   return (
@@ -357,26 +359,59 @@ export default function Home() {
             Common questions about the NATO phonetic alphabet
           </p>
         </div>
-        
+
         <div className="max-w-3xl mx-auto space-y-6">
           <div className="card p-6">
             <h3 className="text-xl font-bold mb-3">What does each letter stand for in the NATO phonetic alphabet?</h3>
             <p className="text-secondary">The NATO phonetic alphabet assigns a code word to each letter A–Z to ensure clarity over voice channels (e.g., Alpha for A, Bravo for B, Charlie for C).</p>
           </div>
-          
+
           <div className="card p-6">
             <h3 className="text-xl font-bold mb-3">How do I pronounce the NATO phonetic alphabet correctly?</h3>
             <p className="text-secondary">Each code word is pronounced with emphasis on its first syllable. Listen to our audio clips or follow our phonetic pronunciation guide for precise enunciation.</p>
           </div>
-          
+
           <div className="card p-6">
             <h3 className="text-xl font-bold mb-3">Where can I download a printable NATO phonetic alphabet PDF?</h3>
             <p className="text-secondary">Visit our Printable PDF & Download section or click the download button in our tools section for a free, optimized PDF.</p>
           </div>
-          
+
           <div className="card p-6">
             <h3 className="text-xl font-bold mb-3">Is there an online NATO phonetic alphabet translator?</h3>
             <p className="text-secondary">Yes! Try our interactive translator in the Tools section: type any message and see the instant phonetic conversion in real time.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-24 bg-warmNeutral-50 dark:bg-warmNeutral-900">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="h2 mb-4">What Our Users Say</h2>
+            <p className="text-body-lg text-secondary max-w-3xl mx-auto">
+              Join thousands of professionals who have mastered the NATO phonetic alphabet
+            </p>
+          </div>
+
+          {/* Hardcoded Testimonials */}
+          <div className="max-w-7xl mx-auto mb-16">
+            <TestimonialsGrid />
+          </div>
+
+          {/* Divider */}
+          <div className="max-w-5xl mx-auto mb-12">
+            <div className="flex items-center gap-4">
+              <div className="flex-1 h-px bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
+              <p className="text-sm font-semibold text-tertiary uppercase tracking-wider">
+                Share Your Experience
+              </p>
+              <div className="flex-1 h-px bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
+            </div>
+          </div>
+
+          {/* Famewall Widget - New Reviews */}
+          <div className="max-w-5xl mx-auto">
+            <FamewallWidget />
           </div>
         </div>
       </section>

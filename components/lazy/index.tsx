@@ -73,7 +73,7 @@ export const LazyDownloadChart = dynamic(
   () => import('@/components/phonetic/download-chart').then(mod => mod.DownloadChart),
   {
     loading: LoadingFallback,
-    ssr: true,
+    ssr: false, // Client-only component (uses PDF library)
   }
 );
 

@@ -74,9 +74,15 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/sitemap.xml" className="text-sm text-secondary hover:text-primary transition-colors">
-                  Sitemap
-                </Link>
+                <a
+                  href="mailto:support@natophonetic.com"
+                  className="text-sm text-secondary hover:text-primary transition-colors inline-flex items-center gap-1"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  Support
+                </a>
               </li>
               <li>
                 <a href="https://en.wikipedia.org/wiki/NATO_phonetic_alphabet" target="_blank" rel="noopener noreferrer" className="text-sm text-secondary hover:text-primary transition-colors">
@@ -95,9 +101,29 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-secondary">
-              © {currentYear} NATO Phonetic Alphabet. Educational resource for learning the international radiotelephony spelling alphabet.
-            </p>
+            <div className="flex flex-col items-center md:items-start gap-2">
+              <p className="text-sm text-secondary">
+                © {currentYear} NATO Phonetic Alphabet. Educational resource for learning the international radiotelephony spelling alphabet.
+              </p>
+              <div className="flex items-center gap-2 text-sm text-secondary">
+                <span>Made with</span>
+                <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                </svg>
+                <span>by</span>
+                <a
+                  href="https://www.linkedin.com/in/appiahrobert/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-coolBlue-500 hover:text-coolBlue-600 dark:text-coolBlue-400 dark:hover:text-coolBlue-300 transition-colors inline-flex items-center gap-1"
+                >
+                  Bob
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+            </div>
             <div className="flex gap-6">
               <Link href="/privacy" className="text-sm text-secondary hover:text-primary transition-colors">
                 Privacy Policy
@@ -105,9 +131,12 @@ export function Footer() {
               <Link href="/terms" className="text-sm text-secondary hover:text-primary transition-colors">
                 Terms of Use
               </Link>
-              <Link href="/contact" className="text-sm text-secondary hover:text-primary transition-colors">
+              <a
+                href="mailto:support@natophonetic.com"
+                className="text-sm text-secondary hover:text-primary transition-colors"
+              >
                 Contact
-              </Link>
+              </a>
             </div>
           </div>
         </div>
