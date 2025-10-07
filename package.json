@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:analyze": "ANALYZE=true next build",
+    "build:production": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -15,7 +18,10 @@
     "test:e2e": "jest --config jest.e2e.config.js",
     "test:unit": "jest --testPathPattern='/__tests__/.*\\.test\\.[jt]sx?$'",
     "test:integration": "jest --testPathPattern='/__tests__/.*\\.integration\\.test\\.[jt]sx?$'",
-    "precommit": "npm test -- --passWithNoTests --watchAll=false && npm run lint"
+    "precommit": "npm test -- --passWithNoTests --watchAll=false && npm run lint",
+    "check:performance": "node scripts/check-performance.js",
+    "check:accessibility": "node scripts/check-accessibility.js",
+    "optimize": "npm run lint:fix && npm run check:performance && npm run check:accessibility"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.0",

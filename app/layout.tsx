@@ -8,6 +8,7 @@ import { faqSchema, organizationSchema } from '@/lib/seo/faq-schema';
 import { SimpleAppProvider } from '@/lib/contexts/simple-app-context';
 import { AnalyticsProvider } from '@/components/analytics/analytics-provider';
 import { Analytics } from '@vercel/analytics/next';
+import { WebVitalsReporter } from '@/components/analytics/web-vitals';
 import { inter } from './fonts';
 import { RouteSpeechHandler } from '@/components/speech/route-speech-handler';
 
@@ -87,6 +88,7 @@ export default function RootLayout({
           </SimpleAppProvider>
         </AnalyticsProvider>
         <Analytics />
+        <WebVitalsReporter />
       </body>
     </html>
   );

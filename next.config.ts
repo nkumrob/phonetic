@@ -59,6 +59,23 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
   },
+
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+
+  // Production optimizations
+  reactStrictMode: true,
+
+  // Optimize bundle size
+  modularizeImports: {
+    '@/components': {
+      transform: '@/components/{{member}}',
+    },
+  },
 };
 
 export default nextConfig;

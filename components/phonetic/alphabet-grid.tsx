@@ -32,17 +32,17 @@ export function AlphabetGrid() {
   }, []);
 
   const handleSpeak = useCallback((letter: string, codeWord: string) => {
+    // Clear any existing timer first to prevent memory leaks
+    if (speakingTimerRef.current) {
+      clearTimeout(speakingTimerRef.current);
+    }
+
     setSpeakingLetter(letter);
 
     // Use centralized speech manager that respects global settings
     // Say "A" as in "Alpha" format for clarity
     speechManager.speak(`"${letter}" as in "${codeWord}"`);
-    
-    // Clear any existing timer
-    if (speakingTimerRef.current) {
-      clearTimeout(speakingTimerRef.current);
-    }
-    
+
     // Reset speaking state after a reasonable time
     speakingTimerRef.current = setTimeout(() => {
       setSpeakingLetter(null);

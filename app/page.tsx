@@ -1,10 +1,28 @@
 'use client';
 
 import Link from 'next/link';
-import { AudioAlphabetTable } from '@/components/phonetic/audio-alphabet-table';
-import { TextConverterWrapper } from '@/components/phonetic/text-converter-wrapper';
-import { FamewallWidget } from '@/components/famewall';
-import { TestimonialsGrid } from '@/components/testimonials';
+import dynamic from 'next/dynamic';
+
+// Lazy load heavy components for better initial page load
+const AudioAlphabetTable = dynamic(() => import('@/components/phonetic/audio-alphabet-table').then(mod => ({ default: mod.AudioAlphabetTable })), {
+  loading: () => <div className="h-48 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
+  ssr: false,
+});
+
+const TextConverterWrapper = dynamic(() => import('@/components/phonetic/text-converter-wrapper').then(mod => ({ default: mod.TextConverterWrapper })), {
+  loading: () => <div className="h-64 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
+  ssr: false,
+});
+
+const FamewallWidget = dynamic(() => import('@/components/famewall').then(mod => ({ default: mod.FamewallWidget })), {
+  loading: () => <div className="h-96 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
+  ssr: false,
+});
+
+const TestimonialsGrid = dynamic(() => import('@/components/testimonials').then(mod => ({ default: mod.TestimonialsGrid })), {
+  loading: () => <div className="h-96 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
+  ssr: false,
+});
 
 export default function Home() {
   return (
