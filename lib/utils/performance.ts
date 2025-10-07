@@ -58,9 +58,10 @@ export const performanceMetrics = {
       LCP: performance.getEntriesByType('largest-contentful-paint')[0]?.startTime || 0,
       
       // Cumulative Layout Shift
-      CLS: performance.getEntriesByType('layout-shift').reduce((sum, entry: any) => {
-        if (!entry.hadRecentInput) {
-          return sum + entry.value;
+      CLS: performance.getEntriesByType('layout-shift').reduce((sum, entry) => {
+        const layoutShiftEntry = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number };
+        if (!layoutShiftEntry.hadRecentInput && layoutShiftEntry.value) {
+          return sum + layoutShiftEntry.value;
         }
         return sum;
       }, 0),

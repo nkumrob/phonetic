@@ -70,6 +70,16 @@ const nextConfig: NextConfig = {
   // Production optimizations
   reactStrictMode: true,
 
+  // ESLint configuration - allow warnings but fail on errors
+  eslint: {
+    ignoreDuringBuilds: false, // Run ESLint during builds
+  },
+
+  // TypeScript configuration
+  typescript: {
+    ignoreBuildErrors: false, // Fail on TypeScript errors
+  },
+
   // Optimize bundle size
   modularizeImports: {
     '@/components': {
