@@ -220,7 +220,7 @@ export function SimpleQuiz({ mode, onComplete }: SimpleQuizProps) {
       case 'audio-to-code':
         // Play the letter sound
         setTimeout(() => {
-          speechManager.speak(`${correctItem.letter}, for ${correctItem.codeWord}`);
+          speechManager.speak(`"${correctItem.letter}" as in "${correctItem.codeWord}"`);
         }, 500);
         
         question = {
@@ -364,11 +364,11 @@ export function SimpleQuiz({ mode, onComplete }: SimpleQuizProps) {
   // Replay audio for audio questions
   const replayAudio = () => {
     if (currentQuestion?.type === 'audio-to-code') {
-      const item = NATO_ALPHABET.find(item => 
+      const item = NATO_ALPHABET.find(item =>
         item.codeWord === currentQuestion.correctAnswer
       );
       if (item) {
-        speechManager.speak(`${item.letter}, for ${item.codeWord}`);
+        speechManager.speak(`"${item.letter}" as in "${item.codeWord}"`);
       }
     }
   };
