@@ -17,7 +17,7 @@ export function WebVitalsReporter() {
     // Send to analytics in production
     if (process.env.NODE_ENV === 'production' && typeof window !== 'undefined') {
       // Send to Google Analytics if available
-      const gtag = (window as any).gtag;
+      const gtag = (window as Window & { gtag?: (...args: unknown[]) => void }).gtag;
       if (gtag) {
         gtag('event', metric.name, {
           value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
@@ -61,7 +61,7 @@ export function WebVitalsReporter() {
 
     try {
       observer.observe({ entryTypes: ['longtask'] });
-    } catch (e) {
+    } catch {
       // longtask not supported in all browsers
     }
 

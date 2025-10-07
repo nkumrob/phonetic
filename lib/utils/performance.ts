@@ -69,7 +69,7 @@ export const performanceMetrics = {
 };
 
 // Debounce utility for performance optimization
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: never[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
@@ -89,7 +89,7 @@ export function debounce<T extends (...args: any[]) => any>(
 }
 
 // Throttle utility for performance optimization
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: never[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
@@ -157,12 +157,14 @@ export const monitorMemory = () => {
   if (typeof window === 'undefined' || process.env.NODE_ENV !== 'development') return;
 
   if ('memory' in performance) {
-    const memory = (performance as any).memory;
-    console.log('[Performance] Memory Usage:', {
-      usedJSHeapSize: `${(memory.usedJSHeapSize / 1048576).toFixed(2)} MB`,
-      totalJSHeapSize: `${(memory.totalJSHeapSize / 1048576).toFixed(2)} MB`,
-      jsHeapSizeLimit: `${(memory.jsHeapSizeLimit / 1048576).toFixed(2)} MB`,
-    });
+    const memory = (performance as Performance & { memory?: { usedJSHeapSize: number; totalJSHeapSize: number; jsHeapSizeLimit: number } }).memory;
+    if (memory) {
+      console.log('[Performance] Memory Usage:', {
+        usedJSHeapSize: `${(memory.usedJSHeapSize / 1048576).toFixed(2)} MB`,
+        totalJSHeapSize: `${(memory.totalJSHeapSize / 1048576).toFixed(2)} MB`,
+        jsHeapSizeLimit: `${(memory.jsHeapSizeLimit / 1048576).toFixed(2)} MB`,
+      });
+    }
   }
 };
 
@@ -230,7 +232,7 @@ export const isLowEndDevice = (): boolean => {
   const cores = navigator.hardwareConcurrency || 1;
   
   // Check for device memory (if available)
-  const memory = (navigator as any).deviceMemory || 4;
+  const memory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory || 4;
 
   // Consider low-end if less than 2 cores or less than 2GB RAM
   return cores < 2 || memory < 2;
@@ -244,7 +246,7 @@ export const shouldLoadHeavyFeature = (): boolean => {
   if (isLowEndDevice()) return false;
 
   // Check connection speed
-  const connection = (navigator as any).connection;
+  const connection = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
   if (connection) {
     const effectiveType = connection.effectiveType;
     // Don't load on slow connections (2g, slow-2g)
