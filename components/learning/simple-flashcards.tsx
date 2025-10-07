@@ -25,8 +25,8 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
   // Play sound for current letter
   const playSound = () => {
     if (state.preferences.soundEnabled) {
-      // Speak the full phrase: "A, for Alpha" with comma for natural pause
-      speechManager.speak(`${currentCard.letter}, for ${currentCard.codeWord}`);
+      // Speak the full phrase: "A" as in "Alpha" for clarity
+      speechManager.speak(`"${currentCard.letter}" as in "${currentCard.codeWord}"`);
     }
   };
 
@@ -159,7 +159,7 @@ export function SimpleFlashcards({ onComplete }: SimpleFlashcardsProps) {
           <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180">
             <div className="h-full p-4 sm:p-8 rounded-xl bg-warmAmber-600 text-white shadow-lg flex flex-col items-center justify-center">
               <div className="text-4xl sm:text-6xl font-black mb-2 sm:mb-4 tracking-headlines">{currentCard.codeWord}</div>
-              <div className="text-xl sm:text-3xl mb-1 sm:mb-2">{currentCard.letter} for {currentCard.codeWord}</div>
+              <div className="text-xl sm:text-3xl mb-1 sm:mb-2">&quot;{currentCard.letter}&quot; as in &quot;{currentCard.codeWord}&quot;</div>
               <div className="text-lg sm:text-xl mb-1 sm:mb-2">{currentCard.pronunciation}</div>
               <div className="text-base sm:text-lg">IPA: {currentCard.ipa}</div>
               

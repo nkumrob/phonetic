@@ -118,7 +118,7 @@ export function ReverseLookup() {
 
   const handleSpeak = () => {
     if (selectedLetter) {
-      speechManager.speak(`${selectedLetter.letter}, for ${selectedLetter.codeWord}`, { rate: 0.9 });
+      speechManager.speak(`"${selectedLetter.letter}" as in "${selectedLetter.codeWord}"`, { rate: 0.9 });
     }
   };
 

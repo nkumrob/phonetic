@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, memo } from 'react';
 import { cn } from '@/lib/utils/cn';
 
 interface PhoneticCardProps {
@@ -13,7 +13,7 @@ interface PhoneticCardProps {
   onFocus?: () => void;
 }
 
-export function PhoneticCard({
+const PhoneticCardComponent: React.FC<PhoneticCardProps> = ({
   letter,
   codeWord,
   pronunciation,
@@ -21,7 +21,7 @@ export function PhoneticCard({
   onClick,
   onSpeak,
   onFocus,
-}: PhoneticCardProps) {
+}) => {
   const handleClick = useCallback(() => {
     onClick();
   }, [onClick]);
@@ -113,4 +113,14 @@ export function PhoneticCard({
 
     </article>
   );
-}
+};
+
+// Memoize component to prevent unnecessary re-renders
+export const PhoneticCard = memo(PhoneticCardComponent, (prevProps, nextProps) => {
+  return (
+    prevProps.letter === nextProps.letter &&
+    prevProps.codeWord === nextProps.codeWord &&
+    prevProps.pronunciation === nextProps.pronunciation &&
+    prevProps.isSpeaking === nextProps.isSpeaking
+  );
+});

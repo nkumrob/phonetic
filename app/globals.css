@@ -230,7 +230,42 @@
     @apply hover:bg-muted;
     padding: 0.75rem 1.5rem;
   }
-  
+
+  /* Button Sizes */
+  .btn-sm {
+    padding: 0.5rem 1rem; /* 8px 16px */
+    font-size: 0.875rem; /* 14px */
+  }
+
+  .btn-lg {
+    padding: 0.875rem 1.75rem; /* 14px 28px */
+    font-size: 1rem; /* 16px */
+  }
+
+  .btn-xl {
+    padding: 1rem 2rem; /* 16px 32px */
+    font-size: 1.125rem; /* 18px */
+    font-weight: 700;
+  }
+
+  /* Typography Utilities */
+  .h2 {
+    font-size: clamp(1.875rem, 5vw, 3rem); /* 30px to 48px responsive */
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .text-body-lg {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.75;
+  }
+
+  .text-body {
+    font-size: 1rem; /* 16px */
+    line-height: 1.75;
+  }
+
   /* Alphabet grid - Clean grid layout */
   .alphabet-grid {
     @apply grid gap-4;

@@ -15,10 +15,10 @@ export function AudioAlphabetTable() {
   
   const handleLetterClick = (item: typeof pronunciationData[0]) => {
     setSelectedLetter(item.letter === selectedLetter ? null : item.letter);
-    
+
     // Play sound if enabled
     if (state.preferences.soundEnabled) {
-      speechManager.speak(`${item.letter}, for ${item.code}`);
+      speechManager.speak(`"${item.letter}" as in "${item.code}"`);
     }
   };
 

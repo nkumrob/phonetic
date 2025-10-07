@@ -163,11 +163,11 @@ export function TextConverter({ showHistory = true }: TextConverterProps = {}) {
       } else {
         const phoneticItem = NATO_ALPHABET.find(item => item.letter === char);
         if (phoneticItem) {
-          phoneticParts.push(`${phoneticItem.letter}, for ${phoneticItem.codeWord}`);
+          phoneticParts.push(`"${phoneticItem.letter}" as in "${phoneticItem.codeWord}"`);
         }
       }
     }
-    
+
     fullText += phoneticParts.join('. ... ');
     
     // Speak the entire text as one utterance

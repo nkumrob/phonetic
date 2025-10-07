@@ -98,16 +98,16 @@ export function SimplePracticeHub({ onModeSelect }: SimplePracticeHubProps = {})
         <div className="space-y-8">
           {/* Welcome Section - No AI slop gradients */}
           <div className="space-y-4">
-            <h1 className="text-7xl font-black text-foreground tracking-headlines">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-foreground tracking-tight">
               Welcome back, {userName}!
             </h1>
-            <p className="text-xl text-secondary max-w-2xl">
+            <p className="text-body-lg text-secondary max-w-2xl">
               Choose your training mode and master the NATO phonetic alphabet
             </p>
           </div>
 
           {/* Practice Modes */}
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-4 md:gap-6">
             {modes.map((mode) => (
               <div
                 key={mode.id}
@@ -115,14 +115,14 @@ export function SimplePracticeHub({ onModeSelect }: SimplePracticeHubProps = {})
                 onClick={() => handleModeSelect(mode.id)}
               >
                 <div className={cn(
-                  "h-full p-8 rounded-xl border-2 transition-all duration-200",
+                  "h-full p-6 md:p-8 rounded-xl border-2 transition-all duration-200",
                   "bg-background",
                   "hover:border-primary hover:shadow-lg hover:-translate-y-1",
                   "border-border"
                 )}>
-                  <div className="space-y-4">
+                  <div className="space-y-3 md:space-y-4 text-center">
                     <div className={cn(
-                      "w-16 h-16 rounded-lg flex items-center justify-center",
+                      "w-12 h-12 md:w-16 md:h-16 rounded-lg flex items-center justify-center mx-auto",
                       "border-2",
                       mode.id === 'learn' && "bg-warmAmber-500 border-warmAmber-600 text-white",
                       mode.id === 'practice' && "bg-coolBlue-500 border-coolBlue-600 text-white",
@@ -130,17 +130,17 @@ export function SimplePracticeHub({ onModeSelect }: SimplePracticeHubProps = {})
                     )}>
                       {mode.icon}
                     </div>
-                    
+
                     <div>
-                      <h3 className="text-2xl font-bold mb-2 tracking-largeText">{mode.title}</h3>
-                      <p className="text-base text-secondary">{mode.description}</p>
+                      <h3 className="text-xl md:text-2xl font-bold mb-2">{mode.title}</h3>
+                      <p className="text-body text-secondary">{mode.description}</p>
                     </div>
-                    
+
                     {mode.stats && (
-                      <div className="flex gap-4 pt-4 border-t">
+                      <div className="flex gap-3 md:gap-4 pt-3 md:pt-4 border-t">
                         {mode.stats.map((stat, i) => (
                           <div key={i} className="text-center flex-1">
-                            <p className="text-2xl font-black text-foreground">{stat.value}</p>
+                            <p className="text-xl md:text-2xl font-black text-foreground">{stat.value}</p>
                             <p className="text-xs text-secondary uppercase tracking-wide font-medium">{stat.label}</p>
                           </div>
                         ))}
