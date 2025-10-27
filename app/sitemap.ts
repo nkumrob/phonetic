@@ -50,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/reviews`,
       lastModified: currentDate,
       changeFrequency: 'weekly',
-      priority: 0.7,
+      priority: 0.6,
     },
     // Legal/info pages - lower priority but important for SEO
     {

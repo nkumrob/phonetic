@@ -32,7 +32,7 @@ class EnvironmentConfig {
     
     return {
       // Public vars
-      siteUrl: process.env.NEXT_PUBLIC_SITE_URL || (isProduction ? 'https://natophonetic.com' : 'http://localhost:3000'),
+      siteUrl: process.env.NEXT_PUBLIC_SITE_URL || (isProduction ? 'https://www.natophonetic.com' : 'http://localhost:3000'),
       gaId: process.env.NEXT_PUBLIC_GA_ID,
       googleSiteVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
       sentryDsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
