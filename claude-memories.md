@@ -257,3 +257,14 @@
 - **Speech Cancel on Navigation (2025-07-25)**: Enhanced speech synthesis cancellation with multiple cancel calls, pause/cancel combo, and explicit onClick handlers on all nav links to stop speech
 - **Text Converter State Clear on Navigation (2025-07-25)**: Added pathname detection to clear text converter input/output state on route changes - prevents stale translations after navigation
 - **Light Mode as Default (2025-07-25)**: Changed default theme from system preference to light mode - removed automatic dark mode switching, users can still change to dark/system in settings
+
+### 2025-10-27 - SEO Fixes for Google Search Console
+- **Duplicate Sitemap Issue**: Removed duplicate `app/sitemap.xml.ts` file - Next.js only needs `app/sitemap.ts`
+- **Incomplete Sitemap**: Added missing pages to sitemap - /contact, /privacy, /terms, /reviews, /settings (was only 5 pages, now 10)
+- **Client Component Metadata**: Fixed SEO for client components by separating into server wrapper + client component pattern
+  - Created reviews-client.tsx, profile-client.tsx, settings-client.tsx with 'use client' directive
+  - Updated page.tsx files to be server components that export metadata and render client components
+- **Robots.txt Enhancement**: Added explicit disallow rules for /api/, /admin/, /_next/, /widget-demo
+- **Canonical URLs**: All pages now have proper canonical URLs via generateMetadata function
+- **Sitemap Priorities**: Organized sitemap with proper priorities - homepage (1.0), core learning (0.9), content (0.7), legal (0.4)
+- **Key Learning**: Next.js client components can't export metadata - must use server component wrapper pattern
