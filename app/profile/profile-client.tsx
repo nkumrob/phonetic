@@ -41,7 +41,7 @@ export default function ProfileClient() {
             </div>
             
             <div className="p-6 bg-warmNeutral-50 dark:bg-warmNeutral-900 rounded-xl border-2 border-border">
-              <div className="text-4xl font-black mb-2">{state.progress.flashcardProgress.length}</div>
+              <div className="text-4xl font-black mb-2">{Object.keys(state.progress.flashcardReviews).length}</div>
               <div className="text-secondary">Letters Reviewed</div>
             </div>
           </div>
@@ -53,25 +53,25 @@ export default function ProfileClient() {
             <h2 className="text-3xl font-bold mb-6">Recent Quizzes</h2>
             <div className="space-y-3">
               {state.progress.quizHistory.slice(-5).reverse().map((quiz, index) => (
-                <div 
+                <div
                   key={index}
                   className="p-4 bg-warmNeutral-50 dark:bg-warmNeutral-900 rounded-lg border border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
                 >
                   <div>
                     <div className="font-semibold capitalize">{quiz.mode} Mode</div>
                     <div className="text-sm text-secondary">
-                      {new Date(quiz.timestamp).toLocaleDateString()}
+                      {new Date(quiz.date).toLocaleDateString()}
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right">
-                      <div className="font-bold">{quiz.score}/{quiz.totalQuestions}</div>
+                      <div className="font-bold">{quiz.correctAnswers}/{quiz.totalQuestions}</div>
                       <div className="text-sm text-secondary">
-                        {Math.round((quiz.score / quiz.totalQuestions) * 100)}% accuracy
+                        {Math.round((quiz.correctAnswers / quiz.totalQuestions) * 100)}% accuracy
                       </div>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                      quiz.passed 
+                      quiz.passed
                         ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100'
                         : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100'
                     }`}>
@@ -85,18 +85,18 @@ export default function ProfileClient() {
         )}
 
         {/* Flashcard Progress */}
-        {state.progress.flashcardProgress.length > 0 && (
+        {Object.keys(state.progress.flashcardReviews).length > 0 && (
           <section>
             <h2 className="text-3xl font-bold mb-6">Flashcard Progress</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {state.progress.flashcardProgress.map((item) => (
-                <div 
-                  key={item.letter}
+              {Object.entries(state.progress.flashcardReviews).map(([letter, reviewCount]) => (
+                <div
+                  key={letter}
                   className="p-4 bg-warmNeutral-50 dark:bg-warmNeutral-900 rounded-lg border border-border text-center"
                 >
-                  <div className="text-2xl font-bold mb-1">{item.letter}</div>
+                  <div className="text-2xl font-bold mb-1">{letter}</div>
                   <div className="text-xs text-secondary">
-                    {item.reviewCount} {item.reviewCount === 1 ? 'review' : 'reviews'}
+                    {reviewCount} {reviewCount === 1 ? 'review' : 'reviews'}
                   </div>
                 </div>
               ))}

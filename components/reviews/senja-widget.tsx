@@ -7,12 +7,19 @@ interface SenjaWidgetProps {
   className?: string;
 }
 
+// Extend Window interface to include iFrameResize
+declare global {
+  interface Window {
+    iFrameResize?: (options: { log: boolean; checkOrigin: boolean }, selector: string) => void;
+  }
+}
+
 export function SenjaWidget({ className = '' }: SenjaWidgetProps) {
   useEffect(() => {
     // Initialize iframe resizer after component mounts
     const initResizer = () => {
-      if (typeof window !== 'undefined' && (window as any).iFrameResize) {
-        (window as any).iFrameResize(
+      if (typeof window !== 'undefined' && window.iFrameResize) {
+        window.iFrameResize(
           { log: false, checkOrigin: false },
           '#senja-collector-iframe'
         );
@@ -36,8 +43,8 @@ export function SenjaWidget({ className = '' }: SenjaWidgetProps) {
         strategy="afterInteractive"
         onLoad={() => {
           // Initialize after script loads
-          if (typeof window !== 'undefined' && (window as any).iFrameResize) {
-            (window as any).iFrameResize(
+          if (typeof window !== 'undefined' && window.iFrameResize) {
+            window.iFrameResize(
               { log: false, checkOrigin: false },
               '#senja-collector-iframe'
             );

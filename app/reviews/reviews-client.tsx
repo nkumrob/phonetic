@@ -47,7 +47,7 @@ export default function ReviewsClient() {
             <div className="text-6xl mb-4">🚀</div>
             <h3 className="text-2xl font-bold mb-2">Reviews Coming Soon</h3>
             <p className="text-secondary">
-              We're building a review system to showcase user testimonials.
+              We&apos;re building a review system to showcase user testimonials.
               In the meantime, please share your feedback on Google!
             </p>
           </div>
