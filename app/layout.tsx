@@ -91,6 +91,13 @@ export default function RootLayout({
             gtag('config', 'G-J1E4GKFXVT');
           `}
         </Script>
+
+        {/* Google AdSense */}
+        <Script
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6386864042923808"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
