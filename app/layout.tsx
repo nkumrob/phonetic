@@ -43,6 +43,8 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6386864042923808"
+     crossOrigin="anonymous"></script>
       </head>
       <body className={`${inter.variable} antialiased font-sans`} suppressHydrationWarning>
         <script
@@ -92,12 +94,6 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Google AdSense */}
-        <Script
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6386864042923808"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );
