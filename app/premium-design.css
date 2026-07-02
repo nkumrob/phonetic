@@ -73,7 +73,11 @@
     --color-error: 239 68 68;
     --color-warning: 245 158 11;
     --color-info: 59 130 246;
-    
+
+    /* Signal/Alert Accent */
+    --signal-bg: 255 243 230;
+    --signal-text: 180 83 10;
+
     /* Spacing Scale - Base 8px */
     --space-0: 0;
     --space-1: 0.25rem;
@@ -137,6 +141,10 @@
     --color-primary: 96 165 250;
     --color-primary-dark: 147 197 253;
     --color-primary-light: 30 64 175;
+
+    /* Signal/Alert Accent - Dark Mode */
+    --signal-bg: rgba(180, 83, 10, 0.18);
+    --signal-text: 245 168 98;
 }
 
 /* =================================================================
@@ -833,10 +841,11 @@ h4, .h4 {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  background: #fff3e6;
-  color: #b4530a;
+  background: rgb(var(--signal-bg));
+  color: rgb(var(--signal-text));
 }
+
 .dark .micro-label {
-  background: rgba(180, 83, 10, 0.18);
-  color: #f5a862;
+  background: var(--signal-bg);
+  color: rgb(var(--signal-text));
 }
