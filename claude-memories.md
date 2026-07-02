@@ -268,6 +268,27 @@
 - **Canonical URLs**: All pages now have proper canonical URLs via generateMetadata function
 - **Sitemap Priorities**: Organized sitemap with proper priorities - homepage (1.0), core learning (0.9), content (0.7), legal (0.4)
 - **Key Learning**: Next.js client components can't export metadata - must use server component wrapper pattern
+### 2026-07-02 - IA-8: Homepage Slimming + FAQ Relocation
+- **Slimmed home-client.tsx from 411→227 lines**: Deleted 5 deep NATO sections (Text Translator, Chart Preview, How to Use, NATO vs Military, FAQ); removed unused dynamic imports (TextConverterWrapper, AudioAlphabetTable).
+- **FAQ relocated verbatim to /learn/page.tsx**: Appended as last section before print-only block; server component, no client deps needed.
+- **Created components/home/benefits-section.tsx**: Three outcome cards (Write faster, Decide with confidence, Trust what AI tells you) linking to tool pages.
+- **Created components/home/nato-band.tsx**: Compact entry band replacing deep NATO content; three CTA buttons → /tools/phonetic-converter, /learn, /api/pdf.
+- **Stats updated**: 6/Work Tools, 26/Code Words, 100%/Free Forever, 0/Sign-ups Required.
+- **Testimonials subtitle updated**: "...communicate clearly — with people and with AI".
+- **All verifications passed**: 0 tsc errors, 32/32 tests pass, all 5 live curl checks correct.
+
+### 2026-07-02 - IA-7: Starter Templates per AI Tool
+- **SWC parser rejects unescaped apostrophes in single-quoted TS strings**: Use template literals or string concatenation; `Leila's` inside `'...'` crashes the SWC transformer at jest time.
+- **Template pill buttons break broad regex selectors in tests**: Adding TemplateStrip with labels like "Improve a research prompt" caused `getByRole('button', { name: /improve/i })` to find 5 matches (ambiguous). Fix: tighten selector to `/improve my prompt/i` or the exact button text.
+- **Files added**: lib/ai/templates.ts, lib/ai/__tests__/templates.test.ts, components/ai-tools/template-strip.tsx, components/ai-tools/__tests__/template-strip.test.tsx; wired into ai-tool-form.tsx; barrel updated.
+
+### 2026-07-02 - IA-8 Review Follow-ups: Component Test Coverage + Accessibility
+- **Created BenefitsSection test**: components/home/__tests__/benefits-section.test.tsx - validates all 3 CTAs link to correct tool paths
+- **Created NatoBand test**: components/home/__tests__/nato-band.test.tsx - validates 3 NATO entry-point links and download attribute
+- **Accessibility enhancement**: Added aria-label="Clear history" to Clear button in recent-results.tsx for screen readers
+- **Test results**: All 24 tests pass (8 test suites); recent-results existing test still passes (aria-label compatible with existing getByRole selector)
+- **Commit SHA**: 64b9ef6 - test(ia): benefits/nato-band coverage + clear-history aria-label (review follow-ups)
+
 ### 2026-07-01 - AI Tools Platform (Prompt Improver) + Turso Migration
 - **AI Productivity Pivot**: Site expanding from phonetic utility into AI productivity tools (EB2 NIW economic-evidence strategy). First tool: Prompt Improver at /tools/prompt-improver.
 - **Model Swap Seam**: Models are env-swappable, never code: `AI_MODEL_<TOOL>` → `AI_DEFAULT_MODEL` → `claude-haiku-4-5` fallback; provider behind `AiProvider` interface selected by `AI_PROVIDER` (lib/ai/provider-factory.ts). To change models, edit .env.local only.
@@ -283,5 +304,9 @@
 - **Next.js Route Export Constraint**: route.ts may ONLY export HTTP method handlers — testable factories must live in a colocated handler.ts (`.next/types` typecheck rejects extra exports once dev server regenerates types).
 - **Hybrid Homepage**: NATO hero kept for SEO; AI tools introduced via subtitle bridge + HomeAiSection after features grid. home-client.tsx at 471 lines — extract any future additions into components.
 - **Mission-Critical Rebrand Task 2 (2026-07-01)**: Added .micro-label CSS class to app/premium-design.css (appended 21 lines). Uppercase letter-spaced badge with warm amber/orange accent (#b4530a light, #f5a862 dark). Used sparingly as caution indicator. No tests required (pure CSS). Commit: 2b371074d805d795ee985c91f834e447. Ready for HomeHero component integration in Task 3.
+- **IA-4 Nav Dropdowns (2026-07-02)**: NavDropdown in components/layout/nav-menu.tsx with Escape/outside-click close, aria-expanded/haspopup; toolsMenuItems() (AI first, phonetic second, All tools last) + NATO_MENU_ITEMS; simple-header.tsx desktop nav replaced with 2 dropdowns, mobile nav with labeled groups; footer Tools column now maps AI_TOOLS registry. grep -c "aria-haspopup" on minified HTML returns 1 (one line), use `grep -o` to confirm 2 occurrences.
 - **Mission-Critical Rebrand Task 3 (2026-07-01)**: Created components/home/home-hero.tsx (85 lines, named export, no 'use client') and components/home/__tests__/home-hero.test.tsx. h1 "AI productivity for mission-critical work", primary CTA→/tools, secondary→/learn, trust indicators Aviation+Military. 3/3 tests pass. No barrel index.ts. home-client.tsx untouched. Commit: e653137.
 - **Rebrand Shipped (2026-07-01, branch feature/mission-critical-rebrand)**: Site repositioned as practical AI productivity platform on the clear-communication foundation. Final copy (owner-amended mid-execution): hero "Use AI better at work", suite section "Productivity Tools" (6 peer tools incl. Phonetic Converter → /tools#converter anchor), bridge "Built on a Proven Communication Foundation", CTA "Ready to work better with AI?" → /tools. Homepage <title> keeps NATO keywords; /learn + /practice untouched; nav "Learn NATO". HomeHero in components/home/; .micro-label = sanctioned amber accent (CSS vars --signal-bg/--signal-text). SEO: monitor Search Console 4 weeks (H1 + features H2 both changed). Subagent-driven execution: 8 tasks, two-stage reviews, final review verdict ready-to-merge.
+- **IA/Nav/Retention Shipped (2026-07-02, branch feature/ia-navigation-retention)**: /tools = pure hub (AI Work Tools + Phonetic & Reference groups from registry category field); converter lives at /tools/phonetic-converter (InlineTextConverter moved byte-faithful to components/phonetic/); NavDropdown menus (components/layout/nav-menu.tsx — speech-cancel preserved on ALL nav paths); homepage slimmed AI-first (BenefitsSection + NatoBand; translator/chart/how-to/NATO-vs/FAQ sections removed, FAQ relocated verbatim to /learn); retention: tool-history + time-saved + templates in lib/client//lib/ai (all localStorage, SSR-guarded).
+- **Jest localStorage Truth (CRITICAL)**: jsdom's localStorage is getter-only — `global.localStorage = mock` is silently ignored; tests always use REAL jsdom Storage (cleared in global beforeEach). Dead mock removed from jest.setup.js 2026-07-02. Never write `expect(localStorage.setItem).toHaveBeenCalled…` — it's not a spy.
+- **SWC/Jest String Gotcha**: unescaped apostrophes inside single-quoted TS strings can break the SWC transform in tests — prefer template literals or escaped quotes in data files.
