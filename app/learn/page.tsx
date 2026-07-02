@@ -42,6 +42,38 @@ export default function LearnPage() {
         </ErrorBoundary>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-16 md:py-20" id="faq">
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="h2 mb-6">Frequently Asked Questions</h2>
+          <p className="text-body-lg text-secondary leading-relaxed">
+            Common questions about the NATO phonetic alphabet
+          </p>
+        </div>
+
+        <div className="max-w-3xl mx-auto space-y-5">
+          <div className="card p-6 md:p-8">
+            <h3 className="text-lg md:text-xl font-bold mb-3">What does each letter stand for in the NATO phonetic alphabet?</h3>
+            <p className="text-body text-secondary leading-relaxed">The NATO phonetic alphabet assigns a code word to each letter A–Z to ensure clarity over voice channels (e.g., Alpha for A, Bravo for B, Charlie for C).</p>
+          </div>
+
+          <div className="card p-6 md:p-8">
+            <h3 className="text-lg md:text-xl font-bold mb-3">How do I pronounce the NATO phonetic alphabet correctly?</h3>
+            <p className="text-body text-secondary leading-relaxed">Each code word is pronounced with emphasis on its first syllable. Listen to our audio clips or follow our phonetic pronunciation guide for precise enunciation.</p>
+          </div>
+
+          <div className="card p-6 md:p-8">
+            <h3 className="text-lg md:text-xl font-bold mb-3">Where can I download a printable NATO phonetic alphabet PDF?</h3>
+            <p className="text-body text-secondary leading-relaxed">Visit our Printable PDF &amp; Download section or click the download button in our tools section for a free, optimized PDF.</p>
+          </div>
+
+          <div className="card p-6 md:p-8">
+            <h3 className="text-lg md:text-xl font-bold mb-3">Is there an online NATO phonetic alphabet translator?</h3>
+            <p className="text-body text-secondary leading-relaxed">Yes! Try our interactive translator in the Tools section: type any message and see the instant phonetic conversion in real time.</p>
+          </div>
+        </div>
+      </section>
+
       {/* Print-only section with static content */}
       <section className="hidden print:block">
         <style dangerouslySetInnerHTML={{ __html: `
