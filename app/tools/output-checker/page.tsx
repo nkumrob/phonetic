@@ -12,7 +12,7 @@ export default function OutputCheckerPage() {
   return (
     <AiToolPageShell
       title="AI Output Checker"
-      description="Paste an AI-generated answer and get a reliability read: which specific claims to verify, signs of weak reasoning or overconfidence, and what context might be missing — before you use it at work."
+      description="Before you act on an AI answer, get a reliability read: which specific claims to verify, signs of weak reasoning or overconfidence, and what context is missing. Built for people who double-check."
     >
       <AiToolForm
         toolId="output-checker"

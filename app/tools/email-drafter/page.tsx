@@ -17,7 +17,7 @@ export default function EmailDrafterPage() {
       <AiToolForm
         toolId="email-drafter"
         inputLabel="What does the email need to say?"
-        placeholder="e.g. tell my team the launch moved to Friday, apologize for short notice, ask everyone to update their tasks by Wednesday"
+        placeholder="e.g. tell the team the launch slipped to Friday, apologize for short notice, ask leads to confirm revised timelines by Wednesday"
         buttonText="Draft My Email"
         loadingText="Drafting…"
         resultTitle="Draft email"

@@ -3,8 +3,9 @@ import { config } from '@/lib/config/env';
 
 export const siteConfig = {
   name: 'natophonetic.com',
-  title: 'natophonetic.com | NATO Phonetic Alphabet (A to Z) | Pronunciation & Chart',
-  description: 'Learn the NATO phonetic alphabet on natophonetic.com: A–Z list, pronunciation guide, printable PDF, and interactive translator. Perfect for pilots, military, telecoms, and radio enthusiasts.',
+  title: 'natophonetic.com | NATO Phonetic Alphabet (A to Z) & AI Productivity Tools for Work',
+  description:
+    'Learn the NATO phonetic alphabet — A–Z list, pronunciation, printable PDF, interactive translator — plus practical AI tools for work: improve prompts, draft emails, summarize documents, and check AI output. Built for pilots, military, dispatch, support, and operations professionals.',
   url: config.siteUrl,
   author: 'Phonetic Alphabet Learning Platform',
   keywords: [

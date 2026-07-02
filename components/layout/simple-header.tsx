@@ -20,7 +20,7 @@ export function SimpleHeader() {
   }, []);
 
   const navigation = [
-    { name: 'Learn', href: '/learn', icon: '📚' },
+    { name: 'Learn NATO', href: '/learn', icon: '📚' },
     { name: 'Practice', href: '/practice', icon: '🎯' },
     { name: 'Tools', href: '/tools', icon: '🛠️' },
   ];

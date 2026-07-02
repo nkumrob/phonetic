@@ -17,7 +17,7 @@ export default function MeetingActionsPage() {
       <AiToolForm
         toolId="meeting-actions"
         inputLabel="Paste your meeting notes"
-        placeholder="Paste raw notes, scattered bullets, or a transcript excerpt (up to 12,000 characters)…"
+        placeholder="Paste meeting notes, shift-handoff notes, or a transcript excerpt (up to 12,000 characters)…"
         buttonText="Extract Action Items"
         loadingText="Extracting…"
         resultTitle="Decisions & action items"
