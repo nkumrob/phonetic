@@ -75,8 +75,6 @@
     --color-info: 59 130 246;
 
     /* Signal/Alert Accent */
-    --signal-bg: 255 243 230;
-    --signal-text: 180 83 10;
 
     /* Spacing Scale - Base 8px */
     --space-0: 0;
@@ -143,8 +141,6 @@
     --color-primary-light: 30 64 175;
 
     /* Signal/Alert Accent - Dark Mode */
-    --signal-bg: 180 83 10;
-    --signal-text: 245 168 98;
 }
 
 /* =================================================================
@@ -828,24 +824,3 @@ h4, .h4 {
   }
 }
 
-/* ── Mission-critical rebrand: signal micro-label ─────────────────── */
-/* Uppercase letter-spaced badge; the ONLY sanctioned use of the amber/orange
-   accent besides "New" chips — use sparingly, like a caution indicator. */
-.micro-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  background: rgb(var(--signal-bg));
-  color: rgb(var(--signal-text));
-}
-
-.dark .micro-label {
-  background: rgba(var(--signal-bg), 0.18);
-  color: rgb(var(--signal-text));
-}

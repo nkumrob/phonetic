@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import { HomeAiSection } from '@/components/ai-tools/home-ai-section';
 import { HomeHero } from '@/components/home/home-hero';
 import { BenefitsSection } from '@/components/home/benefits-section';
-import { NatoBand } from '@/components/home/nato-band';
 
 const FamewallWidget = dynamic(() => import('@/components/famewall').then(mod => ({ default: mod.FamewallWidget })), {
   loading: () => <div className="h-96 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
@@ -20,24 +19,18 @@ const TestimonialsGrid = dynamic(() => import('@/components/testimonials').then(
 export default function HomeClient() {
   return (
     <>
-      {/* Hero — practical AI productivity positioning */}
+      {/* Hero — NATO phonetic leads, AI bridge in subhead */}
       <HomeHero />
 
-      {/* The suite grid — all six tools */}
-      <HomeAiSection />
-
-      {/* Outcome-focused benefits */}
-      <BenefitsSection />
-
-      {/* Features Section with Cards */}
+      {/* NATO features — the main product */}
       <section className="py-16 md:py-20">
         <div className="container px-6 md:px-8 lg:px-4">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="h2 mb-6">Built on a Proven Communication Foundation</h2>
+          <h2 className="h2 mb-6">What Is the NATO Phonetic Alphabet?</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            Natophonetic began with the NATO phonetic alphabet — the standard pilots, sailors, and
-            dispatchers use to communicate with zero ambiguity. That same discipline now powers
-            every AI tool above.
+            The NATO phonetic alphabet is a standardized set of 26 code words used to clearly communicate
+            letters over radio and telephone. Each letter from A to Z is assigned a specific word (Alpha, Bravo, Charlie, etc.)
+            to eliminate confusion in voice communications.
           </p>
         </div>
 
@@ -146,6 +139,12 @@ export default function HomeClient() {
         </div>
       </section>
 
+      {/* AI tools — the supporting act */}
+      <HomeAiSection />
+
+      {/* Outcome-focused benefits */}
+      <BenefitsSection />
+
       {/* Statistics Section */}
       <section className="py-16 md:py-20 bg-warmNeutral-50 dark:bg-warmNeutral-900">
         <div className="container px-6 md:px-8 lg:px-4">
@@ -169,9 +168,6 @@ export default function HomeClient() {
           </div>
         </div>
       </section>
-
-      {/* Compact NATO entry point */}
-      <NatoBand />
 
       {/* Testimonials Section */}
       <section className="py-16 md:py-20 bg-warmNeutral-50 dark:bg-warmNeutral-900">
@@ -209,17 +205,22 @@ export default function HomeClient() {
       {/* CTA Section */}
       <section className="py-16 md:py-20 bg-coolBlue-50 dark:bg-coolBlue-900/10">
         <div className="container px-6 md:px-8 lg:px-4 text-center">
-          <h2 className="h2 mb-6">Ready for mission-critical productivity?</h2>
+          <h2 className="h2 mb-6">Master clear communication — with people and with AI</h2>
           <p className="text-body-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-            Draft, brief, extract, and verify — with the speed of AI and the discipline of the
-            professions that invented clear communication.
+            Learn the alphabet that keeps radio traffic unambiguous, and use the AI tools that
+            bring the same discipline to your comms, briefs, and reports.
           </p>
-          <Link href="/tools" className="btn btn-primary btn-xl inline-flex items-center justify-center">
-            Open Productivity Tools
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="ml-2">
-              <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/learn" className="btn btn-primary btn-xl inline-flex items-center justify-center">
+              Start Learning
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="ml-2" aria-hidden="true">
+                <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Link>
+            <Link href="/tools" className="btn btn-secondary btn-xl inline-flex items-center justify-center">
+              Open AI Tools
+            </Link>
+          </div>
         </div>
       </section>
     </>

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-/** Homepage hero — AI productivity for mission-critical work (final positioning, 2026-07-02). */
+/** Homepage hero — NATO phonetic leads; AI tools as the supporting act (2026-07-02). */
 export function HomeHero() {
   return (
     <section className="py-12 md:py-16 lg:py-20 overflow-hidden relative">
@@ -9,21 +9,17 @@ export function HomeHero() {
       <div className="container px-6 md:px-8 lg:px-4">
         <div className="grid lg:grid-cols-[1.2fr,1fr] gap-12 md:gap-16 lg:gap-20 items-center">
           <div className="space-y-6 md:space-y-8">
-            <div className="text-center lg:text-left">
-              <div className="micro-label animate-fade-in">For Mission-Critical Work</div>
-            </div>
-
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] animate-slide-up text-center lg:!text-left">
-              AI productivity for mission-critical work
+              NATO Phonetic Alphabet: A to Z
             </h1>
 
             <p
               className="text-body-lg text-secondary max-w-2xl mx-auto lg:mx-0 animate-slide-up text-center lg:!text-left"
               style={{ animationDelay: '100ms' }}
             >
-              Draft comms, build briefs, extract action items, and verify AI output — practical
-              tools for aviation, maritime, dispatch, emergency, and operations professionals who
-              can&apos;t afford miscommunication.
+              Learn the universal standard for zero-ambiguity communication, used by aviation,
+              maritime, and emergency professionals worldwide — then put the same discipline to
+              work with AI tools for mission-critical communication.
             </p>
 
             <div
@@ -31,10 +27,10 @@ export function HomeHero() {
               style={{ animationDelay: '200ms' }}
             >
               <Link
-                href="/tools"
+                href="/learn"
                 className="btn btn-primary btn-xl whitespace-nowrap inline-flex items-center justify-center"
               >
-                Open Productivity Tools
+                Start Learning
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="ml-2" aria-hidden="true">
                   <path
                     d="M7.5 5L12.5 10L7.5 15"
@@ -46,10 +42,10 @@ export function HomeHero() {
                 </svg>
               </Link>
               <Link
-                href="/tools/phonetic-converter"
+                href="/tools"
                 className="btn btn-secondary btn-xl whitespace-nowrap inline-flex items-center justify-center"
               >
-                Try the NATO Converter
+                Explore AI Tools
               </Link>
             </div>
 
@@ -57,16 +53,14 @@ export function HomeHero() {
               className="pt-6 md:pt-8 animate-fade-in text-center lg:!text-left"
               style={{ animationDelay: '300ms' }}
             >
-              <div className="flex flex-wrap items-center justify-center lg:!justify-start gap-x-6 gap-y-2">
-                <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
-                  <span aria-hidden="true" className="text-success">✓</span> Built for high-stakes work
-                </span>
-                <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
-                  <span aria-hidden="true" className="text-success">✓</span> Verify before you rely
-                </span>
-                <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
-                  <span aria-hidden="true" className="text-success">✓</span> Zero-ambiguity discipline
-                </span>
+              <p className="text-xs font-bold text-tertiary uppercase tracking-widest mb-4">
+                Trusted by professionals
+              </p>
+              <div className="flex flex-wrap items-center justify-center lg:!justify-start gap-4 md:gap-6">
+                <span className="text-sm font-semibold text-secondary">✈️ Aviation</span>
+                <span className="text-sm font-semibold text-secondary">🚢 Maritime</span>
+                <span className="text-sm font-semibold text-secondary">🚔 Emergency</span>
+                <span className="text-sm font-semibold text-secondary">📡 Military</span>
               </div>
             </div>
           </div>
