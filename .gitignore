@@ -46,3 +46,10 @@ next-env.d.ts
 
 # temporary audio files
 /public/audio/*.mp3
+
+# local dev database (Turso file mode)
+local.db
+local.db-*
+
+# dev logs
+dev-output.log

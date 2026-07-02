@@ -268,3 +268,13 @@
 - **Canonical URLs**: All pages now have proper canonical URLs via generateMetadata function
 - **Sitemap Priorities**: Organized sitemap with proper priorities - homepage (1.0), core learning (0.9), content (0.7), legal (0.4)
 - **Key Learning**: Next.js client components can't export metadata - must use server component wrapper pattern
+### 2026-07-01 - AI Tools Platform (Prompt Improver) + Turso Migration
+- **AI Productivity Pivot**: Site expanding from phonetic utility into AI productivity tools (EB2 NIW economic-evidence strategy). First tool: Prompt Improver at /tools/prompt-improver.
+- **Model Swap Seam**: Models are env-swappable, never code: `AI_MODEL_<TOOL>` → `AI_DEFAULT_MODEL` → `claude-haiku-4-5` fallback; provider behind `AiProvider` interface selected by `AI_PROVIDER` (lib/ai/provider-factory.ts). To change models, edit .env.local only.
+- **Turso Replaces Supabase**: All persistence now Turso/libSQL via lib/db/client.ts (`TURSO_DATABASE_URL`; `file:./local.db` works for local dev with no account). Reviews routes migrated to lib/db/reviews-repo.ts; lib/supabase/ deleted; @supabase/supabase-js was never in package.json (feature was broken). Schema in lib/db/schema.sql, apply with `npm run db:init`.
+- **Metrics Are Fire-and-Forget**: lib/ai/metrics.ts lazily imports the db client and never throws — AI responses must never fail because metrics failed. tool_usage table logs tokens/latency/anonymized session hash + one-tap time-saved feedback (petition evidence data).
+- **Generic AI Route Pattern**: One route app/api/ai/[tool]/route.ts serves all AI tools; tool slug from pathname because withRateLimit drops the route context param. New tool = config entry in lib/ai/config.ts + system prompt file. Rate limit 10/hr/IP (calls cost money).
+- **Jest Env Lesson (CRITICAL)**: Default jest env is jsdom; anything importing next/server or @anthropic-ai/sdk fails with "Request is not defined" — backend test files need `/** @jest-environment node */` docblock, and jest.setup.js browser mocks must be guarded with `typeof window !== 'undefined'`.
+- **Jest userEvent Clipboard**: userEvent.setup() installs its own clipboard stub — assert via `await navigator.clipboard.readText()`, don't mock writeText.
+- **Jest Is Slow Cold**: First jest run in this environment takes 3-5 min (SWC compile/haste crawl); warm cache runs are <1s. Use --runInBand; parallel workers hung. Don't assume a 2-min silent jest run is broken.
+- **Cleanup**: Deleted stray duplicate "components/ui/input 2.tsx".
