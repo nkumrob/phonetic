@@ -34,7 +34,7 @@ export function HomeHero() {
                 className="btn btn-primary btn-xl whitespace-nowrap inline-flex items-center justify-center"
               >
                 Open the Tools
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="ml-2">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="ml-2" aria-hidden="true">
                   <path
                     d="M7.5 5L12.5 10L7.5 15"
                     stroke="currentColor"

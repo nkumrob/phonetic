@@ -18,6 +18,8 @@ describe('HomeHero', () => {
   it('keeps the professional trust indicators', () => {
     render(<HomeHero />);
     expect(screen.getByText(/aviation/i)).toBeInTheDocument();
+    expect(screen.getByText(/maritime/i)).toBeInTheDocument();
+    expect(screen.getByText(/emergency/i)).toBeInTheDocument();
     expect(screen.getByText(/military/i)).toBeInTheDocument();
   });
 });
