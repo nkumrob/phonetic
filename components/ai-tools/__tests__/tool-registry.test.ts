@@ -12,9 +12,22 @@ describe('tool registry', () => {
     ]);
   });
 
-  it('routes the phonetic converter to the converter anchor on the tools page', () => {
+  it('routes the phonetic converter to its dedicated page', () => {
     const phonetic = AI_TOOLS.find((t) => t.id === 'phonetic-converter');
-    expect(phonetic?.href).toBe('/tools#converter');
+    expect(phonetic?.href).toBe('/tools/phonetic-converter');
+  });
+
+  it('categorizes every tool', () => {
+    expect(AI_TOOLS.filter((t) => t.category === 'ai').map((t) => t.id)).toEqual([
+      'prompt-improver',
+      'email-drafter',
+      'summarizer',
+      'meeting-actions',
+      'output-checker',
+    ]);
+    expect(AI_TOOLS.filter((t) => t.category === 'phonetic').map((t) => t.id)).toEqual([
+      'phonetic-converter',
+    ]);
   });
 
   it('gives every tool a name, tagline, and href', () => {

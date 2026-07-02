@@ -9,6 +9,7 @@ export interface AiToolMeta {
   tagline: string;
   href: string;
   emoji: string;
+  category: 'ai' | 'phonetic';
 }
 
 export const AI_TOOLS: AiToolMeta[] = [
@@ -16,8 +17,9 @@ export const AI_TOOLS: AiToolMeta[] = [
     id: 'phonetic-converter',
     name: 'Phonetic Converter',
     tagline: 'Spell names, codes, and critical details clearly in calls, support, and field comms',
-    href: '/tools#converter',
+    href: '/tools/phonetic-converter',
     emoji: '📡',
+    category: 'phonetic',
   },
   {
     id: 'prompt-improver',
@@ -25,6 +27,7 @@ export const AI_TOOLS: AiToolMeta[] = [
     tagline: 'Turn vague requests into structured prompts with context, constraints, and format',
     href: '/tools/prompt-improver',
     emoji: '✨',
+    category: 'ai',
   },
   {
     id: 'email-drafter',
@@ -32,6 +35,7 @@ export const AI_TOOLS: AiToolMeta[] = [
     tagline: 'Convert rough notes into clear professional emails, follow-ups, and replies',
     href: '/tools/email-drafter',
     emoji: '✉️',
+    category: 'ai',
   },
   {
     id: 'summarizer',
@@ -39,6 +43,7 @@ export const AI_TOOLS: AiToolMeta[] = [
     tagline: 'Extract key points, risks, and action items from long documents and reports',
     href: '/tools/summarizer',
     emoji: '📄',
+    category: 'ai',
   },
   {
     id: 'meeting-actions',
@@ -46,6 +51,7 @@ export const AI_TOOLS: AiToolMeta[] = [
     tagline: 'Turn meeting notes into decisions, owners, deadlines, and next steps',
     href: '/tools/meeting-actions',
     emoji: '📋',
+    category: 'ai',
   },
   {
     id: 'output-checker',
@@ -53,5 +59,6 @@ export const AI_TOOLS: AiToolMeta[] = [
     tagline: 'Review AI answers for gaps, weak reasoning, overclaiming, and missing support',
     href: '/tools/output-checker',
     emoji: '🔍',
+    category: 'ai',
   },
 ];
