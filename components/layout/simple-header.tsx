@@ -20,12 +20,9 @@ export function SimpleHeader() {
     setMounted(true);
   }, []);
 
-  /** Cancel speech and clear text converters on any nav action. */
+  /** Cancel any in-progress speech on nav action (regression-sensitive behavior). */
   const handleNavigate = () => {
     speechManager.cancel();
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new Event('clear-text-converters'));
-    }
   };
 
   return (

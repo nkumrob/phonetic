@@ -65,7 +65,7 @@ export function Footer() {
             <h4 className="text-base md:text-lg font-bold mb-4 md:mb-5">Resources</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/#faq" className="text-body text-secondary hover:text-primary transition-colors inline-block">
+                <Link href="/learn#faq" className="text-body text-secondary hover:text-primary transition-colors inline-block">
                   FAQ
                 </Link>
               </li>

@@ -10,6 +10,8 @@ export interface NavItem {
   name: string;
   href: string;
   emoji: string;
+  /** Set for file-download links (e.g. the PDF chart) so browsers save instead of navigate. */
+  download?: string;
 }
 
 /** Items for the Tools dropdown: AI tools, phonetic tools, then All tools. */
@@ -32,7 +34,7 @@ export function toolsMenuItems(): NavItem[] {
 export const NATO_MENU_ITEMS: NavItem[] = [
   { name: 'Learn the Alphabet', href: '/learn', emoji: '📚' },
   { name: 'Practice & Quiz', href: '/practice', emoji: '🎯' },
-  { name: 'Printable Chart', href: '/api/pdf', emoji: '🖨️' },
+  { name: 'Printable Chart', href: '/api/pdf', emoji: '🖨️', download: 'nato-phonetic-alphabet.html' },
 ];
 
 export interface NavDropdownProps {
@@ -85,6 +87,7 @@ export function NavDropdown({ label, items, onNavigate }: NavDropdownProps) {
             <Link
               key={item.href}
               href={item.href}
+              {...(item.download ? { download: item.download, prefetch: false } : {})}
               onClick={() => {
                 setOpen(false);
                 onNavigate?.();
