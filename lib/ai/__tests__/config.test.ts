@@ -64,8 +64,37 @@ describe('AI tool config', () => {
     });
 
     it('rejects unknown tools', () => {
-      expect(isKnownTool('email-drafter')).toBe(false);
+      expect(isKnownTool('resume-writer')).toBe(false);
       expect(isKnownTool('')).toBe(false);
+    });
+  });
+
+  describe('full tool suite', () => {
+    const ALL_TOOLS = [
+      'prompt-improver',
+      'email-drafter',
+      'summarizer',
+      'meeting-actions',
+      'output-checker',
+    ];
+
+    it.each(ALL_TOOLS)('%s has a complete config', (toolId) => {
+      const config = getToolConfig(toolId);
+
+      expect(config.id).toBe(toolId);
+      expect(config.model).toBe('claude-haiku-4-5');
+      expect(config.maxTokens).toBeGreaterThanOrEqual(1024);
+      expect(config.maxInputChars).toBeGreaterThanOrEqual(2000);
+      expect(config.systemPrompt.length).toBeGreaterThan(50);
+    });
+
+    it('resolves per-tool env overrides for every tool', () => {
+      process.env.AI_MODEL_EMAIL_DRAFTER = 'claude-sonnet-4-6';
+      process.env.AI_MODEL_OUTPUT_CHECKER = 'claude-opus-4-8';
+
+      expect(getToolConfig('email-drafter').model).toBe('claude-sonnet-4-6');
+      expect(getToolConfig('output-checker').model).toBe('claude-opus-4-8');
+      expect(getToolConfig('summarizer').model).toBe('claude-haiku-4-5');
     });
   });
 });

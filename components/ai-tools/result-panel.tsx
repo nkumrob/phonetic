@@ -5,10 +5,11 @@ import { Check, Copy } from 'lucide-react';
 
 interface ResultPanelProps {
   text: string;
+  title?: string;
 }
 
-/** Displays the improved prompt with a copy-to-clipboard action. */
-export function ResultPanel({ text }: ResultPanelProps) {
+/** Displays a tool result with a copy-to-clipboard action. */
+export function ResultPanel({ text, title = 'Improved prompt' }: ResultPanelProps) {
   const [copied, setCopied] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -33,7 +34,7 @@ export function ResultPanel({ text }: ResultPanelProps) {
     <div className="rounded-lg bg-gradient-to-br from-coolBlue-50 to-warmAmber-50 dark:from-coolBlue-900/20 dark:to-warmAmber-900/20 border border-warmNeutral-200 dark:border-warmNeutral-700 p-4 space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold text-warmNeutral-700 dark:text-warmNeutral-200">
-          Improved prompt
+          {title}
         </h3>
         <button
           type="button"

@@ -4,6 +4,26 @@ import {
   PROMPT_IMPROVER_MAX_TOKENS,
   PROMPT_IMPROVER_SYSTEM_PROMPT,
 } from './prompts/prompt-improver';
+import {
+  EMAIL_DRAFTER_MAX_INPUT_CHARS,
+  EMAIL_DRAFTER_MAX_TOKENS,
+  EMAIL_DRAFTER_SYSTEM_PROMPT,
+} from './prompts/email-drafter';
+import {
+  SUMMARIZER_MAX_INPUT_CHARS,
+  SUMMARIZER_MAX_TOKENS,
+  SUMMARIZER_SYSTEM_PROMPT,
+} from './prompts/summarizer';
+import {
+  MEETING_ACTIONS_MAX_INPUT_CHARS,
+  MEETING_ACTIONS_MAX_TOKENS,
+  MEETING_ACTIONS_SYSTEM_PROMPT,
+} from './prompts/meeting-actions';
+import {
+  OUTPUT_CHECKER_MAX_INPUT_CHARS,
+  OUTPUT_CHECKER_MAX_TOKENS,
+  OUTPUT_CHECKER_SYSTEM_PROMPT,
+} from './prompts/output-checker';
 
 const FALLBACK_MODEL = 'claude-haiku-4-5';
 
@@ -18,6 +38,26 @@ const TOOL_DEFINITIONS: Record<AiToolId, ToolDefinition> = {
     maxTokens: PROMPT_IMPROVER_MAX_TOKENS,
     maxInputChars: PROMPT_IMPROVER_MAX_INPUT_CHARS,
     systemPrompt: PROMPT_IMPROVER_SYSTEM_PROMPT,
+  },
+  'email-drafter': {
+    maxTokens: EMAIL_DRAFTER_MAX_TOKENS,
+    maxInputChars: EMAIL_DRAFTER_MAX_INPUT_CHARS,
+    systemPrompt: EMAIL_DRAFTER_SYSTEM_PROMPT,
+  },
+  summarizer: {
+    maxTokens: SUMMARIZER_MAX_TOKENS,
+    maxInputChars: SUMMARIZER_MAX_INPUT_CHARS,
+    systemPrompt: SUMMARIZER_SYSTEM_PROMPT,
+  },
+  'meeting-actions': {
+    maxTokens: MEETING_ACTIONS_MAX_TOKENS,
+    maxInputChars: MEETING_ACTIONS_MAX_INPUT_CHARS,
+    systemPrompt: MEETING_ACTIONS_SYSTEM_PROMPT,
+  },
+  'output-checker': {
+    maxTokens: OUTPUT_CHECKER_MAX_TOKENS,
+    maxInputChars: OUTPUT_CHECKER_MAX_INPUT_CHARS,
+    systemPrompt: OUTPUT_CHECKER_SYSTEM_PROMPT,
   },
 };
 

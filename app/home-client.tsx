@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { HomeAiSection } from '@/components/ai-tools/home-ai-section';
 
 // Lazy load heavy components for better initial page load
 const AudioAlphabetTable = dynamic(() => import('@/components/phonetic/audio-alphabet-table').then(mod => ({ default: mod.AudioAlphabetTable })), {
@@ -48,7 +49,8 @@ export default function HomeClient() {
 
               <p className="text-body-lg text-secondary max-w-2xl mx-auto lg:mx-0 animate-slide-up text-center lg:!text-left" style={{ animationDelay: '100ms' }}>
                 Learn the universal communication standard used by military forces, aviation professionals,
-                and emergency services worldwide. Interactive lessons and real-time practice.
+                and emergency services worldwide. Interactive lessons, real-time practice — and new AI
+                tools that bring the same clarity to how you work with AI.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up" style={{ animationDelay: '200ms' }}>
@@ -210,6 +212,9 @@ export default function HomeClient() {
         </div>
         </div>
       </section>
+
+      {/* AI Productivity Tools Section */}
+      <HomeAiSection />
 
       {/* Statistics Section */}
       <section className="py-16 md:py-20 bg-warmNeutral-50 dark:bg-warmNeutral-900">

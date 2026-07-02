@@ -23,7 +23,12 @@ export interface AiProvider {
   generateText(request: GenerateTextRequest): Promise<GenerateTextResult>;
 }
 
-export type AiToolId = 'prompt-improver';
+export type AiToolId =
+  | 'prompt-improver'
+  | 'email-drafter'
+  | 'summarizer'
+  | 'meeting-actions'
+  | 'output-checker';
 
 export interface AiToolConfig {
   id: AiToolId;

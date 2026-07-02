@@ -7,8 +7,8 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Icons } from '@/components/ui/icons';
 import { textToPhonetic } from '@/lib/utils/phonetic-converter';
 import { cn } from '@/lib/utils/cn';
-import Link from 'next/link';
-import { Volume2, Share2, Sparkles } from 'lucide-react';
+import { Volume2, Share2 } from 'lucide-react';
+import { AiToolsGrid } from '@/components/ai-tools';
 import { speechManager } from '@/lib/utils/speech-synthesis';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { logger } from '@/lib/utils/logger';
@@ -367,30 +367,7 @@ export default function ToolsPageClient() {
 
         {/* AI Tools Section */}
         <section className="mb-16">
-          <div className="bg-white dark:bg-warmNeutral-800 rounded-xl shadow-lg border border-warmNeutral-200 dark:border-warmNeutral-700 p-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-warmAmber-50 dark:bg-warmAmber-900/20 rounded-xl mx-auto mb-4 flex items-center justify-center">
-                <Sparkles size={32} className="text-warmAmber-600" />
-              </div>
-              <div className="flex items-center justify-center gap-2 mb-3">
-                <h3 className="text-2xl font-bold tracking-largeText">AI Prompt Improver</h3>
-                <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-warmAmber-100 text-warmAmber-700 dark:bg-warmAmber-900/40 dark:text-warmAmber-300">
-                  New
-                </span>
-              </div>
-              <p className="text-base text-secondary max-w-2xl mx-auto mb-6">
-                Clear communication works with AI too. Turn a rough idea into a structured,
-                effective AI prompt in seconds.
-              </p>
-              <Link
-                href="/tools/prompt-improver"
-                className="btn btn-primary btn-lg inline-flex items-center gap-2"
-              >
-                <Sparkles size={20} />
-                Try the Prompt Improver
-              </Link>
-            </div>
-          </div>
+          <AiToolsGrid />
         </section>
 
         {/* Additional Features - Mobile Responsive */}

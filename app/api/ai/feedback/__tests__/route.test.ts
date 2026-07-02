@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import type { NextRequest } from 'next/server';
-import { createFeedbackHandler } from '../route';
+import { createFeedbackHandler } from '../handler';
 
 function fakeRequest(body: unknown): NextRequest {
   return {

@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import type { NextRequest } from 'next/server';
-import { createAiToolHandler } from '../route';
+import { createAiToolHandler } from '../handler';
 import { AiServiceError } from '@/lib/ai/types';
 
 function fakeRequest(pathname: string, body: unknown): NextRequest {

@@ -278,3 +278,6 @@
 - **Jest userEvent Clipboard**: userEvent.setup() installs its own clipboard stub — assert via `await navigator.clipboard.readText()`, don't mock writeText.
 - **Jest Is Slow Cold**: First jest run in this environment takes 3-5 min (SWC compile/haste crawl); warm cache runs are <1s. Use --runInBand; parallel workers hung. Don't assume a 2-min silent jest run is broken.
 - **Cleanup**: Deleted stray duplicate "components/ui/input 2.tsx".
+- **Full AI Tool Suite Shipped (2026-07-01)**: 5 tools live (prompt-improver, email-drafter, summarizer, meeting-actions, output-checker) all through the one generic route; frontend generalized to AiToolForm + AiToolPageShell + tool-registry.ts in components/ai-tools/ — a new tool needs only a prompt file, config entry, registry entry, page + error.tsx, sitemap line.
+- **Next.js Route Export Constraint**: route.ts may ONLY export HTTP method handlers — testable factories must live in a colocated handler.ts (`.next/types` typecheck rejects extra exports once dev server regenerates types).
+- **Hybrid Homepage**: NATO hero kept for SEO; AI tools introduced via subtitle bridge + HomeAiSection after features grid. home-client.tsx at 471 lines — extract any future additions into components.
