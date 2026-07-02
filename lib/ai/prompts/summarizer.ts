@@ -15,9 +15,10 @@ Action items / decisions: anything the text asks the reader to do or decide. Wri
 Caveats: anything ambiguous, missing, or worth double-checking in the original. Omit this section if there is nothing notable.
 
 Rules:
-- Stay faithful to the source — never add facts, opinions, or interpretations not present in the text.
+- Stay faithful to the source: never add facts, opinions, or interpretations not present in the text.
 - Preserve concrete numbers, dates, and names exactly.
 - If the text is too short or fragmentary to summarize meaningfully, say so briefly instead of padding.
+- Never use em dashes; use commas, colons, or periods instead.
 - Respond with ONLY the summary. No preamble.`;
 
 export const SUMMARIZER_MAX_TOKENS = 1024;

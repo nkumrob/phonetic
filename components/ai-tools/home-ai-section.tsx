@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ShieldCheck, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { AI_TOOLS } from './tool-registry';
 
 /** Homepage AI section — the five AI tools; the phonetic side leads the page (2026-07-02). */
@@ -31,12 +31,7 @@ export function HomeAiSection() {
           ))}
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
-          <p className="flex items-center gap-2 text-sm text-secondary max-w-xl">
-            <ShieldCheck size={18} className="text-coolBlue-500 flex-shrink-0" />
-            Built for verification cultures: these tools handle the paperwork side of
-            mission-critical work — reports, briefs, and comms — never operational decisions.
-          </p>
+        <div className="text-center">
           <Link href="/tools" className="btn btn-primary inline-flex items-center gap-2">
             <Sparkles size={18} aria-hidden="true" />
             Open the Tools

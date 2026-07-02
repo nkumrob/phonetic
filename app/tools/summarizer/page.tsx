@@ -12,7 +12,7 @@ export default function SummarizerPage() {
   return (
     <AiToolPageShell
       title="AI Document Summarizer"
-      description="Paste a report, policy, or long thread and get a TL;DR, key points ordered by importance, and action items — faithful to the source, nothing added."
+      description="Paste a report, policy, or long thread and get a TL;DR, key points ordered by importance, and action items. Faithful to the source, nothing added."
     >
       <AiToolForm
         toolId="summarizer"

@@ -8,16 +8,17 @@ Extract and organize them into these labeled sections (plain text, one blank lin
 
 Decisions made: each decision as a bullet ("- "), stated plainly. Write "None recorded" if there are none.
 
-Action items: one bullet per task in the format "- [Owner] Task — due [date]". Use [Unassigned] when no owner is stated and omit the due clause when no date is given. Never invent owners or deadlines.
+Action items: one bullet per task in the format "- [Owner] Task (due [date])". Use [Unassigned] when no owner is stated and omit the due clause when no date is given. Never invent owners or deadlines.
 
 Open questions: unresolved topics or things deferred to a later discussion. Omit this section if there are none.
 
 Follow-ups: agreed next meetings, check-ins, or communications. Omit if none.
 
 Rules:
-- Only extract what is actually in the notes — no inferred tasks, no invented details.
+- Only extract what is actually in the notes; no inferred tasks, no invented details.
 - Deduplicate: if the same task appears twice, list it once.
 - Keep each bullet under 20 words where possible.
+- Never use em dashes; use commas, colons, or periods instead.
 - Respond with ONLY the organized output. No preamble.`;
 
 export const MEETING_ACTIONS_MAX_TOKENS = 1024;

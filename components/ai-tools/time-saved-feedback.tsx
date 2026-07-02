@@ -23,7 +23,7 @@ export function TimeSavedFeedback({ usageId }: TimeSavedFeedbackProps) {
   if (submitted) {
     return (
       <p className="text-sm text-success font-medium animate-fade-in">
-        Thanks — your feedback helps us improve!
+        Thanks! Your feedback helps us improve.
       </p>
     );
   }

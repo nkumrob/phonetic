@@ -145,37 +145,13 @@ export default function HomeClient() {
       {/* Outcome-focused benefits */}
       <BenefitsSection />
 
-      {/* Statistics Section */}
-      <section className="py-16 md:py-20 bg-warmNeutral-50 dark:bg-warmNeutral-900">
-        <div className="container px-6 md:px-8 lg:px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center">
-            <div className="animate-scale-in">
-              <div className="text-5xl md:text-6xl font-black text-coolBlue-500 mb-3">6</div>
-              <div className="text-sm md:text-body text-secondary font-medium">Work Tools</div>
-            </div>
-            <div className="animate-scale-in" style={{ animationDelay: '100ms' }}>
-              <div className="text-5xl md:text-6xl font-black text-coolBlue-500 mb-3">26</div>
-              <div className="text-sm md:text-body text-secondary font-medium">Code Words</div>
-            </div>
-            <div className="animate-scale-in" style={{ animationDelay: '200ms' }}>
-              <div className="text-5xl md:text-6xl font-black text-coolBlue-500 mb-3">100%</div>
-              <div className="text-sm md:text-body text-secondary font-medium">Free Forever</div>
-            </div>
-            <div className="animate-scale-in" style={{ animationDelay: '300ms' }}>
-              <div className="text-5xl md:text-6xl font-black text-coolBlue-500 mb-3">0</div>
-              <div className="text-sm md:text-body text-secondary font-medium">Sign-ups Required</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Testimonials Section */}
       <section className="py-16 md:py-20 bg-warmNeutral-50 dark:bg-warmNeutral-900">
         <div className="container px-6 md:px-8 lg:px-4">
           <div className="text-center mb-12 md:mb-16">
             <h2 className="h2 mb-6">What Our Users Say</h2>
             <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-              Join thousands of professionals who communicate clearly — with people and with AI
+              Join thousands of professionals who communicate clearly, with people and with AI
             </p>
           </div>
 
@@ -205,7 +181,7 @@ export default function HomeClient() {
       {/* CTA Section */}
       <section className="py-16 md:py-20 bg-coolBlue-50 dark:bg-coolBlue-900/10">
         <div className="container px-6 md:px-8 lg:px-4 text-center">
-          <h2 className="h2 mb-6">Master clear communication — with people and with AI</h2>
+          <h2 className="h2 mb-6">Master clear communication with people and with AI</h2>
           <p className="text-body-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
             Learn the alphabet that keeps radio traffic unambiguous, and use the AI tools that
             bring the same discipline to your comms, briefs, and reports.

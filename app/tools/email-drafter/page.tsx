@@ -12,7 +12,7 @@ export default function EmailDrafterPage() {
   return (
     <AiToolPageShell
       title="AI Email Drafter"
-      description="Type what you need to say — rough notes, bullet points, or a one-line description — and get back a polished, professional email with subject line, ready to send."
+      description="Type what you need to say: rough notes, bullet points, or a one-line description. Get back a polished, professional email with a subject line, ready to send."
     >
       <AiToolForm
         toolId="email-drafter"

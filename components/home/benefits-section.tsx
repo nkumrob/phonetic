@@ -4,7 +4,7 @@ const BENEFITS = [
   {
     emoji: '⚡',
     title: 'Comms out in seconds',
-    body: 'Status updates, incident emails, and reports drafted from rough notes — sent with confidence.',
+    body: 'Status updates, incident emails, and reports drafted from rough notes, sent with confidence.',
     who: 'For anyone reporting up the chain',
     href: '/tools/email-drafter',
     cta: 'Draft an update',
@@ -21,7 +21,7 @@ const BENEFITS = [
     emoji: '🛡️',
     title: 'Verify before you rely',
     body: 'Catch unsupported claims and weak reasoning before they reach an operation or a client.',
-    who: 'For verification cultures',
+    who: 'For everyone who double-checks',
     href: '/tools/output-checker',
     cta: 'Check an AI answer',
   },

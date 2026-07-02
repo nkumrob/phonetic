@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShieldCheck } from 'lucide-react';
+
 import { AI_TOOLS, TimeSavedBanner, type AiToolMeta } from '@/components/ai-tools';
 
 interface ReferenceCard {
@@ -67,7 +67,7 @@ export default function ToolsPageClient() {
           Productivity Tools
         </h1>
         <p className="text-lg sm:text-xl text-secondary text-center max-w-2xl mx-auto">
-          AI productivity for mission-critical work — comms, briefs, action items, and
+          AI productivity for mission-critical work: comms, briefs, action items, and
           verification, plus the phonetic converter that started it all
         </p>
         <TimeSavedBanner />
@@ -81,11 +81,6 @@ export default function ToolsPageClient() {
               <ToolCard key={tool.id} tool={tool} />
             ))}
           </div>
-          <p className="flex items-center gap-2 text-sm text-secondary max-w-xl mt-6">
-            <ShieldCheck size={18} className="text-coolBlue-500 flex-shrink-0" aria-hidden="true" />
-            Built for verification cultures: these tools handle the paperwork side of
-            mission-critical work — reports, briefs, and comms — never operational decisions.
-          </p>
         </section>
 
         <section>

@@ -12,7 +12,7 @@ export default function PromptImproverPage() {
   return (
     <AiToolPageShell
       title="AI Prompt Improver"
-      description="Paste a rough prompt and get back a clear, structured version with role, context, task, constraints, and output format — ready to use with any AI assistant."
+      description="Paste a rough prompt and get back a clear, structured version with role, context, task, constraints, and output format, ready to use with any AI assistant."
     >
       <PromptImprover />
     </AiToolPageShell>

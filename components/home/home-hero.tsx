@@ -18,7 +18,7 @@ export function HomeHero() {
               style={{ animationDelay: '100ms' }}
             >
               Learn the universal standard for zero-ambiguity communication, used by aviation,
-              maritime, and emergency professionals worldwide — then put the same discipline to
+              maritime, and emergency professionals worldwide. Then put the same discipline to
               work with AI tools for mission-critical communication.
             </p>
 

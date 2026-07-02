@@ -59,7 +59,7 @@ const TEMPLATES: Record<string, ToolTemplate[]> = {
     {
       label: 'Try: meeting recap',
       input:
-        `Project sync — 14 Jun. We decided to push the API migration to Q3 to avoid disrupting ` +
+        `Project sync, 14 Jun. We decided to push the API migration to Q3 to avoid disrupting ` +
         `the live product during peak season. Risk flagged: the legacy auth tokens will expire in ` +
         `August, so the migration window is tight. Follow-up 1: Priya to share the revised ` +
         `migration runbook by Friday. Follow-up 2: Dev team to spike the token-refresh endpoint ` +
@@ -83,7 +83,7 @@ const TEMPLATES: Record<string, ToolTemplate[]> = {
         `a memory leak in the new session-pooling code deployed at 13:55 UTC and rolled back to ` +
         `the previous build at 15:10 UTC. Customer impact: roughly 340 orders failed and required ` +
         `manual reprocessing; no data loss occurred. Root cause was insufficient load testing of ` +
-        `the pooling logic under concurrent write bursts — corrective action is a pre-deploy ` +
+        `the pooling logic under concurrent write bursts; corrective action is a pre-deploy ` +
         `load test gate added to CI.`,
     },
     {

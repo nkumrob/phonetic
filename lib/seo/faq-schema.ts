@@ -39,7 +39,7 @@ export const faqSchema = {
       name: 'How do I use the NATO phonetic code in radio communications?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'In any voice transmission—aviation, maritime, or emergency services—spell out critical information one letter at a time using the NATO code words to reduce misunderstandings.'
+        text: 'In any voice transmission (aviation, maritime, or emergency services), spell out critical information one letter at a time using the NATO code words to reduce misunderstandings.'
       }
     },
     {
@@ -63,7 +63,7 @@ export const faqSchema = {
       name: 'Are there audio resources to learn the NATO alphabet?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'We provide downloadable MP3 pronunciations for each letter—perfect for drills, training, or on-the-go learning.'
+        text: 'We provide downloadable MP3 pronunciations for each letter, perfect for drills, training, or on-the-go learning.'
       }
     }
   ]

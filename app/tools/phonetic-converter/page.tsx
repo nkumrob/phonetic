@@ -7,7 +7,7 @@ import { Icons } from '@/components/ui/icons';
 
 export const metadata: Metadata = baseGenerateMetadata(
   'NATO Phonetic Alphabet Converter',
-  'Convert any text to NATO phonetic code words instantly — with audio, reverse lookup, and a printable chart',
+  'Convert any text to NATO phonetic code words instantly, with audio, reverse lookup, and a printable chart',
   '/tools/phonetic-converter'
 );
 
@@ -19,7 +19,7 @@ export default function PhoneticConverterPage() {
           NATO Phonetic Converter
         </h1>
         <p className="text-lg text-secondary max-w-2xl mx-auto">
-          Type or paste any text and get the phonetic spelling instantly — hear it spoken,
+          Type or paste any text and get the phonetic spelling instantly. Hear it spoken,
           copy it, or share it.
         </p>
       </div>

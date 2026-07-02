@@ -12,7 +12,7 @@ export default function MeetingActionsPage() {
   return (
     <AiToolPageShell
       title="Meeting Notes → Action Items"
-      description="Paste your raw meeting notes or a transcript excerpt and get back the decisions made, action items with owners and deadlines, open questions, and follow-ups — nothing invented, nothing missed."
+      description="Paste your raw meeting notes or a transcript excerpt and get back the decisions made, action items with owners and deadlines, open questions, and follow-ups. Nothing invented, nothing missed."
     >
       <AiToolForm
         toolId="meeting-actions"
