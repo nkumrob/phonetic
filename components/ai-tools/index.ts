@@ -1,6 +1,7 @@
 export { AiToolForm } from './ai-tool-form';
 export { AiToolPageShell } from './ai-tool-page-shell';
 export { PromptImprover } from './prompt-improver';
+export { RecentResults } from './recent-results';
 export { ResultPanel } from './result-panel';
 export { TimeSavedFeedback } from './time-saved-feedback';
 export { ToolErrorFallback } from './tool-error-fallback';

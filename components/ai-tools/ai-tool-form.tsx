@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 import { runAiTool, type AiToolResult } from '@/lib/services/ai-tool-service';
 import { cn } from '@/lib/utils/cn';
+import { addHistoryEntry, clearHistory, getHistory, type ToolHistoryEntry } from '@/lib/client/tool-history';
 import { ResultPanel } from './result-panel';
 import { TimeSavedFeedback } from './time-saved-feedback';
+import { RecentResults } from './recent-results';
 
 export interface AiToolFormProps {
   toolId: string;
@@ -37,6 +39,11 @@ export function AiToolForm({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<AiToolResult | null>(null);
+  const [history, setHistory] = useState<ToolHistoryEntry[]>([]);
+
+  useEffect(() => {
+    setHistory(getHistory(toolId));
+  }, [toolId]);
 
   const charCount = input.length;
   const nearLimit = charCount > maxChars * 0.9;
@@ -47,7 +54,9 @@ export function AiToolForm({
     setError(null);
     setResult(null);
     try {
-      setResult(await runAiTool(toolId, input));
+      const response = await runAiTool(toolId, input);
+      setResult(response);
+      setHistory(addHistoryEntry(toolId, input, response.output));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
@@ -104,6 +113,18 @@ export function AiToolForm({
           {result.usageId && <TimeSavedFeedback usageId={result.usageId} />}
         </div>
       )}
+
+      <RecentResults
+        entries={history}
+        onRestore={(entry) => {
+          setResult({ output: entry.output, usageId: null });
+          setError(null);
+        }}
+        onClear={() => {
+          clearHistory(toolId);
+          setHistory([]);
+        }}
+      />
     </div>
   );
 }
