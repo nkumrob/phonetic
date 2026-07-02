@@ -29,7 +29,7 @@ const TestimonialsGrid = dynamic(() => import('@/components/testimonials').then(
 export default function HomeClient() {
   return (
     <>
-      {/* Hero — mission-critical positioning */}
+      {/* Hero — practical AI productivity positioning */}
       <HomeHero />
 
       {/* The suite grid — all six tools */}

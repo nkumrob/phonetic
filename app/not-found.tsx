@@ -51,7 +51,7 @@ export default function NotFound() {
             <Link href="/#alphabet" className="hover:text-coolBlue-500 transition-colors">
               Alphabet Grid
             </Link>
-            <Link href="/#converter" className="hover:text-coolBlue-500 transition-colors">
+            <Link href="/tools#converter" className="hover:text-coolBlue-500 transition-colors">
               Text Converter
             </Link>
             <Link href="/#lookup" className="hover:text-coolBlue-500 transition-colors">

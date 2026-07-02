@@ -16,7 +16,7 @@ export const AI_TOOLS: AiToolMeta[] = [
     id: 'phonetic-converter',
     name: 'Phonetic Converter',
     tagline: 'Spell names, codes, and critical details clearly in calls, support, and field comms',
-    href: '/tools',
+    href: '/tools#converter',
     emoji: '📡',
   },
   {

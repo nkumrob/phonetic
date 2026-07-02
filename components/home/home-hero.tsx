@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-/** Homepage hero — mission-critical positioning (rebrand spec 2026-07-01). */
+/** Homepage hero — practical AI productivity positioning (rebrand spec 2026-07-01, amended copy). */
 export function HomeHero() {
   return (
     <section className="py-12 md:py-16 lg:py-20 overflow-hidden relative">

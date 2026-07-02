@@ -12,9 +12,9 @@ describe('tool registry', () => {
     ]);
   });
 
-  it('routes the phonetic converter to the tools page', () => {
+  it('routes the phonetic converter to the converter anchor on the tools page', () => {
     const phonetic = AI_TOOLS.find((t) => t.id === 'phonetic-converter');
-    expect(phonetic?.href).toBe('/tools');
+    expect(phonetic?.href).toBe('/tools#converter');
   });
 
   it('gives every tool a name, tagline, and href', () => {
