@@ -1,5 +1,5 @@
 /**
- * Client-safe display metadata for the AI tools (cards, pages, sitemap).
+ * Client-safe display metadata for the AI tools (cards, pages).
  * Server-side behavior (models, prompts, limits) lives in lib/ai/config.ts.
  */
 
