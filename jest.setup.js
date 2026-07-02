@@ -84,7 +84,9 @@ global.AudioContext = jest.fn().mockImplementation(() => ({
 
 // NOTE: jsdom's localStorage cannot be replaced by plain assignment (getter-only
 // on Window.prototype) — an earlier jest.fn() mock here was silently ignored.
-// Tests use jsdom's REAL in-memory Storage; the beforeEach below clears it.
+// jsdom tests use jsdom's REAL in-memory Storage; the beforeEach below clears it.
+// Node-env suites (backend tests with @jest-environment node) have NO localStorage,
+// hence the typeof guard in beforeEach.
 
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({
@@ -96,7 +98,7 @@ global.IntersectionObserver = jest.fn().mockImplementation(() => ({
 // Reset mocks between tests
 beforeEach(() => {
   jest.clearAllMocks();
-  localStorage.clear();
+  if (typeof localStorage !== 'undefined') localStorage.clear();
 });
 
 // Custom test matchers
