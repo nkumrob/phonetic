@@ -82,16 +82,9 @@ global.AudioContext = jest.fn().mockImplementation(() => ({
   currentTime: 0,
 }));
 
-// Mock localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
-  length: 0,
-  key: jest.fn(),
-};
-global.localStorage = localStorageMock;
+// NOTE: jsdom's localStorage cannot be replaced by plain assignment (getter-only
+// on Window.prototype) — an earlier jest.fn() mock here was silently ignored.
+// Tests use jsdom's REAL in-memory Storage; the beforeEach below clears it.
 
 // Mock IntersectionObserver
 global.IntersectionObserver = jest.fn().mockImplementation(() => ({
