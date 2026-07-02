@@ -45,7 +45,7 @@ export function HomeHero() {
                 </svg>
               </Link>
               <Link
-                href="/tools#converter"
+                href="/tools/phonetic-converter"
                 className="btn btn-secondary btn-xl whitespace-nowrap inline-flex items-center justify-center"
               >
                 Try the NATO Converter

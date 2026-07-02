@@ -12,7 +12,7 @@ describe('HomeHero', () => {
   it('routes the primary CTA to the tools and secondary to the converter', () => {
     render(<HomeHero />);
     expect(screen.getByRole('link', { name: /open productivity tools/i })).toHaveAttribute('href', '/tools');
-    expect(screen.getByRole('link', { name: /try the NATO converter/i })).toHaveAttribute('href', '/tools#converter');
+    expect(screen.getByRole('link', { name: /try the NATO converter/i })).toHaveAttribute('href', '/tools/phonetic-converter');
   });
 
   it('shows the proof row', () => {
