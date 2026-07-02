@@ -35,9 +35,9 @@ export default function HomeClient() {
         <div className="text-center mb-12 md:mb-16">
           <h2 className="h2 mb-6">Built on a Proven Communication Foundation</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            Natophonetic began as a practical tool for spelling and transmitting information clearly.
-            Now that same focus on clarity, structure, and accuracy powers AI productivity tools for
-            modern work.
+            Natophonetic began with the NATO phonetic alphabet — the standard pilots, sailors, and
+            dispatchers use to communicate with zero ambiguity. That same discipline now powers
+            every AI tool above.
           </p>
         </div>
 
@@ -209,10 +209,10 @@ export default function HomeClient() {
       {/* CTA Section */}
       <section className="py-16 md:py-20 bg-coolBlue-50 dark:bg-coolBlue-900/10">
         <div className="container px-6 md:px-8 lg:px-4 text-center">
-          <h2 className="h2 mb-6">Ready to work better with AI?</h2>
+          <h2 className="h2 mb-6">Ready for mission-critical productivity?</h2>
           <p className="text-body-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-            Use practical tools for prompting, writing, summarizing, and reviewing work with more
-            speed and confidence.
+            Draft, brief, extract, and verify — with the speed of AI and the discipline of the
+            professions that invented clear communication.
           </p>
           <Link href="/tools" className="btn btn-primary btn-xl inline-flex items-center justify-center">
             Open Productivity Tools

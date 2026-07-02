@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-/** Homepage hero — practical AI productivity positioning (rebrand spec 2026-07-01, amended copy). */
+/** Homepage hero — AI productivity for mission-critical work (final positioning, 2026-07-02). */
 export function HomeHero() {
   return (
     <section className="py-12 md:py-16 lg:py-20 overflow-hidden relative">
@@ -10,19 +10,20 @@ export function HomeHero() {
         <div className="grid lg:grid-cols-[1.2fr,1fr] gap-12 md:gap-16 lg:gap-20 items-center">
           <div className="space-y-6 md:space-y-8">
             <div className="text-center lg:text-left">
-              <div className="micro-label animate-fade-in">Built For Real Work</div>
+              <div className="micro-label animate-fade-in">For Mission-Critical Work</div>
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] animate-slide-up text-center lg:!text-left">
-              Use AI better at work
+              AI productivity for mission-critical work
             </h1>
 
             <p
               className="text-body-lg text-secondary max-w-2xl mx-auto lg:mx-0 animate-slide-up text-center lg:!text-left"
               style={{ animationDelay: '100ms' }}
             >
-              Practical tools for prompting, writing, summarizing, checking outputs, and communicating
-              clearly under pressure. Built on Natophonetic&apos;s trusted clear-communication utility.
+              Draft comms, build briefs, extract action items, and verify AI output — practical
+              tools for aviation, maritime, dispatch, emergency, and operations professionals who
+              can&apos;t afford miscommunication.
             </p>
 
             <div
@@ -58,13 +59,13 @@ export function HomeHero() {
             >
               <div className="flex flex-wrap items-center justify-center lg:!justify-start gap-x-6 gap-y-2">
                 <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
-                  <span aria-hidden="true" className="text-success">✓</span> Built for real work tasks
+                  <span aria-hidden="true" className="text-success">✓</span> Built for high-stakes work
                 </span>
                 <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
-                  <span aria-hidden="true" className="text-success">✓</span> Clearer prompting, better output review
+                  <span aria-hidden="true" className="text-success">✓</span> Verify before you rely
                 </span>
                 <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
-                  <span aria-hidden="true" className="text-success">✓</span> Practical, hands-on AI use
+                  <span aria-hidden="true" className="text-success">✓</span> Zero-ambiguity discipline
                 </span>
               </div>
             </div>

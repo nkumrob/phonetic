@@ -2,10 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { HomeHero } from '../home-hero';
 
 describe('HomeHero', () => {
-  it('leads with the task-focused positioning', () => {
+  it('leads with the mission-critical positioning', () => {
     render(<HomeHero />);
     expect(
-      screen.getByRole('heading', { level: 1, name: /use AI better at work/i })
+      screen.getByRole('heading', { level: 1, name: /AI productivity for mission-critical work/i })
     ).toBeInTheDocument();
   });
 
@@ -15,9 +15,11 @@ describe('HomeHero', () => {
     expect(screen.getByRole('link', { name: /try the NATO converter/i })).toHaveAttribute('href', '/tools/phonetic-converter');
   });
 
-  it('shows the proof row', () => {
+  it('names the audience and shows the proof row', () => {
     render(<HomeHero />);
-    expect(screen.getByText(/built for real work tasks/i)).toBeInTheDocument();
-    expect(screen.getByText(/practical, hands-on AI use/i)).toBeInTheDocument();
+    expect(screen.getByText(/aviation, maritime, dispatch, emergency/i)).toBeInTheDocument();
+    expect(screen.getByText(/built for high-stakes work/i)).toBeInTheDocument();
+    expect(screen.getByText(/verify before you rely/i)).toBeInTheDocument();
+    expect(screen.getByText(/zero-ambiguity discipline/i)).toBeInTheDocument();
   });
 });

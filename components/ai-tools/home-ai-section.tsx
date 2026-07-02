@@ -10,8 +10,9 @@ export function HomeAiSection() {
         <div className="text-center mb-10 md:mb-12">
           <h2 className="h2 mb-6">Productivity Tools</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            Practical tools for real work — prompting, writing, summarizing, and reviewing — built
-            on Natophonetic&apos;s clear-communication foundation.
+            Six tools, one standard: say it once, say it right. The paperwork side of
+            mission-critical work — comms, briefs, debriefs, and verification — handled with the
+            discipline your field expects.
           </p>
         </div>
 

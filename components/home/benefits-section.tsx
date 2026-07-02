@@ -3,25 +3,25 @@ import Link from 'next/link';
 const BENEFITS = [
   {
     emoji: '⚡',
-    title: 'Write faster',
-    body: 'Emails, updates, and reports drafted from rough notes in seconds — not sessions.',
-    who: 'For anyone whose day is half writing',
+    title: 'Comms out in seconds',
+    body: 'Status updates, incident emails, and reports drafted from rough notes — sent with confidence.',
+    who: 'For anyone reporting up the chain',
     href: '/tools/email-drafter',
-    cta: 'Draft an email',
+    cta: 'Draft an update',
   },
   {
     emoji: '🎯',
-    title: 'Decide with confidence',
-    body: 'Long documents become key points, risks, and action items you can act on.',
-    who: 'For managers, analysts, and coordinators',
+    title: 'Brief, don’t bury',
+    body: 'Long reports and briefings become key points, risks, and action items you can act on.',
+    who: 'For leads, coordinators, and analysts',
     href: '/tools/summarizer',
-    cta: 'Summarize a document',
+    cta: 'Build a brief',
   },
   {
     emoji: '🛡️',
-    title: 'Trust what AI tells you',
-    body: 'Catch unsupported claims, weak reasoning, and overclaiming before they cost you.',
-    who: 'For everyone who double-checks',
+    title: 'Verify before you rely',
+    body: 'Catch unsupported claims and weak reasoning before they reach an operation or a client.',
+    who: 'For verification cultures',
     href: '/tools/output-checker',
     cta: 'Check an AI answer',
   },
@@ -33,7 +33,7 @@ export function BenefitsSection() {
     <section className="py-16 md:py-20">
       <div className="container px-6 md:px-8 lg:px-4">
         <div className="text-center mb-10 md:mb-12">
-          <h2 className="h2 mb-6">What You Get</h2>
+          <h2 className="h2 mb-6">Made for High-Stakes Work</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {BENEFITS.map((b) => (

@@ -67,8 +67,8 @@ export default function ToolsPageClient() {
           Productivity Tools
         </h1>
         <p className="text-lg sm:text-xl text-secondary text-center max-w-2xl mx-auto">
-          Practical AI tools for prompting, writing, summarizing, and reviewing — plus the
-          phonetic converter that started it all
+          AI productivity for mission-critical work — comms, briefs, action items, and
+          verification, plus the phonetic converter that started it all
         </p>
         <TimeSavedBanner />
       </section>

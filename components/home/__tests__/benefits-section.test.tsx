@@ -4,11 +4,11 @@ import { BenefitsSection } from '../benefits-section';
 describe('BenefitsSection', () => {
   it('renders all three benefit CTAs with correct hrefs', () => {
     render(<BenefitsSection />);
-    expect(screen.getByRole('link', { name: /Draft an email/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /Draft an update/i })).toHaveAttribute(
       'href',
       '/tools/email-drafter'
     );
-    expect(screen.getByRole('link', { name: /Summarize a document/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /Build a brief/i })).toHaveAttribute(
       'href',
       '/tools/summarizer'
     );
