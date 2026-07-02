@@ -315,16 +315,22 @@ export default function ToolsPageClient() {
       {/* Hero Section - Mobile Optimized */}
       <section className="container mx-auto px-4 py-8 sm:py-16">
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-headlines text-center mb-4">
-          Phonetic Tools
+          The Toolkit
         </h1>
         <p className="text-lg sm:text-xl text-secondary text-center max-w-2xl mx-auto">
-          Convert text and lookup NATO phonetic code words instantly with our professional-grade tools
+          AI productivity tools for mission-critical work — plus the phonetic converter that
+          started it all
         </p>
       </section>
 
       <div className="container max-w-6xl mx-auto px-4">
-        {/* Text Converter Section */}
+        {/* AI Tools Section */}
         <section className="mb-16">
+          <AiToolsGrid />
+        </section>
+
+        {/* Text Converter Section */}
+        <section id="converter" className="mb-16 scroll-mt-24">
           <InlineTextConverter key={converterKey} />
         </section>
 
@@ -347,8 +353,8 @@ export default function ToolsPageClient() {
                 Download a professional NATO phonetic alphabet reference chart for offline use
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <a 
-                  href="/api/pdf" 
+                <a
+                  href="/api/pdf"
                   download="nato-phonetic-alphabet.html"
                   className="btn btn-primary btn-lg inline-flex items-center gap-2"
                 >
@@ -363,11 +369,6 @@ export default function ToolsPageClient() {
               </div>
             </div>
           </div>
-        </section>
-
-        {/* AI Tools Section */}
-        <section className="mb-16">
-          <AiToolsGrid />
         </section>
 
         {/* Additional Features - Mobile Responsive */}
