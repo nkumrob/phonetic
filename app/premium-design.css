@@ -819,3 +819,24 @@ h4, .h4 {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Mission-critical rebrand: signal micro-label ─────────────────── */
+/* Uppercase letter-spaced badge; the ONLY sanctioned use of the amber/orange
+   accent besides "New" chips — use sparingly, like a caution indicator. */
+.micro-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: #fff3e6;
+  color: #b4530a;
+}
+.dark .micro-label {
+  background: rgba(180, 83, 10, 0.18);
+  color: #f5a862;
+}
