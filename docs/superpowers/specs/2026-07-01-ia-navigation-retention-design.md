@@ -41,6 +41,21 @@ All `/tools#converter` references (tool registry, HomeHero secondary CTA, app/no
 
 AiToolForm composes: TemplateStrip (above textarea) and RecentResults (below result/feedback). All client components; jsdom-testable with the existing localStorage mock in jest.setup.js.
 
+## Homepage slimming (owner amendment, 2026-07-01)
+
+The homepage currently splits ~50/50 between AI-productivity and deep NATO content (translator widget, full chart, how-to steps, NATO-vs-military, FAQ) — confusing. New structure; deep content RELOCATES (never deleted):
+
+1. **Hero** — unchanged ("Use AI better at work")
+2. **Productivity Tools grid** — unchanged
+3. **NEW Benefits section** — outcome-focused, three cards: "Write faster" (drafts and emails in seconds, not sessions), "Decide with confidence" (summaries and action items you can trust), "Trust what AI tells you" (catch weak reasoning before it costs you) — each with a one-line who-it's-for and a link into the matching tool
+4. **Foundation section** — keep (the three Learn/Practice/Tools entry-point cards ARE the buttons into the NATO side)
+5. **NEW compact NATO band** (replaces translator + chart + how-to + NATO-vs-military + FAQ sections): one short section — "Need the NATO alphabet right now?" with three CTAs: Try the Converter (/tools/phonetic-converter), Learn the Alphabet (/learn), Download the Chart (/api/pdf)
+6. **Stats band** reworked from NATO-only ("26 Letters to Master…") to suite-wide: 6 Work Tools · 26 Code Words · 100% Free · No Sign-up
+7. **Testimonials** — keep; subtitle generalized (drop "mastered the NATO phonetic alphabet")
+8. **Final CTA** — unchanged
+
+Relocations: FAQ section (with its questions intact) moves to /learn (appended section — preserves the FAQ content for search); the translator widget's home is the new /tools/phonetic-converter page (chart + how-to already exist on /learn). SEO note: this removes NATO body content from the highest-authority page — accepted by owner for clarity; homepage title/meta stay NATO-loaded, /learn absorbs the FAQ, and the 4-week Search Console watch covers it.
+
 ## SEO
 
 - `/tools` hub keeps converter keywords in its meta description; the new converter page takes the converter-specific title. Sitemap: add `/tools/phonetic-converter`; `/tools` stays.
