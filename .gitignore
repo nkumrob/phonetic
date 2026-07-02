@@ -53,3 +53,4 @@ local.db-*
 
 # dev logs
 dev-output.log
+.superpowers/
