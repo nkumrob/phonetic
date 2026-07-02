@@ -3,6 +3,7 @@ export { AiToolPageShell } from './ai-tool-page-shell';
 export { PromptImprover } from './prompt-improver';
 export { RecentResults } from './recent-results';
 export { ResultPanel } from './result-panel';
+export { TemplateStrip } from './template-strip';
 export { TimeSavedBanner } from './time-saved-banner';
 export { TimeSavedFeedback } from './time-saved-feedback';
 export { ToolErrorFallback } from './tool-error-fallback';

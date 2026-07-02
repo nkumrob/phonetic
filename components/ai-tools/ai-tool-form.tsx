@@ -5,7 +5,9 @@ import { Sparkles } from 'lucide-react';
 import { runAiTool, type AiToolResult } from '@/lib/services/ai-tool-service';
 import { cn } from '@/lib/utils/cn';
 import { addHistoryEntry, clearHistory, getHistory, type ToolHistoryEntry } from '@/lib/client/tool-history';
+import { getTemplates } from '@/lib/ai/templates';
 import { ResultPanel } from './result-panel';
+import { TemplateStrip } from './template-strip';
 import { TimeSavedFeedback } from './time-saved-feedback';
 import { RecentResults } from './recent-results';
 
@@ -66,6 +68,11 @@ export function AiToolForm({
 
   return (
     <div className="bg-white dark:bg-warmNeutral-800 rounded-xl shadow-lg border border-warmNeutral-200 dark:border-warmNeutral-700 p-6 space-y-4">
+      <TemplateStrip
+        templates={getTemplates(toolId)}
+        onSelect={(value) => setInput(value.slice(0, maxChars))}
+      />
+
       <div>
         <label
           htmlFor={`${toolId}-input`}

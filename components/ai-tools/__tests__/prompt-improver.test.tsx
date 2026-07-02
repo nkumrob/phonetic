@@ -29,7 +29,7 @@ describe('PromptImprover', () => {
     render(<PromptImprover />);
 
     expect(screen.getByRole('textbox')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /improve/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /improve my prompt/i })).toBeDisabled();
   });
 
   it('shows a character counter that tracks input', async () => {
@@ -47,7 +47,7 @@ describe('PromptImprover', () => {
     const user = userEvent.setup();
 
     await user.type(screen.getByRole('textbox'), 'make me a website');
-    await user.click(screen.getByRole('button', { name: /improve/i }));
+    await user.click(screen.getByRole('button', { name: /improve my prompt/i }));
 
     await waitFor(() =>
       expect(screen.getByText(/Role: web developer/)).toBeInTheDocument()
@@ -61,7 +61,7 @@ describe('PromptImprover', () => {
     const user = userEvent.setup();
 
     await user.type(screen.getByRole('textbox'), 'make me a website');
-    await user.click(screen.getByRole('button', { name: /improve/i }));
+    await user.click(screen.getByRole('button', { name: /improve my prompt/i }));
 
     await waitFor(() =>
       expect(screen.getByRole('alert')).toHaveTextContent('AI service is not configured')
@@ -74,7 +74,7 @@ describe('PromptImprover', () => {
     const user = userEvent.setup();
 
     await user.type(screen.getByRole('textbox'), 'make me a website');
-    await user.click(screen.getByRole('button', { name: /improve/i }));
+    await user.click(screen.getByRole('button', { name: /improve my prompt/i }));
     await waitFor(() => screen.getByText(/Role: web developer/));
 
     await user.click(screen.getByRole('button', { name: /copy/i }));
@@ -92,7 +92,7 @@ describe('PromptImprover', () => {
     const user = userEvent.setup();
 
     await user.type(screen.getByRole('textbox'), 'make me a website');
-    await user.click(screen.getByRole('button', { name: /improve/i }));
+    await user.click(screen.getByRole('button', { name: /improve my prompt/i }));
     await waitFor(() => screen.getByText(/Role: web developer/));
 
     await user.click(screen.getByRole('button', { name: /1-5 min/i }));
