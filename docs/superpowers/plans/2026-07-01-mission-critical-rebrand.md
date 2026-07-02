@@ -597,6 +597,11 @@ afplay /Users/robertappiah/Downloads/beep.aiff
 
 ---
 
+## SEO-visible structural changes (monitor both in Search Console per Task 8)
+
+1. Homepage H1: "NATO Phonetic Alphabet: A to Z" → "AI productivity for mission-critical work" (accepted risk per spec).
+2. Features-section H2: "What Is the NATO Phonetic Alphabet?" → "Built on the Original Clear-Communication Protocol" (intentional, Task 5 Step 1.4 — the FAQ-style query heading is lost; the page's FAQ section further down still carries question-format headings, which mitigates featured-snippet loss).
+
 ## Self-review notes
 
 - **Spec coverage:** positioning/voice → Tasks 3–7 copy; homepage order → Task 5; six-tool grid → Tasks 1, 4; SEO protection → Task 7 Step 3 (title keeps NATO keywords), /learn and /practice untouched (no task modifies them); nav labels → Task 7 Step 2; Direction B accents → Task 2 (+ grid classes in Task 4); tools-page unification → Task 6; success criteria → Task 8.
