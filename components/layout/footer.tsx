@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { AI_TOOLS } from '@/components/ai-tools';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -46,21 +47,16 @@ export function Footer() {
           <div>
             <h4 className="text-base md:text-lg font-bold mb-4 md:mb-5">Tools</h4>
             <ul className="space-y-2">
-              <li>
-                <Link href="/tools" className="text-body text-secondary hover:text-primary transition-colors inline-block">
-                  Text Converter
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools" className="text-body text-secondary hover:text-primary transition-colors inline-block">
-                  Reverse Lookup
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools" className="text-body text-secondary hover:text-primary transition-colors inline-block">
-                  PDF Generator
-                </Link>
-              </li>
+              {AI_TOOLS.map((tool) => (
+                <li key={tool.id}>
+                  <Link
+                    href={tool.href}
+                    className="text-body text-secondary hover:text-primary transition-colors inline-block"
+                  >
+                    {tool.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

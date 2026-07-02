@@ -8,38 +8,35 @@ import { cn } from '@/lib/utils/cn';
 import { Settings } from 'lucide-react';
 import { useSimpleAppState } from '@/lib/contexts/simple-app-context';
 import { speechManager } from '@/lib/utils/speech-synthesis';
+import { NavDropdown, toolsMenuItems, NATO_MENU_ITEMS } from './nav-menu';
 
 export function SimpleHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const { state } = useSimpleAppState();
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  const navigation = [
-    { name: 'Learn NATO', href: '/learn', icon: '📚' },
-    { name: 'Practice', href: '/practice', icon: '🎯' },
-    { name: 'Tools', href: '/tools', icon: '🛠️' },
-  ];
+  /** Cancel speech and clear text converters on any nav action. */
+  const handleNavigate = () => {
+    speechManager.cancel();
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('clear-text-converters'));
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg shadow-sm">
       <nav className="container mx-auto px-4" aria-label="Global">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="flex items-center space-x-2 group"
-            onClick={() => {
-              speechManager.cancel();
-              // Dispatch custom event to clear text converters
-              if (typeof window !== 'undefined') {
-                window.dispatchEvent(new Event('clear-text-converters'));
-              }
-            }}
+            onClick={handleNavigate}
           >
             <div className="bg-coolBlue-500 text-white font-black text-sm sm:text-xl px-2 sm:px-4 py-1 sm:py-2 rounded-lg">
               NATO Phonetic
@@ -48,29 +45,16 @@ export function SimpleHeader() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex md:items-center md:gap-1">
-            {navigation.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    "relative px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2",
-                    "hover:bg-gray-100 dark:hover:bg-gray-800",
-                    isActive 
-                      ? "text-primary" 
-                      : "text-secondary hover:text-primary"
-                  )}
-                  onClick={() => speechManager.cancel()}
-                >
-                  <span className="text-lg">{item.icon}</span>
-                  <span>{item.name}</span>
-                  {isActive && (
-                    <div className="absolute bottom-0 left-4 right-4 h-0.5 bg-primary rounded-full" />
-                  )}
-                </Link>
-              );
-            })}
+            <NavDropdown
+              label="Tools"
+              items={toolsMenuItems()}
+              onNavigate={handleNavigate}
+            />
+            <NavDropdown
+              label="Learn NATO"
+              items={NATO_MENU_ITEMS}
+              onNavigate={handleNavigate}
+            />
           </div>
 
           {/* Actions */}
@@ -88,9 +72,9 @@ export function SimpleHeader() {
             <Link
               href="/settings"
               className={cn(
-                "hidden sm:block p-2 rounded-lg transition-colors",
-                "hover:bg-gray-100 dark:hover:bg-gray-800",
-                pathname === '/settings' && "bg-gray-100 dark:bg-gray-800"
+                'hidden sm:block p-2 rounded-lg transition-colors',
+                'hover:bg-gray-100 dark:hover:bg-gray-800',
+                pathname === '/settings' && 'bg-gray-100 dark:bg-gray-800'
               )}
               aria-label="Settings"
             >
@@ -101,13 +85,13 @@ export function SimpleHeader() {
             <div className="hidden sm:block">
               <ThemeToggle />
             </div>
-            
+
             {/* Mobile menu button */}
             <button
               className={cn(
-                "md:hidden p-1.5 sm:p-2 rounded-lg",
-                "hover:bg-gray-100 dark:hover:bg-gray-800",
-                "transition-colors duration-200"
+                'md:hidden p-1.5 sm:p-2 rounded-lg',
+                'hover:bg-gray-100 dark:hover:bg-gray-800',
+                'transition-colors duration-200'
               )}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
@@ -153,28 +137,43 @@ export function SimpleHeader() {
                 <span className="font-medium">{mounted ? (state.user.name || 'Profile') : 'Profile'}</span>
               </Link>
 
-              {navigation.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                      "flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors",
-                      isActive 
-                        ? "bg-primary/10 text-primary" 
-                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                    )}
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      speechManager.cancel();
-                    }}
-                  >
-                    <span className="text-xl">{item.icon}</span>
-                    {item.name}
-                  </Link>
-                );
-              })}
+              {/* Tools group */}
+              <p className="text-xs font-bold uppercase tracking-widest text-tertiary px-3 pt-3 pb-1">
+                Tools
+              </p>
+              {toolsMenuItems().map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleNavigate();
+                  }}
+                >
+                  <span className="text-xl">{item.emoji}</span>
+                  {item.name}
+                </Link>
+              ))}
+
+              {/* Learn NATO group */}
+              <p className="text-xs font-bold uppercase tracking-widest text-tertiary px-3 pt-3 pb-1">
+                Learn NATO
+              </p>
+              {NATO_MENU_ITEMS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleNavigate();
+                  }}
+                >
+                  <span className="text-xl">{item.emoji}</span>
+                  {item.name}
+                </Link>
+              ))}
             </div>
           </div>
         )}
