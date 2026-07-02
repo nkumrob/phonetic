@@ -143,7 +143,7 @@
     --color-primary-light: 30 64 175;
 
     /* Signal/Alert Accent - Dark Mode */
-    --signal-bg: rgba(180, 83, 10, 0.18);
+    --signal-bg: 180 83 10;
     --signal-text: 245 168 98;
 }
 
@@ -846,6 +846,6 @@ h4, .h4 {
 }
 
 .dark .micro-label {
-  background: var(--signal-bg);
+  background: rgba(var(--signal-bg), 0.18);
   color: rgb(var(--signal-text));
 }
