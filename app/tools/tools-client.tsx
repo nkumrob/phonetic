@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ShieldCheck } from 'lucide-react';
-import { AI_TOOLS, type AiToolMeta } from '@/components/ai-tools';
+import { AI_TOOLS, TimeSavedBanner, type AiToolMeta } from '@/components/ai-tools';
 
 interface ReferenceCard {
   name: string;
@@ -70,7 +70,7 @@ export default function ToolsPageClient() {
           Practical AI tools for prompting, writing, summarizing, and reviewing — plus the
           phonetic converter that started it all
         </p>
-        {/* TimeSavedBanner mounts here in Task 6 */}
+        <TimeSavedBanner />
       </section>
 
       <div className="container max-w-6xl mx-auto px-4 pb-16 space-y-14">

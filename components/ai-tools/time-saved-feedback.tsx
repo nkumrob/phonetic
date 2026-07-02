@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { TIME_SAVED_BUCKETS, type TimeSavedBucket } from '@/lib/ai/types';
 import { submitTimeSaved } from '@/lib/services/ai-tool-service';
+import { recordLocalTimeSaved } from '@/lib/client/time-saved';
 
 const BUCKET_LABELS: Record<TimeSavedBucket, string> = {
   '<1': '<1 min',
@@ -36,6 +37,7 @@ export function TimeSavedFeedback({ usageId }: TimeSavedFeedbackProps) {
           type="button"
           onClick={() => {
             setSubmitted(true);
+            recordLocalTimeSaved(bucket);
             void submitTimeSaved(usageId, bucket);
           }}
           className="px-3 py-1.5 text-sm font-medium rounded-full bg-warmNeutral-100 text-warmNeutral-700 hover:bg-warmNeutral-200 dark:bg-warmNeutral-700 dark:text-warmNeutral-200 dark:hover:bg-warmNeutral-600 transition-colors"
