@@ -24,6 +24,7 @@ export function RecentResults({ entries, onRestore, onClear }: RecentResultsProp
         <button
           type="button"
           onClick={onClear}
+          aria-label="Clear history"
           className="text-xs text-muted-foreground hover:text-foreground"
         >
           Clear
