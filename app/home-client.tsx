@@ -39,11 +39,11 @@ export default function HomeClient() {
       <section className="py-16 md:py-20">
         <div className="container px-6 md:px-8 lg:px-4">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="h2 mb-6">Built on the Original Clear-Communication Protocol</h2>
+          <h2 className="h2 mb-6">Built on a Proven Communication Foundation</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            We started with the NATO phonetic alphabet — the standard that lets pilots, sailors,
-            and dispatchers communicate with zero ambiguity. Learn it, practice it, and use the
-            same discipline in every tool above.
+            Natophonetic began as a practical tool for spelling and transmitting information clearly.
+            Now that same focus on clarity, structure, and accuracy powers AI productivity tools for
+            modern work.
           </p>
         </div>
 
@@ -57,8 +57,8 @@ export default function HomeClient() {
               Interactive Learning
             </h3>
             <p className="text-body text-secondary mb-6 leading-relaxed">
-              Explore all 26 letters with professional audio pronunciation, visual memory aids,
-              and proven mnemonic techniques.
+              Learn clear communication through short lessons, guided practice, and real workplace
+              scenarios.
             </p>
             <ul className="space-y-3 text-sm text-tertiary">
               <li className="flex items-center gap-2">
@@ -91,8 +91,7 @@ export default function HomeClient() {
               Practice Modes
             </h3>
             <p className="text-body text-secondary mb-6 leading-relaxed">
-              Challenge yourself with adaptive quizzes, unlock achievements, and track your progress
-              through multiple difficulty levels.
+              Improve performance through drills, prompt exercises, and repeatable workflow practice.
             </p>
             <ul className="space-y-3 text-sm text-tertiary">
               <li className="flex items-center gap-2">
@@ -125,8 +124,8 @@ export default function HomeClient() {
               Professional Tools
             </h3>
             <p className="text-body text-secondary mb-6 leading-relaxed">
-              Convert text instantly, perform reverse lookups, and generate professional PDF reference
-              charts for offline use.
+              Use production-ready utilities for writing, summarizing, reviewing, and structured
+              communication.
             </p>
             <ul className="space-y-3 text-sm text-tertiary">
               <li className="flex items-center gap-2">
@@ -181,9 +180,11 @@ export default function HomeClient() {
       <section className="py-16 md:py-20">
         <div className="container px-6 md:px-8 lg:px-4">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="h2 mb-6">Instant NATO Phonetic Translator</h2>
+          <h2 className="h2 mb-6">NATO Phonetic Translator</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            Convert any text to NATO phonetic alphabet instantly. Type your message and hear it spoken in both regular and phonetic form.
+            Convert any text to NATO phonetic alphabet instantly. Clear communication still matters
+            in customer support, logistics, aviation, and any situation where a single wrong letter
+            causes a costly error.
           </p>
         </div>
 
@@ -223,7 +224,8 @@ export default function HomeClient() {
         <div className="text-center mb-12 md:mb-16">
           <h2 className="h2 mb-6">How to Use NATO Phonetic Code</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            Follow these simple steps to master phonetic communication
+            Follow these simple steps to master phonetic communication — the same discipline that
+            improves prompt writing and task instructions in AI-assisted work.
           </p>
         </div>
 
@@ -391,13 +393,13 @@ export default function HomeClient() {
       {/* CTA Section */}
       <section className="py-16 md:py-20 bg-coolBlue-50 dark:bg-coolBlue-900/10">
         <div className="container px-6 md:px-8 lg:px-4 text-center">
-          <h2 className="h2 mb-6">Ready to Master Professional Communication?</h2>
+          <h2 className="h2 mb-6">Ready to work better with AI?</h2>
           <p className="text-body-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-            Join thousands of aviation professionals, military personnel, and radio operators
-            who have perfected their phonetic alphabet skills.
+            Use practical tools for prompting, writing, summarizing, and reviewing work with more
+            speed and confidence.
           </p>
-          <Link href="/learn" className="btn btn-primary btn-xl inline-flex items-center justify-center">
-            Begin Your Journey
+          <Link href="/tools" className="btn btn-primary btn-xl inline-flex items-center justify-center">
+            Open Productivity Tools
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="ml-2">
               <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>

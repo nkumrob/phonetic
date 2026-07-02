@@ -10,19 +10,19 @@ export function HomeHero() {
         <div className="grid lg:grid-cols-[1.2fr,1fr] gap-12 md:gap-16 lg:gap-20 items-center">
           <div className="space-y-6 md:space-y-8">
             <div className="text-center lg:text-left">
-              <div className="micro-label animate-fade-in">For Mission-Critical Work</div>
+              <div className="micro-label animate-fade-in">Built For Real Work</div>
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] animate-slide-up text-center lg:!text-left">
-              AI productivity for mission-critical work
+              Use AI better at work
             </h1>
 
             <p
               className="text-body-lg text-secondary max-w-2xl mx-auto lg:mx-0 animate-slide-up text-center lg:!text-left"
               style={{ animationDelay: '100ms' }}
             >
-              Draft comms, build briefs, extract action items, and verify AI output — tools built
-              with the discipline of the professions that invented clear communication.
+              Practical tools for prompting, writing, summarizing, checking outputs, and communicating
+              clearly under pressure. Built on Natophonetic&apos;s trusted clear-communication utility.
             </p>
 
             <div
@@ -33,7 +33,7 @@ export function HomeHero() {
                 href="/tools"
                 className="btn btn-primary btn-xl whitespace-nowrap inline-flex items-center justify-center"
               >
-                Open the Tools
+                Open Productivity Tools
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="ml-2" aria-hidden="true">
                   <path
                     d="M7.5 5L12.5 10L7.5 15"
@@ -45,10 +45,10 @@ export function HomeHero() {
                 </svg>
               </Link>
               <Link
-                href="/learn"
+                href="/tools#converter"
                 className="btn btn-secondary btn-xl whitespace-nowrap inline-flex items-center justify-center"
               >
-                Learn the Alphabet
+                Try the NATO Converter
               </Link>
             </div>
 
@@ -56,14 +56,16 @@ export function HomeHero() {
               className="pt-6 md:pt-8 animate-fade-in text-center lg:!text-left"
               style={{ animationDelay: '300ms' }}
             >
-              <p className="text-xs font-bold text-tertiary uppercase tracking-widest mb-4">
-                Built for the professions that can&apos;t afford miscommunication
-              </p>
-              <div className="flex flex-wrap items-center justify-center lg:!justify-start gap-4 md:gap-6">
-                <span className="text-sm font-semibold text-secondary">✈️ Aviation</span>
-                <span className="text-sm font-semibold text-secondary">🚢 Maritime</span>
-                <span className="text-sm font-semibold text-secondary">🚔 Emergency</span>
-                <span className="text-sm font-semibold text-secondary">📡 Military</span>
+              <div className="flex flex-wrap items-center justify-center lg:!justify-start gap-x-6 gap-y-2">
+                <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
+                  <span aria-hidden="true" className="text-success">✓</span> Built for real work tasks
+                </span>
+                <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
+                  <span aria-hidden="true" className="text-success">✓</span> Clearer prompting, better output review
+                </span>
+                <span className="flex items-center gap-1.5 text-sm font-semibold text-secondary">
+                  <span aria-hidden="true" className="text-success">✓</span> Practical, hands-on AI use
+                </span>
               </div>
             </div>
           </div>

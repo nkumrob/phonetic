@@ -8,11 +8,10 @@ export function HomeAiSection() {
     <section className="py-16 md:py-20 bg-gradient-to-br from-warmAmber-50/50 to-coolBlue-50/50 dark:from-warmAmber-900/10 dark:to-coolBlue-900/10">
       <div className="container px-6 md:px-8 lg:px-4">
         <div className="text-center mb-10 md:mb-12">
-          <h2 className="h2 mb-6">The Toolkit</h2>
+          <h2 className="h2 mb-6">Productivity Tools</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            Six tools, one standard: say it once, say it right. From spelling a call sign over a
-            bad connection to briefing a 40-page report — and verifying what AI tells you before
-            you act on it.
+            Practical tools for real work — prompting, writing, summarizing, and reviewing — built
+            on Natophonetic&apos;s clear-communication foundation.
           </p>
         </div>
 
@@ -40,7 +39,7 @@ export function HomeAiSection() {
           </p>
           <Link href="/tools" className="btn btn-primary inline-flex items-center gap-2">
             <Sparkles size={18} />
-            Open the Tools
+            Open Productivity Tools
           </Link>
         </div>
       </div>
