@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { HomeAiSection } from '@/components/ai-tools/home-ai-section';
+import { HomeHero } from '@/components/home/home-hero';
 
 // Lazy load heavy components for better initial page load
 const AudioAlphabetTable = dynamic(() => import('@/components/phonetic/audio-alphabet-table').then(mod => ({ default: mod.AudioAlphabetTable })), {
@@ -28,82 +29,21 @@ const TestimonialsGrid = dynamic(() => import('@/components/testimonials').then(
 export default function HomeClient() {
   return (
     <>
-      {/* Hero Section - Asymmetric Split Layout */}
-      <section className="py-12 md:py-16 lg:py-20 overflow-hidden relative">
-        {/* Warm neutral background */}
-        <div className="absolute inset-0 -z-10 bg-warmNeutral-50 dark:bg-warmNeutral-900" />
+      {/* Hero — mission-critical positioning */}
+      <HomeHero />
 
-        <div className="container px-6 md:px-8 lg:px-4">
-          <div className="grid lg:grid-cols-[1.2fr,1fr] gap-12 md:gap-16 lg:gap-20 items-center">
-            {/* Content */}
-            <div className="space-y-6 md:space-y-8">
-              <div className="text-center lg:text-left">
-                <div className="inline-block px-4 py-2 bg-coolBlue-50 dark:bg-coolBlue-900/20 text-coolBlue-600 dark:text-coolBlue-400 text-xs font-bold uppercase tracking-widest rounded-full animate-fade-in">
-                  International Standard
-                </div>
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] animate-slide-up text-center lg:!text-left">
-                NATO Phonetic Alphabet: A to Z
-              </h1>
-
-              <p className="text-body-lg text-secondary max-w-2xl mx-auto lg:mx-0 animate-slide-up text-center lg:!text-left" style={{ animationDelay: '100ms' }}>
-                Learn the universal communication standard used by military forces, aviation professionals,
-                and emergency services worldwide. Interactive lessons, real-time practice — and new AI
-                tools that bring the same clarity to how you work with AI.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up" style={{ animationDelay: '200ms' }}>
-                <Link href="/learn" className="btn btn-primary btn-xl whitespace-nowrap inline-flex items-center justify-center">
-                  Start Learning Now
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="ml-2">
-                    <path d="M7.5 5L12.5 10L7.5 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </Link>
-                <Link href="/practice" className="btn btn-secondary btn-xl whitespace-nowrap inline-flex items-center justify-center">
-                  Test Your Skills
-                </Link>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-6 md:pt-8 animate-fade-in text-center lg:!text-left" style={{ animationDelay: '300ms' }}>
-                <p className="text-xs font-bold text-tertiary uppercase tracking-widest mb-4">Trusted by professionals</p>
-                <div className="flex flex-wrap items-center justify-center lg:!justify-start gap-4 md:gap-6">
-                  <span className="text-sm font-semibold text-secondary">✈️ Aviation</span>
-                  <span className="text-sm font-semibold text-secondary">🚢 Maritime</span>
-                  <span className="text-sm font-semibold text-secondary">🚔 Emergency</span>
-                  <span className="text-sm font-semibold text-secondary">📡 Military</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Visual Element */}
-            <div className="relative hidden lg:block">
-              <div className="absolute inset-0 bg-coolBlue-100 dark:bg-coolBlue-900/20 rounded-3xl transform rotate-3" />
-              <div className="relative bg-white dark:bg-warmNeutral-800 rounded-3xl p-8 lg:p-12 shadow-2xl">
-                <div className="grid grid-cols-3 gap-4 lg:gap-6">
-                  {['A-Alpha', 'B-Bravo', 'C-Charlie', 'D-Delta', 'E-Echo', 'F-Foxtrot'].slice(0, 6).map((item) => (
-                    <div key={item} className="text-center p-4 lg:p-6 rounded-xl bg-warmNeutral-50 dark:bg-warmNeutral-900 hover:shadow-md transition-all duration-200">
-                      <div className="text-3xl lg:text-4xl font-black text-coolBlue-500 mb-2">{item.split('-')[0]}</div>
-                      <div className="text-xs lg:text-sm font-semibold text-secondary">{item.split('-')[1]}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* The suite grid — all six tools */}
+      <HomeAiSection />
 
       {/* Features Section with Cards */}
       <section className="py-16 md:py-20">
         <div className="container px-6 md:px-8 lg:px-4">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="h2 mb-6">What Is the NATO Phonetic Alphabet?</h2>
+          <h2 className="h2 mb-6">Built on the Original Clear-Communication Protocol</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            The NATO phonetic alphabet is a standardized set of 26 code words used to clearly communicate
-            letters over radio and telephone. Each letter from A to Z is assigned a specific word (Alpha, Bravo, Charlie, etc.)
-            to eliminate confusion in voice communications.
+            We started with the NATO phonetic alphabet — the standard that lets pilots, sailors,
+            and dispatchers communicate with zero ambiguity. Learn it, practice it, and use the
+            same discipline in every tool above.
           </p>
         </div>
 
@@ -212,9 +152,6 @@ export default function HomeClient() {
         </div>
         </div>
       </section>
-
-      {/* AI Productivity Tools Section */}
-      <HomeAiSection />
 
       {/* Statistics Section */}
       <section className="py-16 md:py-20 bg-warmNeutral-50 dark:bg-warmNeutral-900">
