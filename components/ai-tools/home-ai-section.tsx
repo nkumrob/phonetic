@@ -10,8 +10,8 @@ export function HomeAiSection() {
         <div className="text-center mb-10 md:mb-12">
           <h2 className="h2 mb-6">Hours of work in minutes</h2>
           <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            The discipline of the phonetic alphabet, applied to everyday work: draft comms, build
-            briefs, extract action items, and verify AI output before you rely on it.
+            Draft comms, build briefs, extract action items, and verify AI output before you rely
+            on it. The same discipline that keeps radio traffic clear, applied to everyday work.
           </p>
         </div>
 

@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import HomeClient from '@/app/home-client';
 
+// The dynamic widgets load async in jsdom and fire state updates outside act();
+// this structural test only asserts static headings/links, so stub them.
+jest.mock('@/components/famewall', () => ({ FamewallWidget: () => <div data-testid="famewall-stub" /> }));
+jest.mock('@/components/testimonials', () => ({ TestimonialsGrid: () => <div data-testid="testimonials-stub" /> }));
+
 describe('HomeClient structure', () => {
   it('renders the approved sections in order', () => {
     render(<HomeClient />);
