@@ -32,6 +32,15 @@ const schema = readFileSync(resolve(process.cwd(), 'lib/db/schema.sql'), 'utf8')
 
 try {
   await db.executeMultiple(schema);
+
+  // Guarded migrations: idempotent column adds that schema.sql cannot express.
+  const info = await db.execute("pragma table_info('tool_usage')");
+  const hasAnonId = info.rows.some((row) => row.name === 'anon_id');
+  if (!hasAnonId) {
+    await db.execute('alter table tool_usage add column anon_id text');
+    console.log('Added tool_usage.anon_id column.');
+  }
+
   console.log(`Schema applied to ${url.startsWith('file:') ? url : 'Turso database'}.`);
 } catch (error) {
   console.error('Failed to apply schema:', error.message);

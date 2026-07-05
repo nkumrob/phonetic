@@ -32,3 +32,22 @@ create table if not exists tool_usage (
 );
 
 create index if not exists idx_tool_usage_tool_created on tool_usage (tool_name, created_at desc);
+
+create table if not exists events (
+  id         text primary key,
+  name       text not null check (name in
+               ('page_view','converter_use','practice_session','template_use','time_saved_vote')),
+  tool       text,
+  anon_id    text,
+  metadata   text,
+  created_at text not null default (datetime('now'))
+);
+
+create index if not exists idx_events_name_created on events (name, created_at desc);
+create index if not exists idx_events_anon_created on events (anon_id, created_at desc);
+
+create table if not exists user_progress (
+  anon_id    text primary key,
+  data       text not null,
+  updated_at text not null default (datetime('now'))
+);
