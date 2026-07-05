@@ -2,8 +2,8 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { NavDropdown } from '../nav-menu';
 
 const ITEMS = [
-  { name: 'AI Prompt Improver', href: '/tools/prompt-improver', emoji: '✨' },
-  { name: 'All tools', href: '/tools', emoji: '🧰' },
+  { name: 'AI Prompt Improver', href: '/tools/prompt-improver' },
+  { name: 'All tools', href: '/tools' },
 ];
 
 describe('NavDropdown', () => {

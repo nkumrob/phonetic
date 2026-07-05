@@ -7,7 +7,7 @@ export function ChartPreview() {
     <div className="max-w-4xl mx-auto mb-8">
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border-2 border-gray-200 dark:border-gray-700">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 text-center">
+        <div className="bg-coolBlue-600 text-white p-6 text-center">
           <h3 className="text-2xl font-bold">NATO Phonetic Alphabet Reference Chart</h3>
           <p className="text-blue-100 mt-2">Professional reference guide for clear communication</p>
         </div>

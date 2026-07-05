@@ -142,13 +142,12 @@ export function SimpleHeader() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="block px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={() => {
                     setMobileMenuOpen(false);
                     handleNavigate();
                   }}
                 >
-                  <span className="text-xl">{item.emoji}</span>
                   {item.name}
                 </Link>
               ))}
@@ -161,13 +160,12 @@ export function SimpleHeader() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                  className="block px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={() => {
                     setMobileMenuOpen(false);
                     handleNavigate();
                   }}
                 >
-                  <span className="text-xl">{item.emoji}</span>
                   {item.name}
                 </Link>
               ))}

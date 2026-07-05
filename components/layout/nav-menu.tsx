@@ -9,7 +9,6 @@ import { AI_TOOLS } from '@/components/ai-tools';
 export interface NavItem {
   name: string;
   href: string;
-  emoji: string;
   /** Set for file-download links (e.g. the PDF chart) so browsers save instead of navigate. */
   download?: string;
 }
@@ -17,24 +16,22 @@ export interface NavItem {
 /** Items for the Tools dropdown: AI tools, phonetic tools, then All tools. */
 export function toolsMenuItems(): NavItem[] {
   return [
-    ...AI_TOOLS.filter((tool) => tool.category === 'ai').map(({ name, href, emoji }) => ({
+    ...AI_TOOLS.filter((tool) => tool.category === 'ai').map(({ name, href }) => ({
       name,
       href,
-      emoji,
     })),
-    ...AI_TOOLS.filter((tool) => tool.category === 'phonetic').map(({ name, href, emoji }) => ({
+    ...AI_TOOLS.filter((tool) => tool.category === 'phonetic').map(({ name, href }) => ({
       name,
       href,
-      emoji,
     })),
-    { name: 'All tools', href: '/tools', emoji: '🧰' },
+    { name: 'All tools', href: '/tools' },
   ];
 }
 
 export const NATO_MENU_ITEMS: NavItem[] = [
-  { name: 'Learn the Alphabet', href: '/learn', emoji: '📚' },
-  { name: 'Practice & Quiz', href: '/practice', emoji: '🎯' },
-  { name: 'Printable Chart', href: '/api/pdf', emoji: '🖨️', download: 'nato-phonetic-alphabet.html' },
+  { name: 'Learn the Alphabet', href: '/learn' },
+  { name: 'Practice & Quiz', href: '/practice' },
+  { name: 'Printable Chart', href: '/api/pdf', download: 'nato-phonetic-alphabet.html' },
 ];
 
 export interface NavDropdownProps {
@@ -92,9 +89,8 @@ export function NavDropdown({ label, items, onNavigate }: NavDropdownProps) {
                 setOpen(false);
                 onNavigate?.();
               }}
-              className="flex items-center gap-2 px-4 py-2 text-sm text-warmNeutral-700 dark:text-warmNeutral-200 hover:bg-warmNeutral-100 dark:hover:bg-warmNeutral-700 transition-colors"
+              className="block px-4 py-2 text-sm text-warmNeutral-700 dark:text-warmNeutral-200 hover:bg-warmNeutral-100 dark:hover:bg-warmNeutral-700 transition-colors"
             >
-              <span aria-hidden="true">{item.emoji}</span>
               {item.name}
             </Link>
           ))}

@@ -240,7 +240,7 @@ export function ReverseLookup() {
         {/* Selected Letter Display */}
         {selectedLetter && (
           <div className="mt-6 space-y-6">
-            <div className="text-center bg-gradient-to-br from-coolBlue-50 to-warmAmber-50 dark:from-coolBlue-900/20 dark:to-warmAmber-900/20 rounded-lg p-6 border border-warmNeutral-200 dark:border-warmNeutral-700">
+            <div className="text-center bg-warmNeutral-50 dark:bg-warmNeutral-800 rounded-lg p-6 border border-warmNeutral-200 dark:border-warmNeutral-700">
               <div className="text-6xl font-black text-foreground mb-4">
                 {selectedLetter.letter}
               </div>

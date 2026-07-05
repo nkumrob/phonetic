@@ -189,7 +189,7 @@ export function InlineTextConverter() {
           <label className="text-sm font-medium text-secondary">
             Phonetic Output
           </label>
-          <div className="w-full p-3 rounded-lg bg-gradient-to-br from-coolBlue-50 to-warmAmber-50 dark:from-coolBlue-900/20 dark:to-warmAmber-900/20 border border-warmNeutral-200 dark:border-warmNeutral-700 min-h-[100px] max-h-[300px] overflow-y-auto">
+          <div className="w-full p-3 rounded-lg bg-warmNeutral-50 dark:bg-warmNeutral-800 border border-warmNeutral-200 dark:border-warmNeutral-700 min-h-[100px] max-h-[300px] overflow-y-auto">
             {outputText ? (
               <p className="font-mono text-foreground leading-relaxed">
                 {outputText}
