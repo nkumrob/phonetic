@@ -110,5 +110,6 @@ reachable via the NATO door, nav dropdowns, and footer — nothing orphaned.
 ## Constraints and conventions
 
 - Files ≤ 500 lines; outcome-led professional copy only; no em dashes in
-  user-facing copy (per `69cb685`); no badges (per `fd6504e`); `.micro-label`
-  amber accent available for the eyebrow if needed.
+  user-facing copy (per `69cb685`); no badges (per `fd6504e`). `.micro-label`
+  was REMOVED in `fd6504e` — eyebrows/labels use the inline utility stack
+  `text-xs font-bold text-tertiary uppercase tracking-widest`.

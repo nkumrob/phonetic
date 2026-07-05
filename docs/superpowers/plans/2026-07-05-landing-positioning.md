@@ -76,7 +76,9 @@ export function HomeHero() {
       <div className="absolute inset-0 -z-10 bg-warmNeutral-50 dark:bg-warmNeutral-900" />
 
       <div className="container px-6 md:px-8 lg:px-4 text-center">
-        <p className="micro-label mb-4 animate-fade-in">Natophonetic</p>
+        <p className="text-xs font-bold text-tertiary uppercase tracking-widest mb-4 animate-fade-in">
+          Natophonetic
+        </p>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1] animate-slide-up mb-6">
           Productivity for mission-critical work
@@ -95,7 +97,7 @@ export function HomeHero() {
 }
 ```
 
-Notes: `.micro-label` is the sanctioned amber eyebrow class in `app/premium-design.css`. Keep this a server component — no `'use client'`.
+Notes: do NOT use `.micro-label` — that class was removed from `app/premium-design.css` in `fd6504e` ("no badges"); the inline utility stack above is the live eyebrow idiom (same pattern the old hero used for its "Trusted by professionals" label). Keep this a server component — no `'use client'`.
 
 - [ ] **Step 4: Run the test to verify it passes**
 
@@ -182,7 +184,9 @@ export function TwoDoors() {
       <div className="container px-6 md:px-8 lg:px-4">
         <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           <div className="p-6 md:p-8 rounded-2xl bg-warmAmber-50/60 dark:bg-warmAmber-900/10 border border-warmAmber-200 dark:border-warmAmber-800/40">
-            <p className="micro-label mb-3">NATO Phonetic Alphabet</p>
+            <p className="text-xs font-bold text-tertiary uppercase tracking-widest mb-3">
+              NATO Phonetic Alphabet
+            </p>
             <h2 className="text-2xl font-bold mb-3">Split-second clarity</h2>
             <p className="text-body text-secondary mb-6 leading-relaxed">
               The universal standard for communicating letters and codes without error over radio,
@@ -202,7 +206,9 @@ export function TwoDoors() {
           </div>
 
           <div className="p-6 md:p-8 rounded-2xl bg-coolBlue-50/60 dark:bg-coolBlue-900/10 border border-coolBlue-200 dark:border-coolBlue-800/40">
-            <p className="micro-label mb-3">AI Work Tools</p>
+            <p className="text-xs font-bold text-tertiary uppercase tracking-widest mb-3">
+              AI Work Tools
+            </p>
             <h2 className="text-2xl font-bold mb-3">Decisions, faster</h2>
             <p className="text-body text-secondary mb-6 leading-relaxed">
               Draft, summarize, and review with AI to a professional standard. Five tools, no
