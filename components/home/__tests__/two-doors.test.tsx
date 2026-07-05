@@ -4,8 +4,19 @@ import { TwoDoors } from '../two-doors';
 describe('TwoDoors', () => {
   it('renders both outcome headings', () => {
     render(<TwoDoors />);
-    expect(screen.getByRole('heading', { name: /split-second clarity/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /decisions, faster/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: /split-second clarity/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: /decisions, faster/i })
+    ).toBeInTheDocument();
+  });
+
+  it('keeps the NATO door first in the DOM (mobile stacking order)', () => {
+    render(<TwoDoors />);
+    const nato = screen.getByRole('heading', { level: 2, name: /split-second clarity/i });
+    const ai = screen.getByRole('heading', { level: 2, name: /decisions, faster/i });
+    expect(nato.compareDocumentPosition(ai) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('keeps the NATO keyword as the door label', () => {

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
-const LINK_CLASS = 'text-sm font-semibold text-coolBlue-500 hover:text-coolBlue-600';
+const LINK_CLASS =
+  'text-sm font-semibold text-coolBlue-500 hover:text-coolBlue-600 dark:text-coolBlue-400 dark:hover:text-coolBlue-300';
 
 /** Two equal entry doors: NATO phonetic and AI work tools (landing positioning, 2026-07-05). */
 export function TwoDoors() {

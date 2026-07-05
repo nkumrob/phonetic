@@ -132,8 +132,19 @@ import { TwoDoors } from '../two-doors';
 describe('TwoDoors', () => {
   it('renders both outcome headings', () => {
     render(<TwoDoors />);
-    expect(screen.getByRole('heading', { name: /split-second clarity/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /decisions, faster/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: /split-second clarity/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: /decisions, faster/i })
+    ).toBeInTheDocument();
+  });
+
+  it('keeps the NATO door first in the DOM (mobile stacking order)', () => {
+    render(<TwoDoors />);
+    const nato = screen.getByRole('heading', { level: 2, name: /split-second clarity/i });
+    const ai = screen.getByRole('heading', { level: 2, name: /decisions, faster/i });
+    expect(nato.compareDocumentPosition(ai) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('keeps the NATO keyword as the door label', () => {
@@ -175,7 +186,8 @@ Create `components/home/two-doors.tsx`:
 ```tsx
 import Link from 'next/link';
 
-const LINK_CLASS = 'text-sm font-semibold text-coolBlue-500 hover:text-coolBlue-600';
+const LINK_CLASS =
+  'text-sm font-semibold text-coolBlue-500 hover:text-coolBlue-600 dark:text-coolBlue-400 dark:hover:text-coolBlue-300';
 
 /** Two equal entry doors: NATO phonetic and AI work tools (landing positioning, 2026-07-05). */
 export function TwoDoors() {
