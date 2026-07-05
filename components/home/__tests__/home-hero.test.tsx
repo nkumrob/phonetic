@@ -21,15 +21,15 @@ describe('HomeHero', () => {
     expect(screen.queryByText(/natophonetic/i)).not.toBeInTheDocument();
   });
 
-  it('routes the primary action to the AI tools and the secondary to the converter', () => {
+  it('routes the primary action to the AI tools and the secondary to learning the alphabet', () => {
     render(<HomeHero />);
     expect(screen.getByRole('link', { name: /open the ai tools/i })).toHaveAttribute(
       'href',
       '/tools'
     );
-    expect(screen.getByRole('link', { name: /nato phonetic converter/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /learn the nato alphabet/i })).toHaveAttribute(
       'href',
-      '/tools/phonetic-converter'
+      '/learn'
     );
   });
 });
