@@ -4,7 +4,9 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { HomeAiSection } from '@/components/ai-tools/home-ai-section';
 import { HomeHero } from '@/components/home/home-hero';
+import { TwoDoors } from '@/components/home/two-doors';
 import { BenefitsSection } from '@/components/home/benefits-section';
+import { StandardSection } from '@/components/home/standard-section';
 
 const FamewallWidget = dynamic(() => import('@/components/famewall').then(mod => ({ default: mod.FamewallWidget })), {
   loading: () => <div className="h-96 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
@@ -19,131 +21,20 @@ const TestimonialsGrid = dynamic(() => import('@/components/testimonials').then(
 export default function HomeClient() {
   return (
     <>
-      {/* Hero — NATO phonetic leads, AI bridge in subhead */}
+      {/* Outcome-led umbrella hero; the doors below are the CTAs */}
       <HomeHero />
 
-      {/* NATO features — the main product */}
-      <section className="py-16 md:py-20">
-        <div className="container px-6 md:px-8 lg:px-4">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="h2 mb-6">What Is the NATO Phonetic Alphabet?</h2>
-          <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
-            The NATO phonetic alphabet is a standardized set of 26 code words used to clearly communicate
-            letters over radio and telephone. Each letter from A to Z is assigned a specific word (Alpha, Bravo, Charlie, etc.)
-            to eliminate confusion in voice communications.
-          </p>
-        </div>
+      {/* Two equal entry doors: NATO phonetic | AI work tools */}
+      <TwoDoors />
 
-        <div className="feature-grid stagger">
-          {/* Learn Card */}
-          <Link href="/learn" className="card card-interactive group">
-            <div className="w-14 h-14 md:w-16 md:h-16 bg-warmAmber-50 dark:bg-warmAmber-900/20 rounded-xl flex items-center justify-center mb-5 md:mb-6 group-hover:scale-110 transition-transform duration-200">
-              <span className="text-3xl md:text-4xl">📚</span>
-            </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-coolBlue-500 transition-colors">
-              Interactive Learning
-            </h3>
-            <p className="text-body text-secondary mb-6 leading-relaxed">
-              Learn clear communication through short lessons, guided practice, and real workplace
-              scenarios.
-            </p>
-            <ul className="space-y-3 text-sm text-tertiary">
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Native speaker pronunciation
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                IPA phonetic notation
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Keyboard navigation support
-              </li>
-            </ul>
-          </Link>
+      {/* Outcome benefits */}
+      <BenefitsSection />
 
-          {/* Practice Card */}
-          <Link href="/practice" className="card card-interactive group">
-            <div className="w-14 h-14 md:w-16 md:h-16 bg-coolBlue-50 dark:bg-coolBlue-900/20 rounded-xl flex items-center justify-center mb-5 md:mb-6 group-hover:scale-110 transition-transform duration-200">
-              <span className="text-3xl md:text-4xl">🎯</span>
-            </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-coolBlue-500 transition-colors">
-              Practice Modes
-            </h3>
-            <p className="text-body text-secondary mb-6 leading-relaxed">
-              Improve performance through drills, prompt exercises, and repeatable workflow practice.
-            </p>
-            <ul className="space-y-3 text-sm text-tertiary">
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                5 difficulty levels
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Speed &amp; survival modes
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Achievement system
-              </li>
-            </ul>
-          </Link>
-
-          {/* Tools Card */}
-          <Link href="/tools" className="card card-interactive group">
-            <div className="w-14 h-14 md:w-16 md:h-16 bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl flex items-center justify-center mb-5 md:mb-6 group-hover:scale-110 transition-transform duration-200">
-              <span className="text-3xl md:text-4xl">🛠️</span>
-            </div>
-            <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-coolBlue-500 transition-colors">
-              Professional Tools
-            </h3>
-            <p className="text-body text-secondary mb-6 leading-relaxed">
-              Use production-ready utilities for writing, summarizing, reviewing, and structured
-              communication.
-            </p>
-            <ul className="space-y-3 text-sm text-tertiary">
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Real-time converter
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                Fuzzy search lookup
-              </li>
-              <li className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                PDF generation
-              </li>
-            </ul>
-          </Link>
-        </div>
-        </div>
-      </section>
-
-      {/* AI tools — the supporting act */}
+      {/* AI tools showcase (cross-sell) */}
       <HomeAiSection />
 
-      {/* Outcome-focused benefits */}
-      <BenefitsSection />
+      {/* The one compact keyword-rich NATO section */}
+      <StandardSection />
 
       {/* Testimonials Section */}
       <section className="py-16 md:py-20 bg-warmNeutral-50 dark:bg-warmNeutral-900">
@@ -181,20 +72,20 @@ export default function HomeClient() {
       {/* CTA Section */}
       <section className="py-16 md:py-20 bg-coolBlue-50 dark:bg-coolBlue-900/10">
         <div className="container px-6 md:px-8 lg:px-4 text-center">
-          <h2 className="h2 mb-6">Master clear communication with people and with AI</h2>
+          <h2 className="h2 mb-6">Precision in every deliverable</h2>
           <p className="text-body-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-            Learn the alphabet that keeps radio traffic unambiguous, and use the AI tools that
-            bring the same discipline to your comms, briefs, and reports.
+            Free professional tools for clear communication and dependable AI output. No sign-up
+            required.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/learn" className="btn btn-primary btn-xl inline-flex items-center justify-center">
-              Start Learning
+            <Link href="/tools" className="btn btn-primary btn-xl inline-flex items-center justify-center">
+              Open the Tools
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="ml-2" aria-hidden="true">
                 <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </Link>
-            <Link href="/tools" className="btn btn-secondary btn-xl inline-flex items-center justify-center">
-              Open AI Tools
+            <Link href="/learn" className="btn btn-secondary btn-xl inline-flex items-center justify-center">
+              Learn the Alphabet
             </Link>
           </div>
         </div>
