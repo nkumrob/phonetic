@@ -32,10 +32,6 @@ export function HomeHero() {
 
       <div className="container relative px-6 md:px-8 lg:px-4 py-16 md:py-24 lg:py-28">
         <div className="max-w-4xl">
-          <p className="mb-7 animate-fade-in font-mono text-[12px] font-bold uppercase tracking-[0.22em] text-coolBlue-700 dark:text-coolBlue-300">
-            Natophonetic
-          </p>
-
           <h1 className="mb-8 animate-slide-up text-5xl font-black leading-[1.02] tracking-[-0.025em] sm:text-6xl md:text-7xl lg:text-[5.25rem]">
             Productivity for{' '}
             <span className="text-coolBlue-600 dark:text-coolBlue-400">mission-critical</span> work

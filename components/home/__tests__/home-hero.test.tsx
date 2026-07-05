@@ -16,9 +16,9 @@ describe('HomeHero', () => {
     ).toBeInTheDocument();
   });
 
-  it('shows the brand eyebrow', () => {
+  it('has no redundant brand eyebrow (logo already carries the brand)', () => {
     render(<HomeHero />);
-    expect(screen.getByText(/natophonetic/i)).toBeInTheDocument();
+    expect(screen.queryByText(/natophonetic/i)).not.toBeInTheDocument();
   });
 
   it('routes the primary action to the AI tools and the secondary to the converter', () => {
