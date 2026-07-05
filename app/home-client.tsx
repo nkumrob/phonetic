@@ -33,14 +33,16 @@ export default function HomeClient() {
       <HomeAiSection />
 
       {/* Testimonials Section */}
-      <section className="border-t border-warmNeutral-200 bg-warmNeutral-50 py-20 dark:border-warmNeutral-700 dark:bg-warmNeutral-900 md:py-24">
+      <section className="relative border-t border-white/10 bg-[#0e1117] py-20 md:py-24">
         <div className="container px-6 md:px-8 lg:px-4">
           <div className="mb-12 max-w-5xl md:mb-16">
-            <p className="mb-4 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-warmNeutral-500 dark:text-warmNeutral-400">
+            <p className="mb-4 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-slate-400">
               Field reports
             </p>
-            <h2 className="h2 mb-4">What Our Users Say</h2>
-            <p className="max-w-2xl text-body-lg leading-relaxed text-secondary">
+            <h2 className="mb-4 text-4xl font-black tracking-tight text-white md:text-5xl">
+              What Our Users Say
+            </h2>
+            <p className="max-w-2xl text-lg leading-relaxed text-slate-300">
               Join thousands of professionals who communicate clearly, with people and with AI
             </p>
           </div>
@@ -53,43 +55,50 @@ export default function HomeClient() {
           {/* Divider */}
           <div className="mx-auto mb-12 max-w-5xl">
             <div className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
-              <p className="font-mono text-[12px] font-bold uppercase tracking-[0.15em] text-warmNeutral-500 dark:text-warmNeutral-400">
+              <div className="h-px flex-1 bg-white/10"></div>
+              <p className="font-mono text-[12px] font-bold uppercase tracking-[0.15em] text-slate-400">
                 Share Your Experience
               </p>
-              <div className="h-px flex-1 bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
+              <div className="h-px flex-1 bg-white/10"></div>
             </div>
           </div>
 
           {/* Famewall Widget - New Reviews */}
-          <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl">
             <FamewallWidget />
           </div>
         </div>
       </section>
 
-      {/* CTA Section — signal band */}
-      <section className="relative overflow-hidden bg-coolBlue-600 py-20 dark:bg-coolBlue-700 md:py-24">
+      {/* CTA Section — night signal band */}
+      <section className="relative overflow-hidden border-t border-white/10 bg-[#0a0d12] py-20 md:py-28">
+        {/* dramatic blue signal glow */}
+        <div
+          aria-hidden="true"
+          className="absolute -top-56 left-1/2 h-[640px] w-[640px] -translate-x-1/2 rounded-full bg-coolBlue-500/25 blur-3xl"
+        />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-16 right-4 select-none font-mono text-[13rem] font-bold leading-none text-white/[0.06] md:text-[17rem]"
+          className="pointer-events-none absolute -bottom-16 right-4 select-none font-mono text-[13rem] font-bold leading-none text-coolBlue-400/10 md:text-[17rem]"
         >
           A→Z
         </span>
         <div className="container relative px-6 md:px-8 lg:px-4">
           <div className="max-w-3xl">
-            <p className="mb-4 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-coolBlue-100">
+            <p className="mb-4 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-coolBlue-300">
               Ready when you are
             </p>
-            <h2 className="h2 mb-6 text-white">Precision in every deliverable</h2>
-            <p className="mb-10 max-w-xl text-xl leading-relaxed text-white/90">
+            <h2 className="mb-6 text-4xl font-black tracking-tight text-white md:text-5xl">
+              Precision in every deliverable
+            </h2>
+            <p className="mb-10 max-w-xl text-xl leading-relaxed text-slate-300">
               Free professional tools for clear communication and dependable AI output. No sign-up
               required.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/tools"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 text-lg font-bold text-coolBlue-700 shadow-[0_14px_32px_-12px_rgba(0,0,0,0.4)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-coolBlue-50"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-coolBlue-500 px-8 py-4 text-lg font-bold text-white shadow-[0_14px_36px_-10px_rgba(59,130,246,0.8)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-coolBlue-400"
               >
                 Open the Tools
                 <span aria-hidden="true" className="font-mono">
@@ -98,7 +107,7 @@ export default function HomeClient() {
               </Link>
               <Link
                 href="/learn"
-                className="inline-flex items-center justify-center rounded-lg border-2 border-white px-8 py-4 text-lg font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-coolBlue-700"
+                className="inline-flex items-center justify-center rounded-lg border-2 border-white/70 px-8 py-4 text-lg font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-[#0a0d12]"
               >
                 Learn the Alphabet
               </Link>
