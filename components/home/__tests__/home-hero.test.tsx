@@ -21,8 +21,15 @@ describe('HomeHero', () => {
     expect(screen.getByText(/natophonetic/i)).toBeInTheDocument();
   });
 
-  it('has no CTA links; the doors below are the CTAs', () => {
+  it('routes the primary action to the AI tools and the secondary to the converter', () => {
     render(<HomeHero />);
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /open the ai tools/i })).toHaveAttribute(
+      'href',
+      '/tools'
+    );
+    expect(screen.getByRole('link', { name: /nato phonetic converter/i })).toHaveAttribute(
+      'href',
+      '/tools/phonetic-converter'
+    );
   });
 });

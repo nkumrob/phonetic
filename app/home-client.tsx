@@ -36,7 +36,7 @@ export default function HomeClient() {
       <section className="border-t border-warmNeutral-200 bg-warmNeutral-50 py-20 dark:border-warmNeutral-700 dark:bg-warmNeutral-900 md:py-24">
         <div className="container px-6 md:px-8 lg:px-4">
           <div className="mb-12 max-w-5xl md:mb-16">
-            <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-tertiary">
+            <p className="mb-4 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-warmNeutral-500 dark:text-warmNeutral-400">
               Field reports
             </p>
             <h2 className="h2 mb-4">What Our Users Say</h2>
@@ -54,7 +54,7 @@ export default function HomeClient() {
           <div className="mx-auto mb-12 max-w-5xl">
             <div className="flex items-center gap-4">
               <div className="h-px flex-1 bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
-              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-tertiary">
+              <p className="font-mono text-[12px] font-bold uppercase tracking-[0.15em] text-warmNeutral-500 dark:text-warmNeutral-400">
                 Share Your Experience
               </p>
               <div className="h-px flex-1 bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
@@ -78,18 +78,18 @@ export default function HomeClient() {
         </span>
         <div className="container relative px-6 md:px-8 lg:px-4">
           <div className="max-w-3xl">
-            <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-coolBlue-200">
+            <p className="mb-4 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-coolBlue-100">
               Ready when you are
             </p>
             <h2 className="h2 mb-6 text-white">Precision in every deliverable</h2>
-            <p className="mb-10 max-w-xl text-body-lg leading-relaxed text-coolBlue-100">
+            <p className="mb-10 max-w-xl text-xl leading-relaxed text-white/90">
               Free professional tools for clear communication and dependable AI output. No sign-up
               required.
             </p>
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/tools"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 font-bold text-coolBlue-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-coolBlue-50"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 text-lg font-bold text-coolBlue-700 shadow-[0_14px_32px_-12px_rgba(0,0,0,0.4)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-coolBlue-50"
               >
                 Open the Tools
                 <span aria-hidden="true" className="font-mono">
@@ -98,7 +98,7 @@ export default function HomeClient() {
               </Link>
               <Link
                 href="/learn"
-                className="inline-flex items-center justify-center rounded-lg border border-white/40 px-8 py-4 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/10"
+                className="inline-flex items-center justify-center rounded-lg border-2 border-white px-8 py-4 text-lg font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-coolBlue-700"
               >
                 Learn the Alphabet
               </Link>
