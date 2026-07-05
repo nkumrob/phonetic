@@ -14,7 +14,7 @@ export const tokens = {
   typography: {
     fontFamily: {
       sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-      mono: ['JetBrains Mono', 'Consolas', 'Monaco', 'monospace'],
+      mono: ['var(--font-jetbrains-mono)', 'JetBrains Mono', 'Consolas', 'Monaco', 'monospace'],
       display: ['Inter', 'system-ui', 'sans-serif'], // For headlines
     },
     fontSize: {

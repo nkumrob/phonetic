@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 
 // Optimize Inter font loading with variable font
 export const inter = Inter({
@@ -13,6 +13,16 @@ export const inter = Inter({
     'Roboto',
     'sans-serif',
   ],
+});
+
+// Instrument-grade mono accent for transmission labels and code words
+export const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
+  weight: ['400', '700'],
+  preload: false,
+  fallback: ['Consolas', 'Monaco', 'monospace'],
 });
 
 // Font loading optimization settings

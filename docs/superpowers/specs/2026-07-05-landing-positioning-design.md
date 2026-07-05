@@ -2,6 +2,15 @@
 
 Date: 2026-07-05
 Status: Approved (brainstorm with owner, visual companion session)
+
+> **Post-ship amendments (owner directives, 2026-07-05):** (1) The "standard
+> behind it" StandardSection was REMOVED from the homepage; the SEO keyword
+> sentence moved into the NATO door body ("The NATO phonetic alphabet is the
+> universal standard..."). Keyword now lives in: title tag, NATO door label,
+> NATO door body. (2) Full design elevation to "instrument-grade editorial":
+> JetBrains Mono accent font (loaded via next/font, var --font-jetbrains-mono),
+> hairline grid textures, phonetic CLARITY signature strip in hero, watermark
+> glyph door cards, dark console band for AI tools, signal-blue CTA band.
 Branch target: feature/ia-navigation-retention (or successor branch)
 
 ## Problem

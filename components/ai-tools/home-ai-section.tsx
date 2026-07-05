@@ -1,42 +1,72 @@
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
 import { AI_TOOLS } from './tool-registry';
 
-/** Homepage AI section — the five AI tools; the phonetic side leads the page (2026-07-02). */
+/** Homepage AI section — the five AI tools as a dark console band (2026-07-05). */
 export function HomeAiSection() {
+  const tools = AI_TOOLS.filter((tool) => tool.category === 'ai');
+
   return (
-    <section className="py-16 md:py-20 bg-gradient-to-br from-warmAmber-50/50 to-coolBlue-50/50 dark:from-warmAmber-900/10 dark:to-coolBlue-900/10">
-      <div className="container px-6 md:px-8 lg:px-4">
-        <div className="text-center mb-10 md:mb-12">
-          <h2 className="h2 mb-6">Hours of work in minutes</h2>
-          <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
+    <section className="relative overflow-hidden bg-warmNeutral-900 py-20 md:py-24">
+      {/* hairline grid on the console surface */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(255, 255, 255, 0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.4) 1px, transparent 1px)',
+          backgroundSize: '72px 72px',
+        }}
+      />
+
+      <div className="container relative px-6 md:px-8 lg:px-4">
+        <div className="mb-12 flex max-w-5xl flex-col gap-6 md:mb-16 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-coolBlue-400">
+              AI Work Tools / 05 instruments
+            </p>
+            <h2 className="h2 text-white">Hours of work in minutes</h2>
+          </div>
+          <p className="max-w-md text-body leading-relaxed text-warmNeutral-400">
             Draft comms, build briefs, extract action items, and verify AI output before you rely
             on it. The same discipline that keeps radio traffic clear, applied to everyday work.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto mb-10">
-          {AI_TOOLS.filter((tool) => tool.category === 'ai').map((tool) => (
+        <div className="mb-12 grid max-w-5xl gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {tools.map((tool, i) => (
             <Link
               key={tool.id}
               href={tool.href}
-              className="group p-5 rounded-xl bg-white dark:bg-warmNeutral-800 border border-warmNeutral-200 dark:border-warmNeutral-700 hover:border-warmAmber-300 dark:hover:border-warmAmber-700 hover:shadow-md transition-all"
+              className="group rounded-xl border border-white/10 bg-white/[0.04] p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-coolBlue-400/60 hover:bg-white/[0.08]"
             >
-              <div className="text-3xl mb-3">{tool.emoji}</div>
-              <h3 className="font-bold text-warmNeutral-800 dark:text-warmNeutral-100 group-hover:text-warmAmber-700 dark:group-hover:text-warmAmber-400 transition-colors mb-1">
+              <p className="mb-4 font-mono text-xs font-bold text-warmNeutral-500 transition-colors group-hover:text-coolBlue-400">
+                {String(i + 1).padStart(2, '0')}
+              </p>
+              <h3 className="mb-1 font-bold text-warmNeutral-50 transition-colors group-hover:text-coolBlue-300">
                 {tool.name}
               </h3>
-              <p className="text-sm text-secondary">{tool.tagline}</p>
+              <p className="text-sm leading-relaxed text-warmNeutral-400">{tool.tagline}</p>
             </Link>
           ))}
+          <div
+            aria-hidden="true"
+            className="hidden items-end rounded-xl border border-dashed border-white/10 p-6 lg:flex"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-warmNeutral-600">
+              Free / no sign-up / rate-limited fairly
+            </p>
+          </div>
         </div>
 
-        <div className="text-center">
-          <Link href="/tools" className="btn btn-primary inline-flex items-center gap-2">
-            <Sparkles size={18} aria-hidden="true" />
-            Open the Tools
-          </Link>
-        </div>
+        <Link
+          href="/tools"
+          className="inline-flex items-center gap-3 rounded-lg bg-coolBlue-500 px-7 py-3.5 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-coolBlue-400"
+        >
+          Open the Tools
+          <span aria-hidden="true" className="font-mono">
+            →
+          </span>
+        </Link>
       </div>
     </section>
   );

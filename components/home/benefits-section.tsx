@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 const BENEFITS = [
   {
-    emoji: '⚡',
+    index: '01',
     title: 'Comms out in seconds',
     body: 'Status updates, incident emails, and reports drafted from rough notes, sent with confidence.',
     who: 'For anyone reporting up the chain',
@@ -10,7 +10,7 @@ const BENEFITS = [
     cta: 'Draft an update',
   },
   {
-    emoji: '🎯',
+    index: '02',
     title: 'Brief, don’t bury',
     body: 'Long reports and briefings become key points, risks, and action items you can act on.',
     who: 'For leads, coordinators, and analysts',
@@ -18,7 +18,7 @@ const BENEFITS = [
     cta: 'Build a brief',
   },
   {
-    emoji: '🛡️',
+    index: '03',
     title: 'Verify before you rely',
     body: 'Catch unsupported claims and weak reasoning before they reach an operation or a client.',
     who: 'For everyone who double-checks',
@@ -30,22 +30,30 @@ const BENEFITS = [
 /** Outcome-focused benefits row (homepage slimming, spec amendment 2026-07-01). */
 export function BenefitsSection() {
   return (
-    <section className="py-16 md:py-20">
+    <section className="border-t border-warmNeutral-200 bg-white py-20 dark:border-warmNeutral-700 dark:bg-warmNeutral-900 md:py-24">
       <div className="container px-6 md:px-8 lg:px-4">
-        <div className="text-center mb-10 md:mb-12">
-          <h2 className="h2 mb-6">Made for High-Stakes Work</h2>
+        <div className="mb-12 max-w-5xl md:mb-16">
+          <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-tertiary">
+            Outcomes
+          </p>
+          <h2 className="h2">Made for High-Stakes Work</h2>
         </div>
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid max-w-5xl gap-10 md:grid-cols-3 md:gap-8">
           {BENEFITS.map((b) => (
             <div
               key={b.title}
-              className="p-6 rounded-xl bg-white dark:bg-warmNeutral-800 border border-warmNeutral-200 dark:border-warmNeutral-700"
+              className="border-t-2 border-warmNeutral-900 pt-6 dark:border-warmNeutral-100"
             >
-              <div className="text-3xl mb-3" aria-hidden="true">{b.emoji}</div>
-              <h3 className="text-xl font-bold mb-2">{b.title}</h3>
-              <p className="text-body text-secondary mb-2 leading-relaxed">{b.body}</p>
-              <p className="text-sm text-tertiary mb-4">{b.who}</p>
-              <Link href={b.href} className="text-sm font-semibold text-coolBlue-500 hover:text-coolBlue-600">
+              <p className="mb-5 font-mono text-xs font-bold text-tertiary">{b.index}</p>
+              <h3 className="mb-3 text-xl font-black tracking-tight">{b.title}</h3>
+              <p className="mb-3 text-body leading-relaxed text-secondary">{b.body}</p>
+              <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.14em] text-tertiary">
+                {b.who}
+              </p>
+              <Link
+                href={b.href}
+                className="inline-flex items-center font-mono text-[13px] font-bold text-coolBlue-600 transition-colors hover:text-coolBlue-700 dark:text-coolBlue-400 dark:hover:text-coolBlue-300"
+              >
                 {b.cta} →
               </Link>
             </div>

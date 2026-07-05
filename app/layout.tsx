@@ -10,7 +10,7 @@ import { SimpleAppProvider } from '@/lib/contexts/simple-app-context';
 import { AnalyticsProvider } from '@/components/analytics/analytics-provider';
 import { Analytics } from '@vercel/analytics/next';
 import { WebVitalsReporter } from '@/components/analytics/web-vitals';
-import { inter } from './fonts';
+import { inter, jetbrainsMono } from './fonts';
 import { RouteSpeechHandler } from '@/components/speech/route-speech-handler';
 
 export const metadata: Metadata = generateMetadata();
@@ -46,7 +46,7 @@ export default function RootLayout({
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6386864042923808"
      crossOrigin="anonymous"></script>
       </head>
-      <body className={`${inter.variable} antialiased font-sans`} suppressHydrationWarning>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans`} suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{
             __html: `

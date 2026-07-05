@@ -19,7 +19,6 @@ describe('HomeClient structure', () => {
       'Decisions, faster',
       'Made for High-Stakes Work',
       'Hours of work in minutes',
-      'Built on the NATO Phonetic Alphabet',
       'Precision in every deliverable',
     ];
     const positions = expectedOrder.map((t) =>
@@ -35,6 +34,13 @@ describe('HomeClient structure', () => {
     render(<HomeClient />);
     expect(screen.queryByText(/What Is the NATO Phonetic Alphabet\?/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/Interactive Learning/i)).not.toBeInTheDocument();
+  });
+
+  it('does not render the retired NATO provenance section (owner directive 2026-07-05)', () => {
+    render(<HomeClient />);
+    expect(
+      screen.queryByRole('heading', { name: /built on the NATO phonetic alphabet/i })
+    ).not.toBeInTheDocument();
   });
 
   it('routes the closing CTA buttons', () => {

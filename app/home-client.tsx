@@ -6,7 +6,6 @@ import { HomeAiSection } from '@/components/ai-tools/home-ai-section';
 import { HomeHero } from '@/components/home/home-hero';
 import { TwoDoors } from '@/components/home/two-doors';
 import { BenefitsSection } from '@/components/home/benefits-section';
-import { StandardSection } from '@/components/home/standard-section';
 
 const FamewallWidget = dynamic(() => import('@/components/famewall').then(mod => ({ default: mod.FamewallWidget })), {
   loading: () => <div className="h-96 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
@@ -30,63 +29,80 @@ export default function HomeClient() {
       {/* Outcome benefits */}
       <BenefitsSection />
 
-      {/* AI tools showcase (cross-sell) */}
+      {/* AI tools showcase (cross-sell, dark console band) */}
       <HomeAiSection />
 
-      {/* The one compact keyword-rich NATO section */}
-      <StandardSection />
-
       {/* Testimonials Section */}
-      <section className="py-16 md:py-20 bg-warmNeutral-50 dark:bg-warmNeutral-900">
+      <section className="border-t border-warmNeutral-200 bg-warmNeutral-50 py-20 dark:border-warmNeutral-700 dark:bg-warmNeutral-900 md:py-24">
         <div className="container px-6 md:px-8 lg:px-4">
-          <div className="text-center mb-12 md:mb-16">
-            <h2 className="h2 mb-6">What Our Users Say</h2>
-            <p className="text-body-lg text-secondary max-w-3xl mx-auto leading-relaxed">
+          <div className="mb-12 max-w-5xl md:mb-16">
+            <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-tertiary">
+              Field reports
+            </p>
+            <h2 className="h2 mb-4">What Our Users Say</h2>
+            <p className="max-w-2xl text-body-lg leading-relaxed text-secondary">
               Join thousands of professionals who communicate clearly, with people and with AI
             </p>
           </div>
 
           {/* Hardcoded Testimonials */}
-          <div className="max-w-7xl mx-auto mb-16">
+          <div className="mx-auto mb-16 max-w-7xl">
             <TestimonialsGrid />
           </div>
 
           {/* Divider */}
-          <div className="max-w-5xl mx-auto mb-12">
+          <div className="mx-auto mb-12 max-w-5xl">
             <div className="flex items-center gap-4">
-              <div className="flex-1 h-px bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
-              <p className="text-sm font-semibold text-tertiary uppercase tracking-wider">
+              <div className="h-px flex-1 bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
+              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-tertiary">
                 Share Your Experience
               </p>
-              <div className="flex-1 h-px bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
+              <div className="h-px flex-1 bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
             </div>
           </div>
 
           {/* Famewall Widget - New Reviews */}
-          <div className="max-w-5xl mx-auto">
+          <div className="mx-auto max-w-5xl">
             <FamewallWidget />
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 md:py-20 bg-coolBlue-50 dark:bg-coolBlue-900/10">
-        <div className="container px-6 md:px-8 lg:px-4 text-center">
-          <h2 className="h2 mb-6">Precision in every deliverable</h2>
-          <p className="text-body-lg text-secondary max-w-2xl mx-auto mb-10 leading-relaxed">
-            Free professional tools for clear communication and dependable AI output. No sign-up
-            required.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/tools" className="btn btn-primary btn-xl inline-flex items-center justify-center">
-              Open the Tools
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="ml-2" aria-hidden="true">
-                <path d="M9 6L15 12L9 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </Link>
-            <Link href="/learn" className="btn btn-secondary btn-xl inline-flex items-center justify-center">
-              Learn the Alphabet
-            </Link>
+      {/* CTA Section — signal band */}
+      <section className="relative overflow-hidden bg-coolBlue-600 py-20 dark:bg-coolBlue-700 md:py-24">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-16 right-4 select-none font-mono text-[13rem] font-bold leading-none text-white/[0.06] md:text-[17rem]"
+        >
+          A→Z
+        </span>
+        <div className="container relative px-6 md:px-8 lg:px-4">
+          <div className="max-w-3xl">
+            <p className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[0.3em] text-coolBlue-200">
+              Ready when you are
+            </p>
+            <h2 className="h2 mb-6 text-white">Precision in every deliverable</h2>
+            <p className="mb-10 max-w-xl text-body-lg leading-relaxed text-coolBlue-100">
+              Free professional tools for clear communication and dependable AI output. No sign-up
+              required.
+            </p>
+            <div className="flex flex-col gap-4 sm:flex-row">
+              <Link
+                href="/tools"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-4 font-bold text-coolBlue-700 transition-all duration-200 hover:-translate-y-0.5 hover:bg-coolBlue-50"
+              >
+                Open the Tools
+                <span aria-hidden="true" className="font-mono">
+                  →
+                </span>
+              </Link>
+              <Link
+                href="/learn"
+                className="inline-flex items-center justify-center rounded-lg border border-white/40 px-8 py-4 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/10"
+              >
+                Learn the Alphabet
+              </Link>
+            </div>
           </div>
         </div>
       </section>
