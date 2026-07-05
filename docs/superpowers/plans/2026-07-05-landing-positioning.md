@@ -321,7 +321,8 @@ const PREVIEW: Array<[string, string]> = [
   ['F', 'Foxtrot'],
 ];
 
-const LINK_CLASS = 'text-sm font-semibold text-coolBlue-500 hover:text-coolBlue-600';
+const LINK_CLASS =
+  'text-sm font-semibold text-coolBlue-500 hover:text-coolBlue-600 dark:text-coolBlue-400 dark:hover:text-coolBlue-300';
 
 /** Compact keyword-rich NATO provenance section; the single NATO block on the homepage (2026-07-05). */
 export function StandardSection() {
@@ -380,6 +381,8 @@ git commit -m "feat(brand): compact NATO provenance section (homepage SEO anchor
 ```
 
 ---
+
+> **Review follow-ups applied after Task 3 (2026-07-05):** the preview tiles use `<dl>/<dt>/<dd>` (screen-reader pairing of letter+word) instead of plain divs, and the standard-section test also asserts the PDF link's `download` attribute. NOTE for future tests: "Convert text →" and the `/api/pdf` link exist in BOTH TwoDoors and StandardSection — never use singular `getByRole('link', ...)` queries for those names against the full page; use `getAllByRole`.
 
 ### Task 4: Homepage assembly (section order + HomeAiSection heading + features grid removal)
 

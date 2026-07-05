@@ -26,17 +26,17 @@ export function StandardSection() {
             discipline to everyday work.
           </p>
 
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-10">
+          <dl className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-10">
             {PREVIEW.map(([letter, word]) => (
               <div
                 key={letter}
                 className="p-3 rounded-xl bg-white dark:bg-warmNeutral-800 border border-warmNeutral-200 dark:border-warmNeutral-700"
               >
-                <div className="text-2xl font-black text-coolBlue-500">{letter}</div>
-                <div className="text-xs font-semibold text-secondary">{word}</div>
+                <dt className="text-2xl font-black text-coolBlue-500">{letter}</dt>
+                <dd className="text-xs font-semibold text-secondary">{word}</dd>
               </div>
             ))}
-          </div>
+          </dl>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <Link href="/tools/phonetic-converter" className={LINK_CLASS}>

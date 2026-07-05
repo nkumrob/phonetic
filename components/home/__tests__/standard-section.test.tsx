@@ -22,10 +22,9 @@ describe('StandardSection', () => {
       'href',
       '/tools/phonetic-converter'
     );
-    expect(screen.getByRole('link', { name: /download the chart/i })).toHaveAttribute(
-      'href',
-      '/api/pdf'
-    );
+    const chart = screen.getByRole('link', { name: /download the chart/i });
+    expect(chart).toHaveAttribute('href', '/api/pdf');
+    expect(chart).toHaveAttribute('download');
     expect(screen.getByRole('link', { name: /learn the full alphabet/i })).toHaveAttribute(
       'href',
       '/learn'
