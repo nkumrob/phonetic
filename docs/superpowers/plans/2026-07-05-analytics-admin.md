@@ -1052,7 +1052,8 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             Log out
           </button>
         </nav>
-        <main className="min-w-0 flex-1">{children}</main>
+        {/* div, NOT <main>: the root layout already provides the main landmark (review fix) */}
+        <div className="min-w-0 flex-1">{children}</div>
       </div>
     </div>
   );
