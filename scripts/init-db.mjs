@@ -45,8 +45,9 @@ try {
   // and lack country/city. Rebuild via create-copy-rename, preserving rows.
   const eventsDef = await db.execute("select sql from sqlite_master where type='table' and name='events'");
   const eventsSql = eventsDef.rows[0]?.sql ?? '';
-  if (eventsSql && (eventsSql.includes('check') || !eventsSql.includes('country'))) {
+  if (eventsSql && (eventsSql.toLowerCase().includes('check') || !eventsSql.includes('country'))) {
     await db.executeMultiple(`
+      begin;
       create table events_new (
         id         text primary key,
         name       text not null,
@@ -61,6 +62,7 @@ try {
         select id, name, tool, anon_id, metadata, created_at from events;
       drop table events;
       alter table events_new rename to events;
+      commit;
     `);
     console.log('Rebuilt events table (no CHECK, +country/city).');
   }
