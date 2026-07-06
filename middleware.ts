@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { parseAnonId } from './lib/utils/anon-id';
 
 /**
  * Issues a durable anonymous visitor id (np_anon). Random UUID, no PII —
@@ -16,11 +17,13 @@ export function middleware(request: NextRequest): NextResponse {
   };
 
   const existing = request.cookies.get('np_anon');
-  if (existing) {
-    // Sliding renewal: re-set with same value so the expiry window resets
+  const validId = existing ? parseAnonId(existing.value) : null;
+  if (validId) {
+    // Sliding renewal: re-set the validated UUID so the expiry window resets
     // from the current visit rather than the first visit.
-    response.cookies.set('np_anon', existing.value, COOKIE_OPTIONS);
+    response.cookies.set('np_anon', validId, COOKIE_OPTIONS);
   } else {
+    // No cookie, or the stored value is malformed — issue a fresh UUID.
     response.cookies.set('np_anon', globalThis.crypto.randomUUID(), COOKIE_OPTIONS);
   }
 

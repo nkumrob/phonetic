@@ -16,6 +16,8 @@ const HISTORY_PREFIX = 'tool-history:';
 const TIME_SAVED_KEY = 'time-saved-minutes';
 const MAX_ENTRIES = 5;
 const PUSH_DEBOUNCE_MS = 2000;
+const SYNC_OUTPUT_MAX_CHARS = 2000;
+const SYNC_PAYLOAD_MAX_BYTES = 30 * 1024;
 
 let pushTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -80,12 +82,74 @@ export function applyProgress(data: ProgressData): void {
   }
 }
 
+/**
+ * Returns a copy of `data` safe to send over the wire:
+ * 1. Truncates every entry's `output` to SYNC_OUTPUT_MAX_CHARS.
+ * 2. Drops the globally oldest entry (by timestamp) repeatedly until the
+ *    JSON byte length is within SYNC_PAYLOAD_MAX_BYTES. Emptied tool keys
+ *    are removed so the server upsert cleans them up.
+ */
+function boundProgressPayload(data: ProgressData): ProgressData {
+  // Step 1 — truncate outputs.
+  const toolHistory: Record<string, ToolHistoryEntry[]> = {};
+  for (const [toolId, entries] of Object.entries(data.toolHistory)) {
+    toolHistory[toolId] = entries.map((e) => ({
+      ...e,
+      output: e.output.slice(0, SYNC_OUTPUT_MAX_CHARS),
+    }));
+  }
+
+  let bounded: ProgressData = { toolHistory, timeSavedMinutes: data.timeSavedMinutes };
+
+  // Step 2 — drop oldest entries until under the byte cap.
+  // Use TextEncoder when available (browsers); fall back to Buffer in Node / test envs.
+  const getByteLen = (str: string): number =>
+    typeof TextEncoder !== 'undefined'
+      ? new TextEncoder().encode(str).length
+      : Buffer.byteLength(str, 'utf-8');
+
+  while (true) {
+    const json = JSON.stringify(bounded);
+    const byteLen = getByteLen(json);
+    if (byteLen <= SYNC_PAYLOAD_MAX_BYTES) break;
+
+    // Find the globally oldest entry across all tools.
+    let oldestTs = Infinity;
+    let oldestToolId: string | null = null;
+    for (const [toolId, entries] of Object.entries(bounded.toolHistory)) {
+      for (const entry of entries) {
+        if (entry.timestamp < oldestTs) {
+          oldestTs = entry.timestamp;
+          oldestToolId = toolId;
+        }
+      }
+    }
+
+
+    if (oldestToolId === null) break; // Nothing left to drop.
+
+    const remaining = bounded.toolHistory[oldestToolId].filter((e) => e.timestamp !== oldestTs);
+    if (remaining.length === 0) {
+      // Remove the now-empty tool key entirely.
+      const { [oldestToolId]: _removed, ...rest } = bounded.toolHistory;
+      bounded = { ...bounded, toolHistory: rest };
+    } else {
+      bounded = {
+        ...bounded,
+        toolHistory: { ...bounded.toolHistory, [oldestToolId]: remaining },
+      };
+    }
+  }
+
+  return bounded;
+}
+
 async function pushProgress(): Promise<void> {
   try {
     await fetch('/api/progress', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(collectLocalProgress()),
+      body: JSON.stringify(boundProgressPayload(collectLocalProgress())),
       keepalive: true,
     });
   } catch {
@@ -105,7 +169,10 @@ export async function pullAndMergeProgress(): Promise<void> {
     const local = collectLocalProgress();
     const merged = mergeProgress(local, remote);
     applyProgress(merged);
-    if (JSON.stringify(merged) !== JSON.stringify(remote)) {
+    // Compare what we *would* push (bounded merged) against the server copy.
+    // Without bounding here we'd always push when local outputs exceed 2000 chars,
+    // even if the bounded snapshot is identical to what's already on the server.
+    if (JSON.stringify(boundProgressPayload(merged)) !== JSON.stringify(remote)) {
       await pushProgress();
     }
   } catch {

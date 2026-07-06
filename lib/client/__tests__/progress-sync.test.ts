@@ -7,6 +7,7 @@ import {
   __resetSyncStateForTests,
   type ProgressData,
 } from '../progress-sync';
+import { clearHistory } from '../tool-history';
 
 const ENTRY_OLD = { inputPreview: 'old', output: 'o1', timestamp: 1000 };
 const ENTRY_NEW = { inputPreview: 'new', output: 'o2', timestamp: 2000 };
@@ -103,5 +104,80 @@ describe('notifyProgressChanged', () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock.mock.calls[0][1].method).toBe('PUT');
+  });
+});
+
+describe('clearHistory triggers server sync (Fix 1)', () => {
+  it('pushes after clearHistory so the cleared tool is absent from the PUT body', async () => {
+    jest.useFakeTimers();
+    window.localStorage.setItem('tool-history:summarizer', JSON.stringify([ENTRY_OLD]));
+    const fetchMock = jest.fn().mockResolvedValue({ ok: true });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    clearHistory('summarizer');
+    jest.advanceTimersByTime(2000);
+    await Promise.resolve();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][1].method).toBe('PUT');
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body as string) as ProgressData;
+    expect(body.toolHistory).not.toHaveProperty('summarizer');
+  });
+});
+
+describe('boundProgressPayload (Fix 2)', () => {
+  it('truncates outputs longer than 2000 chars in the pushed body', async () => {
+    jest.useFakeTimers();
+    const longOutput = 'x'.repeat(5000);
+    window.localStorage.setItem(
+      'tool-history:summarizer',
+      JSON.stringify([{ inputPreview: 'q', output: longOutput, timestamp: 1000 }]),
+    );
+    const fetchMock = jest.fn().mockResolvedValue({ ok: true });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    notifyProgressChanged();
+    jest.advanceTimersByTime(2000);
+    await Promise.resolve();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const body = JSON.parse(fetchMock.mock.calls[0][1].body as string) as ProgressData;
+    const sentOutput = body.toolHistory['summarizer'][0].output;
+    expect(sentOutput.length).toBeLessThanOrEqual(2000);
+  });
+
+  it('drops oldest entries until payload is under 30KB when truncation alone is insufficient', async () => {
+    jest.useFakeTimers();
+    // Build ~20 tools × 5 entries × 2000-char outputs ≈ 200KB before bounding
+    const now = Date.now();
+    for (let t = 0; t < 20; t++) {
+      const entries = Array.from({ length: 5 }, (_, i) => ({
+        inputPreview: `q${t}-${i}`,
+        output: 'y'.repeat(2000),
+        timestamp: now + t * 100 + i, // newer tools / entries have higher timestamps
+      }));
+      window.localStorage.setItem(`tool-history:tool-${t}`, JSON.stringify(entries));
+    }
+    const fetchMock = jest.fn().mockResolvedValue({ ok: true });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    notifyProgressChanged();
+    jest.advanceTimersByTime(2000);
+    await Promise.resolve();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const raw = fetchMock.mock.calls[0][1].body as string;
+    const byteLen = Buffer.byteLength(raw, 'utf-8'); // test runs in Node via jest
+    expect(byteLen).toBeLessThan(30 * 1024);
+
+    // Newest entries must still be present
+    const body = JSON.parse(raw) as ProgressData;
+    // tool-19 has the highest timestamps — should survive
+    const newestTool = body.toolHistory['tool-19'];
+    expect(newestTool).toBeDefined();
+    expect(newestTool.length).toBeGreaterThan(0);
+    // Verify the globally newest timestamp (now + 19*100 + 4) is present in the payload
+    const maxTsInTool = Math.max(...newestTool.map((e) => e.timestamp));
+    expect(maxTsInTool).toBe(now + 19 * 100 + 4);
   });
 });

@@ -28,4 +28,18 @@ describe('anonymous id middleware', () => {
     expect(cookie?.value).toBe(EXISTING_UUID);
     expect(cookie?.maxAge).toBe(31536000);
   });
+
+  it('replaces a malformed np_anon cookie with a fresh UUID instead of renewing it verbatim', () => {
+    const request = new NextRequest('http://localhost/', {
+      headers: { cookie: 'np_anon=garbage' },
+    });
+
+    const response = middleware(request);
+
+    const cookie = response.cookies.get('np_anon');
+    expect(cookie?.value).not.toBe('garbage');
+    expect(cookie?.value).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+    );
+  });
 });
