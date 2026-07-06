@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { track } from '@/lib/client/track';
 import { Sparkles } from 'lucide-react';
 import { runAiTool, type AiToolResult } from '@/lib/services/ai-tool-service';
 import { cn } from '@/lib/utils/cn';
@@ -70,7 +71,10 @@ export function AiToolForm({
     <div className="bg-white dark:bg-warmNeutral-800 rounded-xl shadow-lg border border-warmNeutral-200 dark:border-warmNeutral-700 p-6 space-y-4">
       <TemplateStrip
         templates={getTemplates(toolId)}
-        onSelect={(value) => setInput(value.slice(0, maxChars))}
+        onSelect={(value) => {
+          track('template_use', toolId);
+          setInput(value.slice(0, maxChars));
+        }}
       />
 
       <div>

@@ -5,6 +5,7 @@ import { LazySimplePracticeHub, LazySimpleQuiz, LazySimpleFlashcards } from '@/c
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Button } from '@/components/ui';
 import { ArrowLeft } from 'lucide-react';
+import { track } from '@/lib/client/track';
 
 type Mode = 'hub' | 'learn' | 'practice' | 'challenge';
 
@@ -12,6 +13,7 @@ export default function SimplePracticeClient() {
   const [currentMode, setCurrentMode] = useState<Mode>('hub');
   
   const handleModeSelect = (mode: 'learn' | 'practice' | 'challenge') => {
+    track('practice_session', mode);
     setCurrentMode(mode);
   };
   

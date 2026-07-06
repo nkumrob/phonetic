@@ -7,6 +7,7 @@ import { textToPhonetic } from '@/lib/utils/phonetic-converter';
 import { speechManager } from '@/lib/utils/speech-synthesis';
 import { NATO_ALPHABET } from '@/lib/constants/phonetic-alphabet';
 import { logger } from '@/lib/utils/logger';
+import { track } from '@/lib/client/track';
 
 const MAX_CHARACTERS = 1000;
 
@@ -22,6 +23,17 @@ export function InlineTextConverter() {
   useEffect(() => {
     const converted = textToPhonetic(inputText);
     setOutputText(converted);
+  }, [inputText]);
+
+  const trackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!inputText.trim()) return;
+    if (trackTimer.current) clearTimeout(trackTimer.current);
+    trackTimer.current = setTimeout(() => track('converter_use', 'phonetic-converter'), 2000);
+    return () => {
+      if (trackTimer.current) clearTimeout(trackTimer.current);
+    };
   }, [inputText]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

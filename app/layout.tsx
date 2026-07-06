@@ -12,6 +12,7 @@ import { Analytics } from '@vercel/analytics/next';
 import { WebVitalsReporter } from '@/components/analytics/web-vitals';
 import { inter, jetbrainsMono } from './fonts';
 import { RouteSpeechHandler } from '@/components/speech/route-speech-handler';
+import { PageViewTracker } from '@/components/analytics/page-view-tracker';
 
 export const metadata: Metadata = generateMetadata();
 
@@ -66,6 +67,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schemas) }}
         />
         <AnalyticsProvider>
+          <PageViewTracker />
           <SimpleAppProvider>
             <RouteSpeechHandler />
             <div className="min-h-screen bg-background flex flex-col">
