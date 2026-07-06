@@ -7,14 +7,21 @@ import { NextRequest, NextResponse } from 'next/server';
 export function middleware(request: NextRequest): NextResponse {
   const response = NextResponse.next();
 
-  if (!request.cookies.get('np_anon')) {
-    response.cookies.set('np_anon', globalThis.crypto.randomUUID(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 365,
-      path: '/',
-    });
+  const COOKIE_OPTIONS = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax' as const,
+    maxAge: 60 * 60 * 24 * 365,
+    path: '/',
+  };
+
+  const existing = request.cookies.get('np_anon');
+  if (existing) {
+    // Sliding renewal: re-set with same value so the expiry window resets
+    // from the current visit rather than the first visit.
+    response.cookies.set('np_anon', existing.value, COOKIE_OPTIONS);
+  } else {
+    response.cookies.set('np_anon', globalThis.crypto.randomUUID(), COOKIE_OPTIONS);
   }
 
   return response;

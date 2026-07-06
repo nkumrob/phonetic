@@ -4,6 +4,8 @@
 import { NextRequest } from 'next/server';
 import { middleware } from '../middleware';
 
+const EXISTING_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
+
 describe('anonymous id middleware', () => {
   it('sets an np_anon cookie for visitors without one', () => {
     const response = middleware(new NextRequest('http://localhost/'));
@@ -15,13 +17,15 @@ describe('anonymous id middleware', () => {
     expect(cookie?.maxAge).toBe(60 * 60 * 24 * 365);
   });
 
-  it('does not reissue when the cookie already exists', () => {
+  it('refreshes the existing cookie value with a fresh maxAge', () => {
     const request = new NextRequest('http://localhost/', {
-      headers: { cookie: 'np_anon=existing-id' },
+      headers: { cookie: `np_anon=${EXISTING_UUID}` },
     });
 
     const response = middleware(request);
 
-    expect(response.cookies.get('np_anon')).toBeUndefined();
+    const cookie = response.cookies.get('np_anon');
+    expect(cookie?.value).toBe(EXISTING_UUID);
+    expect(cookie?.maxAge).toBe(31536000);
   });
 });
