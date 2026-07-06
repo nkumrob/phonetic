@@ -34,5 +34,6 @@ function parseCity(raw: string | null): string | null {
   } catch {
     return null;
   }
+  if (decoded.length === 0) return null;
   return decoded.length > CITY_MAX ? null : decoded;
 }

@@ -54,3 +54,6 @@ local.db-*
 # dev logs
 dev-output.log
 .superpowers/
+
+# Claude Code project files
+.claude/

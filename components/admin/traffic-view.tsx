@@ -61,6 +61,7 @@ export function TrafficView() {
             </section>
             <section className="rounded-xl border border-warmNeutral-200 bg-white p-6 dark:border-warmNeutral-700 dark:bg-warmNeutral-800">
               <h2 className="mb-4 text-lg font-bold">Top countries</h2>
+              <p className="text-xs text-tertiary">Visitors with at least one interaction</p>
               <TopList
                 data={stats.countries.map((c) => ({ label: c.country, count: c.visitors }))}
                 emptyText="No geo data in this range."

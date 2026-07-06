@@ -172,7 +172,6 @@ describe('getTrafficStats — countries', () => {
     expect(us).toBeDefined();
     // a1's page_view is excluded; only a2 (event, non-page_view) and a3 (tool_usage) count.
     expect(us.visitors).toBe(2);
-    expect(us.interactions).toBe(2);
   });
 
   it('omits countries whose only activity is a page_view event', async () => {

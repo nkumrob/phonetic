@@ -3,7 +3,7 @@ import { TrafficView } from '../traffic-view';
 
 const TRAFFIC_STATS = {
   topPages: [{ path: '/phonetic', views: 100 }],
-  countries: [{ country: 'US', visitors: 50, interactions: 120 }],
+  countries: [{ country: 'US', visitors: 50 }],
   newVisitors: 30,
   returningVisitors: 20,
   avgInteractionsPerVisitor: 2.4,
@@ -42,6 +42,19 @@ describe('TrafficView', () => {
     expect(await screen.findByText('Top pages')).toBeInTheDocument();
     expect(screen.getByText('Top countries')).toBeInTheDocument();
     expect(screen.getByText('Practice funnel')).toBeInTheDocument();
+  });
+
+  it('renders the countries hint about interaction filter', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => TRAFFIC_STATS,
+    }) as unknown as typeof fetch;
+
+    render(<TrafficView />);
+
+    expect(
+      await screen.findByText('Visitors with at least one interaction'),
+    ).toBeInTheDocument();
   });
 
   it('renders the funnel mode and completion', async () => {

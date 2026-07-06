@@ -79,4 +79,13 @@ describe('OverviewDashboard', () => {
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not load/i);
   });
+
+  it('renders the Interactions KPI hint as "activity, excl. page views"', async () => {
+    global.fetch = mockFetch();
+
+    render(<OverviewDashboard />);
+
+    await screen.findByText('128');
+    expect(screen.getByText('activity, excl. page views')).toBeInTheDocument();
+  });
 });

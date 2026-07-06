@@ -11,7 +11,7 @@ export interface TrafficStats {
   /** Top 10 page paths by view count, sorted descending. */
   topPages: Array<{ path: string; views: number }>;
   /** Top 10 countries by distinct visitors (country=null rows excluded). */
-  countries: Array<{ country: string; visitors: number; interactions: number }>;
+  countries: Array<{ country: string; visitors: number }>;
   /** Visitors whose all-time first_seen falls within the current window. */
   newVisitors: number;
   /** Visitors active in the current window whose first_seen predates it. */
@@ -39,9 +39,9 @@ export async function getTrafficStats(
           group by tool order by views desc limit 10`,
       args: [s],
     }),
-    // Top countries by distinct visitors, with interaction count
+    // Top countries by distinct visitors (interaction-only; page_view-only visitors excluded)
     db.execute({
-      sql: `select country, count(distinct anon_id) as visitors, count(*) as interactions
+      sql: `select country, count(distinct anon_id) as visitors
           from (
             select country, anon_id from events
               where created_at >= date('now', ?) and country is not null and anon_id is not null
@@ -135,7 +135,6 @@ export async function getTrafficStats(
     countries: (countries.rows as Array<Record<string, unknown>>).map((r) => ({
       country: String(r.country),
       visitors: num(r.visitors),
-      interactions: num(r.interactions),
     })),
     newVisitors: num(vr.new_visitors),
     returningVisitors: num(vr.returning_visitors),

@@ -80,4 +80,14 @@ describe('readGeo', () => {
     const req = makeRequest({ 'x-vercel-ip-city': 'Paris' });
     expect(readGeo(req)).toEqual({ country: null, city: 'Paris' });
   });
+
+  it('returns null city for empty string header', () => {
+    const req = makeRequest({ 'x-vercel-ip-city': '' });
+    expect(readGeo(req).city).toBeNull();
+  });
+
+  it('returns null city for whitespace-only header (e.g. decoded %20%20)', () => {
+    const req = makeRequest({ 'x-vercel-ip-city': '%20%20' });
+    expect(readGeo(req).city).toBeNull();
+  });
 });

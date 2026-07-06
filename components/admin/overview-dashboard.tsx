@@ -53,7 +53,7 @@ export function OverviewDashboard() {
             <KpiCard
               label="Interactions"
               value={stats.interactions.current}
-              hint="tool uses, excl. page views"
+              hint="activity, excl. page views"
               delta={stats.interactions}
             />
             <KpiCard
