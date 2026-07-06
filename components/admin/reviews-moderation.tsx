@@ -29,8 +29,9 @@ export function ReviewsModeration() {
   const [processing, setProcessing] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: load once on mount only
-  useEffect(() => { loadReviews(); }, []);
+  useEffect(() => {
+    loadReviews();
+  }, []); // intentional: load once on mount only
 
   async function loadReviews() {
     setLoading(true);
