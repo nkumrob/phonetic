@@ -26,7 +26,11 @@ describe('OverviewDashboard', () => {
     expect(await screen.findByText('42')).toBeInTheDocument();
     expect(screen.getByText('128')).toBeInTheDocument();
     expect(screen.getByText(/1\.6 hours|95/)).toBeInTheDocument(); // formatted time saved
-    expect(global.fetch).toHaveBeenCalledWith('/api/admin/stats/overview?days=30');
+    // useAdminStats issues a cancellable request, so fetch receives a signal too.
+    expect(global.fetch).toHaveBeenCalledWith(
+      '/api/admin/stats/overview?days=30',
+      expect.objectContaining({ signal: expect.anything() }),
+    );
   });
 
   it('shows an error state when the fetch fails', async () => {

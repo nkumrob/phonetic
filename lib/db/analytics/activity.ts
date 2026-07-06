@@ -6,6 +6,21 @@
 
 import { resolveDb, type DbLike } from './shared';
 
+/** Bounds for the activity feed page size. */
+const MIN_LIMIT = 1;
+const MAX_LIMIT = 200;
+const DEFAULT_LIMIT = 50;
+
+/**
+ * Defensively coerces the caller-supplied limit to a safe integer in
+ * [MIN_LIMIT, MAX_LIMIT], defaulting to DEFAULT_LIMIT for undefined or
+ * non-finite input. Keeps the LIMIT clause bounded regardless of the caller.
+ */
+function clampLimit(limit: number | undefined): number {
+  if (typeof limit !== 'number' || !Number.isFinite(limit)) return DEFAULT_LIMIT;
+  return Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, Math.floor(limit)));
+}
+
 export interface ActivityItem {
   /** ISO datetime string (created_at value from the DB). */
   at: string;
@@ -20,14 +35,16 @@ export interface ActivityItem {
 /**
  * Returns the most recent activity items, newest first.
  *
- * @param limit - Maximum rows to return (default 50).
+ * @param limit - Maximum rows to return; clamped to an integer in [1, 200],
+ *                defaulting to 50 for undefined or non-finite input.
  * @param deps  - Optional injectable deps for testing.
  */
 export async function getRecentActivity(
-  limit = 50,
+  limit?: number,
   deps?: { db?: DbLike },
 ): Promise<ActivityItem[]> {
   const db = await resolveDb(deps);
+  const safeLimit = clampLimit(limit);
 
   const result = await db.execute({
     sql: `select at, kind, name, tool, anon_id, country from (
@@ -49,7 +66,7 @@ export async function getRecentActivity(
         )
         order by at desc
         limit ?`,
-    args: [limit],
+    args: [safeLimit],
   });
 
   return (result.rows as Array<Record<string, unknown>>).map((r) => ({

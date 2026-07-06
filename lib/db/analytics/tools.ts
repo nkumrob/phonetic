@@ -4,7 +4,7 @@
  * Kept separate from traffic.ts so each page makes exactly one stats fetch.
  */
 
-import { resolveDb, since, num, type DbLike } from './shared';
+import { resolveDb, since, num, LEADERBOARD_EVENT_KEYS, type DbLike } from './shared';
 
 export interface ToolStatsRow {
   tool: string;
@@ -15,12 +15,6 @@ export interface ToolStatsRow {
   avgLatencyMs: number | null;
   timeSavedVotes: number | null;
 }
-
-// Event names whose `tool` column maps to a leaderboard display key.
-const LEADERBOARD_EVENT_KEYS: Record<string, string> = {
-  converter_use: 'phonetic-converter',
-  practice_session: 'practice',
-};
 
 export async function getToolStats(days: number, deps?: { db?: DbLike }): Promise<ToolStatsRow[]> {
   const db = await resolveDb(deps);

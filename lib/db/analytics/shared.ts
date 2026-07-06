@@ -34,3 +34,13 @@ export function since(days: number): string {
 export function num(value: unknown): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : Number(value) || 0;
 }
+
+/**
+ * Maps event names whose `tool` column doubles as a leaderboard display key.
+ * Shared by traffic.ts (toolLeaderboard) and tools.ts (per-tool rows) so the
+ * mapping lives in exactly one place.
+ */
+export const LEADERBOARD_EVENT_KEYS: Record<string, string> = {
+  converter_use: 'phonetic-converter',
+  practice_session: 'practice',
+};

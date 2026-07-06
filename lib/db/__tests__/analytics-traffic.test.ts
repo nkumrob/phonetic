@@ -150,3 +150,40 @@ describe('getTrafficStats — toolLeaderboard', () => {
     expect(stats.toolLeaderboard.find((t) => t.tool === 'phonetic-converter')).toBeDefined();
   });
 });
+
+describe('getTrafficStats — countries', () => {
+  it('excludes page_view events from the events arm; tool_usage still counts', async () => {
+    // Same visitor produces a page_view (should NOT count) and a tool_usage (should count).
+    await client.execute({
+      sql: `insert into events (id, name, tool, anon_id, country, created_at) values
+        ('e1','page_view','/','a1','US',datetime('now')),
+        ('e2','converter_use','phonetic-converter','a2','US',datetime('now'))`,
+      args: [],
+    });
+    await client.execute({
+      sql: `insert into tool_usage (id, tool_name, anon_id, country, created_at) values
+        ('u1','summarizer','a3','US',datetime('now'))`,
+      args: [],
+    });
+
+    const stats = await getTrafficStats(7, { db });
+
+    const us = stats.countries.find((c) => c.country === 'US')!;
+    expect(us).toBeDefined();
+    // a1's page_view is excluded; only a2 (event, non-page_view) and a3 (tool_usage) count.
+    expect(us.visitors).toBe(2);
+    expect(us.interactions).toBe(2);
+  });
+
+  it('omits countries whose only activity is a page_view event', async () => {
+    await client.execute({
+      sql: `insert into events (id, name, tool, anon_id, country, created_at) values
+        ('e1','page_view','/','a1','FR',datetime('now'))`,
+      args: [],
+    });
+
+    const stats = await getTrafficStats(7, { db });
+
+    expect(stats.countries.find((c) => c.country === 'FR')).toBeUndefined();
+  });
+});

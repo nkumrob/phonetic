@@ -1,34 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { OverviewStats } from '@/lib/db/analytics-repo';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { formatTimeSaved } from '@/lib/client/time-saved';
+import { useAdminStats } from '@/lib/hooks/use-admin-stats';
 import { KpiCard } from './kpi-card';
 import { RangeSwitcher, type StatsRange } from './range-switcher';
 import { ActivityChart } from './activity-chart';
 
 export function OverviewDashboard() {
   const [days, setDays] = useState<StatsRange>(30);
-  const [stats, setStats] = useState<OverviewStats | null>(null);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    setError(false);
-    setStats(null);
-    fetch(`/api/admin/stats/overview?days=${days}`)
-      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
-      .then((data) => {
-        if (!cancelled) setStats(data as OverviewStats);
-      })
-      .catch(() => {
-        if (!cancelled) setError(true);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [days]);
+  const { data: stats, error } = useAdminStats<OverviewStats>(
+    `/api/admin/stats/overview?days=${days}`,
+  );
 
   if (error) {
     return (

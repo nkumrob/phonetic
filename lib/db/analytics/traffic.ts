@@ -5,7 +5,7 @@
  * learning funnel, and tool leaderboard (moved here from overview).
  */
 
-import { resolveDb, since, num, type DbLike } from './shared';
+import { resolveDb, since, num, LEADERBOARD_EVENT_KEYS, type DbLike } from './shared';
 
 export interface TrafficStats {
   /** Top 10 page paths by view count, sorted descending. */
@@ -23,12 +23,6 @@ export interface TrafficStats {
   /** All tools sorted by usage count descending. */
   toolLeaderboard: Array<{ tool: string; uses: number }>;
 }
-
-// Event names whose `tool` column maps to a leaderboard display key.
-const LEADERBOARD_EVENT_KEYS: Record<string, string> = {
-  converter_use: 'phonetic-converter',
-  practice_session: 'practice',
-};
 
 export async function getTrafficStats(
   days: number,
@@ -51,6 +45,7 @@ export async function getTrafficStats(
           from (
             select country, anon_id from events
               where created_at >= date('now', ?) and country is not null and anon_id is not null
+                and name != 'page_view'
             union all
             select country, anon_id from tool_usage
               where created_at >= date('now', ?) and country is not null and anon_id is not null
