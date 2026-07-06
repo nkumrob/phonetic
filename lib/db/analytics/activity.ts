@@ -6,10 +6,10 @@
 
 import { resolveDb, type DbLike } from './shared';
 
-/** Bounds for the activity feed page size. */
-const MIN_LIMIT = 1;
-const MAX_LIMIT = 200;
-const DEFAULT_LIMIT = 50;
+/** Bounds for the activity feed page size (exported so parse-limit.ts and tests can share them). */
+export const ACTIVITY_MIN_LIMIT = 1;
+export const ACTIVITY_MAX_LIMIT = 200;
+export const ACTIVITY_DEFAULT_LIMIT = 50;
 
 /**
  * Defensively coerces the caller-supplied limit to a safe integer in
@@ -17,8 +17,8 @@ const DEFAULT_LIMIT = 50;
  * non-finite input. Keeps the LIMIT clause bounded regardless of the caller.
  */
 function clampLimit(limit: number | undefined): number {
-  if (typeof limit !== 'number' || !Number.isFinite(limit)) return DEFAULT_LIMIT;
-  return Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, Math.floor(limit)));
+  if (typeof limit !== 'number' || !Number.isFinite(limit)) return ACTIVITY_DEFAULT_LIMIT;
+  return Math.min(ACTIVITY_MAX_LIMIT, Math.max(ACTIVITY_MIN_LIMIT, Math.floor(limit)));
 }
 
 export interface ActivityItem {

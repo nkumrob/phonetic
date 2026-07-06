@@ -9,14 +9,20 @@ import { track } from '@/lib/client/track';
 
 type Mode = 'hub' | 'learn' | 'practice' | 'challenge';
 
-export default function SimplePracticeClient() {
+/**
+ * Encapsulates practice session state and tracking logic.
+ *
+ * Exported as a named export so it can be tested independently without
+ * rendering the lazy-loaded child components.
+ */
+export function usePracticeSession() {
   const [currentMode, setCurrentMode] = useState<Mode>('hub');
-  
+
   const handleModeSelect = (mode: 'learn' | 'practice' | 'challenge') => {
     track('practice_session', mode);
     setCurrentMode(mode);
   };
-  
+
   const handleBack = () => {
     setCurrentMode('hub');
   };
@@ -26,13 +32,19 @@ export default function SimplePracticeClient() {
     if (mode === 'learn') {
       setCurrentMode('hub');
     } else {
-      // Add a small delay for better UX
+      // Small delay for better UX before returning to hub.
       setTimeout(() => {
         setCurrentMode('hub');
       }, 100);
     }
   };
-  
+
+  return { currentMode, handleModeSelect, handleBack, completeSession };
+}
+
+export default function SimplePracticeClient() {
+  const { currentMode, handleModeSelect, handleBack, completeSession } = usePracticeSession();
+
   return (
     <div className="container mx-auto px-4 py-8 mb-24">
       {currentMode !== 'hub' && (
@@ -48,12 +60,12 @@ export default function SimplePracticeClient() {
           </Button>
         </div>
       )}
-      
+
       <ErrorBoundary>
         {currentMode === 'hub' && (
           <LazySimplePracticeHub onModeSelect={handleModeSelect} />
         )}
-        
+
         {currentMode === 'learn' && (
           <LazySimpleFlashcards onComplete={() => completeSession('learn')} />
         )}

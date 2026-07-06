@@ -37,6 +37,10 @@ export function useAdminStats<T>(
 
     fetch(url, { signal: controller.signal })
       .then((response) => {
+        // Same-tick race guard: abort() may fire between the microtask ticks
+        // where fetch resolves and this callback runs. Returning early prevents
+        // setting state on an unmounted / url-changed component.
+        if (controller.signal.aborted) return null;
         if (!response.ok) {
           if (response.status === 401) navigate('/admin/login');
           else setError(true);
@@ -45,6 +49,8 @@ export function useAdminStats<T>(
         return response.json();
       })
       .then((json) => {
+        // Guard again: json() itself takes a tick, so abort may have fired by now.
+        if (controller.signal.aborted) return null;
         if (json !== null) setData(json as T);
       })
       .catch((err: unknown) => {
