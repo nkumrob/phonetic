@@ -6,6 +6,7 @@ import {
   isEventName,
 } from '@/lib/constants/events';
 import { insertEvent, type NewEvent } from '@/lib/db/events-repo';
+import { parseAnonId } from '@/lib/utils/anon-id';
 import { RateLimiter } from '@/lib/utils/rate-limit';
 import { logger } from '@/lib/utils/logger';
 
@@ -17,9 +18,6 @@ interface HandlerDeps {
   insert?: (event: NewEvent) => Promise<void>;
   limiter?: LimiterLike;
 }
-
-// UUID v4 pattern — only accepted format for the np_anon anonymous-session cookie
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
  * Records one allowlisted analytics event. Clients fire-and-forget, so
@@ -72,8 +70,7 @@ export function createEventsHandler(deps?: HandlerDeps) {
     }
 
     try {
-      const rawAnonId = request.cookies.get('np_anon')?.value ?? null;
-      const anonId = rawAnonId !== null && UUID_RE.test(rawAnonId) ? rawAnonId : null;
+      const anonId = parseAnonId(request.cookies.get('np_anon')?.value);
 
       await insert({
         id: randomUUID(),

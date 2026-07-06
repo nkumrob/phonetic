@@ -4,6 +4,7 @@ import { runAiTool, type RunAiToolResult } from '@/lib/ai/ai-service';
 import { recordToolUsage, type ToolUsageEntry } from '@/lib/ai/metrics';
 import { anonymousSessionHash } from '@/lib/ai/session-hash';
 import { AiServiceError } from '@/lib/ai/types';
+import { parseAnonId } from '@/lib/utils/anon-id';
 import { cacheConfigs, getCacheHeaders } from '@/lib/utils/cache-headers';
 import { logger } from '@/lib/utils/logger';
 
@@ -45,7 +46,7 @@ export function createAiToolHandler(deps?: HandlerDeps) {
         outputTokens: result.outputTokens,
         latencyMs: result.latencyMs,
         sessionHash: anonymousSessionHash(request),
-        anonId: request.cookies.get('np_anon')?.value ?? null,
+        anonId: parseAnonId(request.cookies.get('np_anon')?.value),
       });
 
       return NextResponse.json(
