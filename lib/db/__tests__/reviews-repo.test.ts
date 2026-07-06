@@ -33,7 +33,7 @@ describe('reviews repo', () => {
     it('fetches approved reviews ordered by date and maps booleans', async () => {
       const { db, execute } = fakeDb();
 
-      const reviews = await listReviews({ approvedOnly: true }, { db });
+      const reviews = await listReviews({ approvedFilter: true }, { db });
 
       const stmt = execute.mock.calls[0][0];
       expect(stmt.sql).toMatch(/approved = 1/i);
@@ -44,12 +44,33 @@ describe('reviews repo', () => {
     it('applies rating and limit filters as args', async () => {
       const { db, execute } = fakeDb();
 
-      await listReviews({ approvedOnly: true, rating: 5, limit: 10 }, { db });
+      await listReviews({ approvedFilter: true, rating: 5, limit: 10 }, { db });
 
       const stmt = execute.mock.calls[0][0];
       expect(stmt.sql).toMatch(/rating = \?/i);
       expect(stmt.sql).toMatch(/limit \?/i);
       expect(stmt.args).toEqual([5, 10]);
+    });
+
+    it('fetches only unapproved reviews when approvedFilter is false', async () => {
+      const { db, execute } = fakeDb([{ ...ROW, approved: 0 }]);
+
+      const reviews = await listReviews({ approvedFilter: false }, { db });
+
+      const stmt = execute.mock.calls[0][0];
+      expect(stmt.sql).toMatch(/approved = 0/i);
+      expect(stmt.sql).not.toMatch(/approved = 1/i);
+      expect(reviews[0]).toMatchObject({ approved: false });
+    });
+
+    it('fetches all reviews (no approved clause) when approvedFilter is undefined', async () => {
+      const { db, execute } = fakeDb();
+
+      await listReviews({}, { db });
+
+      const stmt = execute.mock.calls[0][0];
+      expect(stmt.sql).not.toMatch(/approved/i);
+      expect(stmt.sql).toMatch(/order by date desc/i);
     });
   });
 

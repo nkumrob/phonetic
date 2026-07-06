@@ -18,4 +18,11 @@ describe('ToolsTable', () => {
     const converterRow = screen.getByText('phonetic-converter').closest('tr')!;
     expect(converterRow.textContent).toContain('—');
   });
+
+  it('renders empty state message when rows is empty', () => {
+    render(<ToolsTable rows={[]} />);
+
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    expect(screen.getByText('No tool activity in this range yet.')).toBeInTheDocument();
+  });
 });

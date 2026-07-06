@@ -62,14 +62,21 @@ function toReview(row: ReviewRow): Review {
 }
 
 export async function listReviews(
-  options: { approvedOnly?: boolean; rating?: number; limit?: number },
+  options: {
+    /** true = approved-only, false = unapproved-only, undefined = all */
+    approvedFilter?: boolean;
+    rating?: number;
+    limit?: number;
+  },
   deps?: { db?: DbLike }
 ): Promise<Review[]> {
   const db = await resolveDb(deps);
   const clauses: string[] = [];
   const args: unknown[] = [];
 
-  if (options.approvedOnly) clauses.push('approved = 1');
+  if (options.approvedFilter === true) clauses.push('approved = 1');
+  else if (options.approvedFilter === false) clauses.push('approved = 0');
+  // undefined → no filter (all reviews)
   if (options.rating !== undefined) {
     clauses.push('rating = ?');
     args.push(options.rating);

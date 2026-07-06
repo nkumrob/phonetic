@@ -7,6 +7,12 @@ function cell(value: number | null, suffix = ''): string {
 }
 
 export function ToolsTable({ rows }: { rows: ToolStatsRow[] }) {
+  if (rows.length === 0) {
+    return (
+      <p className="text-sm text-tertiary p-6">No tool activity in this range yet.</p>
+    );
+  }
+
   return (
     <div className="overflow-x-auto rounded-xl border border-warmNeutral-200 bg-white dark:border-warmNeutral-700 dark:bg-warmNeutral-800">
       <table className="w-full text-sm">
