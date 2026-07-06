@@ -44,6 +44,15 @@ describe('GET /api/progress', () => {
     expect(get).not.toHaveBeenCalled();
     expect(await res.json()).toEqual({ data: null });
   });
+
+  it('returns 500 when the repo lookup fails', async () => {
+    const get = jest.fn().mockRejectedValue(new Error('db down'));
+    const handler = createProgressGetHandler({ get });
+
+    const res = await handler(makeRequest('GET', undefined, ANON));
+
+    expect(res.status).toBe(500);
+  });
 });
 
 describe('PUT /api/progress', () => {
