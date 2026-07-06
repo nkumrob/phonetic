@@ -19,6 +19,23 @@ async function hmacHex(payload: string, secret: string): Promise<string> {
   return Array.from(new Uint8Array(sig), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
+/**
+ * Constant-time HMAC verification via WebCrypto subtle.verify.
+ * Returns false immediately for non-hex or odd-length signature strings.
+ */
+async function hmacVerify(payload: string, hexSig: string, secret: string): Promise<boolean> {
+  if (hexSig.length % 2 !== 0 || !/^[0-9a-f]+$/i.test(hexSig)) return false;
+  const sigBytes = new Uint8Array(hexSig.match(/.{2}/g)!.map((b) => parseInt(b, 16)));
+  const key = await globalThis.crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['verify']
+  );
+  return globalThis.crypto.subtle.verify('HMAC', key, sigBytes, new TextEncoder().encode(payload));
+}
+
 export async function createSessionToken(secret: string): Promise<string> {
   const expiry = String(Date.now() + SESSION_TTL_MS);
   return `${expiry}.${await hmacHex(expiry, secret)}`;
@@ -26,15 +43,12 @@ export async function createSessionToken(secret: string): Promise<string> {
 
 export async function verifySessionToken(token: string | undefined, secret: string): Promise<boolean> {
   if (!token) return false;
+  // Fail-closed: zero-length HMAC keys throw DataError in WebCrypto; return false instead.
+  if (!secret) return false;
   const dot = token.indexOf('.');
   if (dot <= 0) return false;
   const expiry = token.slice(0, dot);
   const signature = token.slice(dot + 1);
   if (!/^\d+$/.test(expiry) || Number(expiry) <= Date.now()) return false;
-
-  const expected = await hmacHex(expiry, secret);
-  // HMAC output is unforgeable without the secret, so a plain compare here
-  // does not leak anything an attacker can use (they cannot generate
-  // candidate signatures to time against).
-  return signature === expected;
+  return hmacVerify(expiry, signature, secret);
 }

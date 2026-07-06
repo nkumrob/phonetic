@@ -37,6 +37,16 @@ describe('admin session tokens', () => {
     const token = await createSessionToken(SECRET);
     expect(await verifySessionToken(token, 'other-secret')).toBe(false);
   });
+
+  it('rejects empty secret (fail-closed, no exception)', async () => {
+    const token = await createSessionToken(SECRET);
+    expect(await verifySessionToken(token, '')).toBe(false);
+  });
+
+  it('rejects non-hex signature before calling verify', async () => {
+    const future = String(Date.now() + 100000);
+    expect(await verifySessionToken(`${future}.zzzz`, SECRET)).toBe(false);
+  });
 });
 
 // Test helper mirroring the module's HMAC so we can forge an expired-but-signed token.
