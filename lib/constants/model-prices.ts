@@ -10,5 +10,7 @@
  */
 export const MODEL_PRICES: Record<string, { inputPerMTok: number; outputPerMTok: number }> = {
   'claude-haiku-4-5': { inputPerMTok: 1, outputPerMTok: 5 },
+  // The API records the dated snapshot id, which is what tool_usage rows contain.
+  'claude-haiku-4-5-20251001': { inputPerMTok: 1, outputPerMTok: 5 },
   // gpt-5.4-nano: intentionally absent — add real prices when available.
 };
