@@ -199,3 +199,47 @@ Added to `.env.example` and `.env.local`.
 - **Cookie consent** — `np_anon` is first-party, functional/analytics with no PII;
   privacy policy updated. If a consent banner is ever required for a market, events
   degrade gracefully (anon_id null).
+
+## 14. Dashboard v2 — comprehensive expansion (added 2026-07-06, owner request)
+
+Owner reviewed the shipped Phase 2 dashboard and asked for a comprehensive
+version. Approved additions, all admin-side:
+
+1. **Traffic & engagement**: page-views KPI, top pages table, new vs returning
+   visitors (first-seen = min(created_at) per anon_id across events∪tool_usage;
+   "new" when first seen inside the range), avg interactions per visitor.
+2. **Trends**: every KPI carries a delta vs the previous window of equal length;
+   the daily chart gains a dashed previous-period overlay aligned by day index.
+3. **AI operations**: tokens by model, estimated cost from an owner-editable
+   price table (lib/constants/model-prices.ts, $/MTok in+out; unknown models
+   show "set price" instead of a number), latency stats.
+4. **Recent activity feed**: last 50 interactions (time, kind, tool, short
+   visitor id, country) unioned from events + tool_usage.
+5. **Learning funnel**: practice_session starts vs completions by mode
+   (learn/practice/challenge). New event name `practice_complete` fired from
+   the existing onComplete callbacks in app/practice/simple-practice-client.tsx.
+6. **Geography**: country + city captured server-side from Vercel's
+   x-vercel-ip-country / x-vercel-ip-city headers (null in local dev, no IP
+   stored) on both events and tool_usage; countries table in the Traffic view.
+
+**Schema consequences** (the part that bites): adding `practice_complete`
+requires rebuilding the `events` table because SQLite cannot alter its CHECK
+constraint. Decision: the rebuilt table DROPS the name CHECK entirely — the
+server-side allowlist in lib/constants/events.ts becomes the single gatekeeper
+(documented tradeoff; avoids a rebuild per future event name). The rebuild
+migration is guarded in scripts/init-db.mjs (detect old constraint via
+sqlite_master.sql, create-copy-rename, recreate indexes). `events` and
+`tool_usage` gain nullable `country`/`city` columns.
+
+**IA change**: sidebar becomes Overview / Traffic / AI Ops / Tools / Reviews.
+Overview = KPIs with deltas + daily chart with overlay + recent activity.
+Traffic = page views, top pages, countries, new/returning, learning funnel.
+AI Ops = tokens by model, est. cost, latency, time-saved votes.
+
+**Shared fetch hook**: useAdminStats(url) consolidates the fetch/cancel/error
+pattern and redirects to /admin/login on 401 (fixes the misleading
+"check the database" error when the session expires).
+
+analytics-repo splits into lib/db/analytics/ modules (shared, overview,
+traffic, ai-ops, activity) with lib/db/analytics-repo.ts re-exporting for
+existing imports; every file stays under 500 lines.
