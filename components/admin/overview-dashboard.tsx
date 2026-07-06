@@ -7,8 +7,6 @@ import { formatTimeSaved } from '@/lib/client/time-saved';
 import { KpiCard } from './kpi-card';
 import { RangeSwitcher, type StatsRange } from './range-switcher';
 import { ActivityChart } from './activity-chart';
-import { LeaderboardChart } from './leaderboard-chart';
-import { VotesList } from './votes-list';
 
 export function OverviewDashboard() {
   const [days, setDays] = useState<StatsRange>(30);
@@ -56,12 +54,18 @@ export function OverviewDashboard() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
-            <KpiCard label="Unique visitors" value={stats.uniqueVisitors} />
-            <KpiCard label="Interactions" value={stats.interactions} hint="tool uses, excl. page views" />
-            <KpiCard label="AI conversations" value={stats.aiConversations} />
-            <KpiCard label="Tokens used" value={stats.tokens} hint="input + output" />
-            <KpiCard label="Time saved" value={formatTimeSaved(stats.timeSavedMinutes)} hint="self-reported" />
+          {/* KPIs now carry KpiWithDelta; render .current for the number */}
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+            <KpiCard label="Unique visitors" value={stats.uniqueVisitors.current} />
+            <KpiCard label="Interactions" value={stats.interactions.current} hint="tool uses, excl. page views" />
+            <KpiCard label="AI conversations" value={stats.aiConversations.current} />
+            <KpiCard label="Tokens used" value={stats.tokens.current} hint="input + output" />
+            <KpiCard
+              label="Time saved"
+              value={formatTimeSaved(stats.timeSavedMinutes.current)}
+              hint="self-reported"
+            />
+            <KpiCard label="Page views" value={stats.pageViews.current} />
           </div>
 
           <section className="rounded-xl border border-warmNeutral-200 bg-white p-6 dark:border-warmNeutral-700 dark:bg-warmNeutral-800">
@@ -69,20 +73,7 @@ export function OverviewDashboard() {
             <ActivityChart data={stats.dailySeries} />
           </section>
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            <section className="rounded-xl border border-warmNeutral-200 bg-white p-6 dark:border-warmNeutral-700 dark:bg-warmNeutral-800">
-              <h2 className="mb-4 text-lg font-bold">Most-used tools</h2>
-              {stats.toolLeaderboard.length === 0 ? (
-                <p className="text-sm text-tertiary">No tool usage in this range yet.</p>
-              ) : (
-                <LeaderboardChart data={stats.toolLeaderboard.slice(0, 8)} />
-              )}
-            </section>
-            <section className="rounded-xl border border-warmNeutral-200 bg-white p-6 dark:border-warmNeutral-700 dark:bg-warmNeutral-800">
-              <h2 className="mb-4 text-lg font-bold">Time-saved votes</h2>
-              <VotesList data={stats.timeSavedDistribution} />
-            </section>
-          </div>
+          {/* Most-used tools and time-saved votes moved to Traffic / AI Ops in Task 5 */}
         </>
       )}
     </div>

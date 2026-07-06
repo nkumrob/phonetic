@@ -43,14 +43,23 @@ describe('getOverviewStats', () => {
 
     const stats = await getOverviewStats(30, { db });
 
-    expect(stats.uniqueVisitors).toBe(2); // in-range: visitor ...0001 (u1,u2,e2,e4) and ...0003 (e1,e3); u3's visitor is outside range
-    expect(stats.aiConversations).toBe(2); // u1,u2
-    expect(stats.interactions).toBe(5); // u1,u2 + e1,e2,e4 (page_view excluded)
-    expect(stats.tokens).toBe(450); // (100+50)+(200+100)
-    expect(stats.timeSavedMinutes).toBe(10); // one '5-15' vote in range
+    // KPIs are now KpiWithDelta — read .current for the window value
+    expect(stats.uniqueVisitors.current).toBe(2); // visitors ...0001 and ...0003 in range; u3's visitor outside
+    expect(stats.aiConversations.current).toBe(2); // u1, u2
+    expect(stats.interactions.current).toBe(5); // u1,u2 + e1,e2,e4 (page_view excluded)
+    expect(stats.tokens.current).toBe(450); // (100+50)+(200+100)
+    expect(stats.timeSavedMinutes.current).toBe(10); // one '5-15' vote in range
   });
 
-  it('produces a daily series covering the range with ai/other split', async () => {
+  it('pageViews counts events with name=page_view', async () => {
+    await seed();
+
+    const stats = await getOverviewStats(30, { db });
+
+    expect(stats.pageViews.current).toBe(1); // e3 is the page_view
+  });
+
+  it('produces a daily series covering the range with ai/other/prevTotal fields', async () => {
     await seed();
 
     const stats = await getOverviewStats(7, { db });
@@ -60,28 +69,60 @@ describe('getOverviewStats', () => {
     expect(today.ai).toBe(2);
     expect(today.other).toBe(3); // converter, practice, template (page_view excluded)
     expect(stats.dailySeries[0].ai + stats.dailySeries[0].other).toBe(0); // empty older day
+    // prevTotal is present on every entry (0 since no prev-window data seeded)
+    expect(typeof today.prevTotal).toBe('number');
   });
 
-  it('builds the tool leaderboard excluding template_use and page_view', async () => {
-    await seed();
+  it('previous-window counts appear in .previous of each KPI', async () => {
+    // Current window (days 0-6 ago): 3 AI runs
+    await client.execute({
+      sql: `insert into tool_usage (id, tool_name, model, input_tokens, output_tokens, created_at) values
+        ('c1','summarizer','m',100,50,datetime('now')),
+        ('c2','summarizer','m',200,100,datetime('now')),
+        ('c3','summarizer','m',50,25,datetime('now','-2 days'))`,
+      args: [],
+    });
+    // Previous window (days 7-13 ago): 2 AI runs
+    await client.execute({
+      sql: `insert into tool_usage (id, tool_name, model, input_tokens, output_tokens, created_at) values
+        ('p1','summarizer','m',60,30,datetime('now','-8 days')),
+        ('p2','summarizer','m',40,20,datetime('now','-10 days'))`,
+      args: [],
+    });
 
-    const stats = await getOverviewStats(30, { db });
+    const stats = await getOverviewStats(7, { db });
 
-    expect(stats.toolLeaderboard).toEqual(
-      expect.arrayContaining([
-        { tool: 'summarizer', uses: 2 },
-        { tool: 'phonetic-converter', uses: 1 },
-        { tool: 'practice', uses: 1 },
-      ])
-    );
-    expect(stats.toolLeaderboard.find((t) => t.tool === '/tools')).toBeUndefined();
-    expect(stats.toolLeaderboard[0]).toEqual({ tool: 'summarizer', uses: 2 }); // sorted desc
+    expect(stats.aiConversations.current).toBe(3);
+    expect(stats.aiConversations.previous).toBe(2);
+    expect(stats.tokens.current).toBe(525); // (100+50)+(200+100)+(50+25)
+    expect(stats.tokens.previous).toBe(150); // (60+30)+(40+20)
   });
 
-  it('returns the time-saved vote distribution', async () => {
-    await seed();
-    const stats = await getOverviewStats(30, { db });
-    expect(stats.timeSavedDistribution).toEqual([{ bucket: '5-15', votes: 1 }]);
+  it('prevTotal in dailySeries reflects activity from the corresponding previous-window day', async () => {
+    // Tool usage 3 days ago in current window
+    await client.execute({
+      sql: `insert into tool_usage (id, tool_name, created_at) values
+        ('a1','tool', date('now', '-3 days') || ' 10:00:00')`,
+      args: [],
+    });
+    // Tool usage 10 days ago (= 3 days + 7) — in previous window, same relative offset
+    await client.execute({
+      sql: `insert into tool_usage (id, tool_name, created_at) values
+        ('b1','tool', date('now', '-10 days') || ' 10:00:00')`,
+      args: [],
+    });
+
+    const stats = await getOverviewStats(7, { db });
+
+    const today = new Date();
+    const d3 = new Date(today);
+    d3.setUTCDate(d3.getUTCDate() - 3);
+    const dateStr = d3.toISOString().slice(0, 10);
+
+    const entry = stats.dailySeries.find((p) => p.date === dateStr);
+    expect(entry).toBeDefined();
+    expect(entry!.ai).toBe(1);       // current window: a1
+    expect(entry!.prevTotal).toBe(1); // previous window: b1
   });
 
   it('calendar-day alignment: first-day row counted, eve-of-window row excluded, series total equals interactions', async () => {
@@ -101,9 +142,9 @@ describe('getOverviewStats', () => {
 
     const stats = await getOverviewStats(7, { db });
 
-    expect(stats.aiConversations).toBe(1); // only a1 — a2 is outside the calendar window
+    expect(stats.aiConversations.current).toBe(1); // only a1 — a2 is outside the calendar window
     const seriesTotal = stats.dailySeries.reduce((sum, p) => sum + p.ai + p.other, 0);
-    expect(seriesTotal).toBe(stats.interactions); // chart and KPIs are aligned
+    expect(seriesTotal).toBe(stats.interactions.current); // chart and KPIs are aligned
   });
 });
 

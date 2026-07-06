@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import { OverviewDashboard } from '../overview-dashboard';
 
+/** Minimal fixture matching the v2 OverviewStats shape (KpiWithDelta). */
 const STATS = {
-  uniqueVisitors: 42,
-  interactions: 128,
-  aiConversations: 30,
-  tokens: 21000,
-  timeSavedMinutes: 95,
-  dailySeries: [{ date: '2026-07-05', ai: 3, other: 5 }],
-  toolLeaderboard: [{ tool: 'summarizer', uses: 12 }],
-  timeSavedDistribution: [{ bucket: '5-15', votes: 4 }],
+  uniqueVisitors: { current: 42, previous: 38 },
+  interactions: { current: 128, previous: 110 },
+  aiConversations: { current: 30, previous: 25 },
+  tokens: { current: 21000, previous: 18000 },
+  timeSavedMinutes: { current: 95, previous: 80 },
+  pageViews: { current: 5, previous: 4 },
+  dailySeries: [{ date: '2026-07-05', ai: 3, other: 5, prevTotal: 6 }],
 };
 
 describe('OverviewDashboard', () => {
