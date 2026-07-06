@@ -29,6 +29,8 @@ create table if not exists tool_usage (
   session_hash text,
   time_saved_bucket text check (time_saved_bucket in ('<1', '1-5', '5-15', '15+')),
   anon_id text,
+  country    text,
+  city       text,
   created_at text not null default (datetime('now'))
 );
 
@@ -36,13 +38,15 @@ create index if not exists idx_tool_usage_tool_created on tool_usage (tool_name,
 create index if not exists idx_tool_usage_created on tool_usage (created_at desc);
 create index if not exists idx_tool_usage_anon on tool_usage (anon_id, created_at desc);
 
+-- Event-name validation lives in lib/constants/events.ts (server allowlist); no CHECK so new names don't force a table rebuild.
 create table if not exists events (
   id         text primary key,
-  name       text not null check (name in
-               ('page_view','converter_use','practice_session','template_use','time_saved_vote')),
+  name       text not null,
   tool       text,
   anon_id    text,
   metadata   text,
+  country    text,
+  city       text,
   created_at text not null default (datetime('now'))
 );
 

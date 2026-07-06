@@ -41,6 +41,40 @@ try {
     console.log('Added tool_usage.anon_id column.');
   }
 
+  // events rebuild: legacy tables have a CHECK on name (SQLite can't alter it)
+  // and lack country/city. Rebuild via create-copy-rename, preserving rows.
+  const eventsDef = await db.execute("select sql from sqlite_master where type='table' and name='events'");
+  const eventsSql = eventsDef.rows[0]?.sql ?? '';
+  if (eventsSql && (eventsSql.includes('check') || !eventsSql.includes('country'))) {
+    await db.executeMultiple(`
+      create table events_new (
+        id         text primary key,
+        name       text not null,
+        tool       text,
+        anon_id    text,
+        metadata   text,
+        country    text,
+        city       text,
+        created_at text not null default (datetime('now'))
+      );
+      insert into events_new (id, name, tool, anon_id, metadata, created_at)
+        select id, name, tool, anon_id, metadata, created_at from events;
+      drop table events;
+      alter table events_new rename to events;
+    `);
+    console.log('Rebuilt events table (no CHECK, +country/city).');
+  }
+  // tool_usage geo columns (simple guarded ALTERs, like anon_id)
+  const tuInfo = await db.execute("pragma table_info('tool_usage')");
+  if (tuInfo.rows.length > 0) {
+    for (const col of ['country', 'city']) {
+      if (!tuInfo.rows.some((row) => row.name === col)) {
+        await db.execute(`alter table tool_usage add column ${col} text`);
+        console.log(`Added tool_usage.${col} column.`);
+      }
+    }
+  }
+
   await db.executeMultiple(schema);
 
   console.log(`Schema applied to ${url.startsWith('file:') ? url : 'Turso database'}.`);
