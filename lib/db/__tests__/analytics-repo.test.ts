@@ -12,8 +12,6 @@ let db: DbLike;
 beforeEach(async () => {
   client = createClient({ url: ':memory:' });
   await client.executeMultiple(readFileSync(resolve(process.cwd(), 'lib/db/schema.sql'), 'utf8'));
-  // schema.sql's tool_usage predates anon_id (added by init-db.mjs migration) — mirror it here.
-  await client.execute('alter table tool_usage add column anon_id text');
   db = client as unknown as DbLike;
 });
 
@@ -84,6 +82,28 @@ describe('getOverviewStats', () => {
     await seed();
     const stats = await getOverviewStats(30, { db });
     expect(stats.timeSavedDistribution).toEqual([{ bucket: '5-15', votes: 1 }]);
+  });
+
+  it('calendar-day alignment: first-day row counted, eve-of-window row excluded, series total equals interactions', async () => {
+    // Row on the first calendar day of the 7-day window (6 days ago at 00:30).
+    await client.execute({
+      sql: `insert into tool_usage (id, tool_name, anon_id, created_at) values
+        ('a1', 'test-tool', 'aaaa', date('now', '-6 days') || ' 00:30:00')`,
+      args: [],
+    });
+    // Row on the calendar day BEFORE the window (7 days ago at 23:30 — the rolling
+    // window would include this; the calendar-day window must not).
+    await client.execute({
+      sql: `insert into tool_usage (id, tool_name, anon_id, created_at) values
+        ('a2', 'test-tool', 'bbbb', date('now', '-7 days') || ' 23:30:00')`,
+      args: [],
+    });
+
+    const stats = await getOverviewStats(7, { db });
+
+    expect(stats.aiConversations).toBe(1); // only a1 — a2 is outside the calendar window
+    const seriesTotal = stats.dailySeries.reduce((sum, p) => sum + p.ai + p.other, 0);
+    expect(seriesTotal).toBe(stats.interactions); // chart and KPIs are aligned
   });
 });
 

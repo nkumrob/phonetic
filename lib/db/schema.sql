@@ -28,10 +28,13 @@ create table if not exists tool_usage (
   latency_ms integer,
   session_hash text,
   time_saved_bucket text check (time_saved_bucket in ('<1', '1-5', '5-15', '15+')),
+  anon_id text,
   created_at text not null default (datetime('now'))
 );
 
 create index if not exists idx_tool_usage_tool_created on tool_usage (tool_name, created_at desc);
+create index if not exists idx_tool_usage_created on tool_usage (created_at desc);
+create index if not exists idx_tool_usage_anon on tool_usage (anon_id, created_at desc);
 
 create table if not exists events (
   id         text primary key,

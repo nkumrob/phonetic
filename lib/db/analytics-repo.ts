@@ -52,8 +52,12 @@ async function resolveDb(deps?: { db?: DbLike }): Promise<DbLike> {
   return getDb() as unknown as DbLike;
 }
 
+/**
+ * Calendar-day aligned with dailySeries: returns the offset for midnight of
+ * the first series day (`date('now', since(days))` == start of day N-1 ago).
+ */
 function since(days: number): string {
-  return `-${days} days`;
+  return `-${days - 1} days`;
 }
 
 function num(value: unknown): number {
@@ -67,44 +71,44 @@ export async function getOverviewStats(days: number, deps?: { db?: DbLike }): Pr
   const [kpis, visitors, eventsDaily, usageDaily, usageTools, eventTools, distribution] = await Promise.all([
     db.execute({
       sql: `select
-        (select count(*) from tool_usage where created_at >= datetime('now', ?)) as ai_conversations,
-        (select count(*) from events where name != 'page_view' and created_at >= datetime('now', ?)) as event_interactions,
-        (select coalesce(sum(input_tokens + output_tokens), 0) from tool_usage where created_at >= datetime('now', ?)) as tokens,
+        (select count(*) from tool_usage where created_at >= date('now', ?)) as ai_conversations,
+        (select count(*) from events where name != 'page_view' and created_at >= date('now', ?)) as event_interactions,
+        (select coalesce(sum(input_tokens + output_tokens), 0) from tool_usage where created_at >= date('now', ?)) as tokens,
         (select coalesce(sum(${TIME_SAVED_MINUTES_SQL}), 0) from tool_usage
-           where time_saved_bucket is not null and created_at >= datetime('now', ?)) as time_saved`,
+           where time_saved_bucket is not null and created_at >= date('now', ?)) as time_saved`,
       args: [s, s, s, s],
     }),
     db.execute({
       sql: `select count(distinct anon_id) as visitors from (
-        select anon_id from events where anon_id is not null and created_at >= datetime('now', ?)
+        select anon_id from events where anon_id is not null and created_at >= date('now', ?)
         union
-        select anon_id from tool_usage where anon_id is not null and created_at >= datetime('now', ?)
+        select anon_id from tool_usage where anon_id is not null and created_at >= date('now', ?)
       )`,
       args: [s, s],
     }),
     db.execute({
       sql: `select date(created_at) as day, count(*) as n from events
-        where name != 'page_view' and created_at >= datetime('now', ?) group by day`,
+        where name != 'page_view' and created_at >= date('now', ?) group by day`,
       args: [s],
     }),
     db.execute({
       sql: `select date(created_at) as day, count(*) as n from tool_usage
-        where created_at >= datetime('now', ?) group by day`,
+        where created_at >= date('now', ?) group by day`,
       args: [s],
     }),
     db.execute({
       sql: `select tool_name as tool, count(*) as uses from tool_usage
-        where created_at >= datetime('now', ?) group by tool_name`,
+        where created_at >= date('now', ?) group by tool_name`,
       args: [s],
     }),
     db.execute({
       sql: `select name, count(*) as uses from events
-        where name in ('converter_use','practice_session') and created_at >= datetime('now', ?) group by name`,
+        where name in ('converter_use','practice_session') and created_at >= date('now', ?) group by name`,
       args: [s],
     }),
     db.execute({
       sql: `select time_saved_bucket as bucket, count(*) as votes from tool_usage
-        where time_saved_bucket is not null and created_at >= datetime('now', ?) group by bucket`,
+        where time_saved_bucket is not null and created_at >= date('now', ?) group by bucket`,
       args: [s],
     }),
   ]);
@@ -163,12 +167,12 @@ export async function getToolStats(days: number, deps?: { db?: DbLike }): Promis
               sum(input_tokens) as input_tokens, sum(output_tokens) as output_tokens,
               round(avg(latency_ms)) as avg_latency,
               sum(case when time_saved_bucket is not null then 1 else 0 end) as votes
-            from tool_usage where created_at >= datetime('now', ?) group by tool_name`,
+            from tool_usage where created_at >= date('now', ?) group by tool_name`,
       args: [s],
     }),
     db.execute({
       sql: `select name, count(*) as uses, count(distinct anon_id) as unique_users from events
-            where name in ('converter_use','practice_session') and created_at >= datetime('now', ?) group by name`,
+            where name in ('converter_use','practice_session') and created_at >= date('now', ?) group by name`,
       args: [s],
     }),
   ]);
