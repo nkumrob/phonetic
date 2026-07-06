@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import { parseActivityLimit } from '@/app/api/admin/stats/activity/parse-limit';
-import { createActivityHandler } from '@/app/api/admin/stats/activity/route';
+import { createActivityHandler } from '@/app/api/admin/stats/activity/handler';
 import {
   ACTIVITY_DEFAULT_LIMIT,
   ACTIVITY_MIN_LIMIT,

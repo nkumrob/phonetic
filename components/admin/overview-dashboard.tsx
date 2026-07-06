@@ -2,17 +2,22 @@
 
 import { useState } from 'react';
 import type { OverviewStats } from '@/lib/db/analytics-repo';
+import type { ActivityItem } from '@/lib/db/analytics/activity';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { formatTimeSaved } from '@/lib/client/time-saved';
 import { useAdminStats } from '@/lib/hooks/use-admin-stats';
 import { KpiCard } from './kpi-card';
 import { RangeSwitcher, type StatsRange } from './range-switcher';
 import { ActivityChart } from './activity-chart';
+import { ActivityFeed } from './activity-feed';
 
 export function OverviewDashboard() {
   const [days, setDays] = useState<StatsRange>(30);
   const { data: stats, error } = useAdminStats<OverviewStats>(
     `/api/admin/stats/overview?days=${days}`,
+  );
+  const { data: activity, error: activityError } = useAdminStats<ActivityItem[]>(
+    '/api/admin/stats/activity',
   );
 
   if (error) {
@@ -39,18 +44,40 @@ export function OverviewDashboard() {
         </div>
       ) : (
         <>
-          {/* KPIs now carry KpiWithDelta; render .current for the number */}
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
-            <KpiCard label="Unique visitors" value={stats.uniqueVisitors.current} />
-            <KpiCard label="Interactions" value={stats.interactions.current} hint="tool uses, excl. page views" />
-            <KpiCard label="AI conversations" value={stats.aiConversations.current} />
-            <KpiCard label="Tokens used" value={stats.tokens.current} hint="input + output" />
+            <KpiCard
+              label="Unique visitors"
+              value={stats.uniqueVisitors.current}
+              delta={stats.uniqueVisitors}
+            />
+            <KpiCard
+              label="Interactions"
+              value={stats.interactions.current}
+              hint="tool uses, excl. page views"
+              delta={stats.interactions}
+            />
+            <KpiCard
+              label="AI conversations"
+              value={stats.aiConversations.current}
+              delta={stats.aiConversations}
+            />
+            <KpiCard
+              label="Tokens used"
+              value={stats.tokens.current}
+              hint="input + output"
+              delta={stats.tokens}
+            />
             <KpiCard
               label="Time saved"
               value={formatTimeSaved(stats.timeSavedMinutes.current)}
               hint="self-reported"
+              delta={stats.timeSavedMinutes}
             />
-            <KpiCard label="Page views" value={stats.pageViews.current} />
+            <KpiCard
+              label="Page views"
+              value={stats.pageViews.current}
+              delta={stats.pageViews}
+            />
           </div>
 
           <section className="rounded-xl border border-warmNeutral-200 bg-white p-6 dark:border-warmNeutral-700 dark:bg-warmNeutral-800">
@@ -58,7 +85,16 @@ export function OverviewDashboard() {
             <ActivityChart data={stats.dailySeries} />
           </section>
 
-          {/* Most-used tools and time-saved votes moved to Traffic / AI Ops in Task 5 */}
+          <section className="rounded-xl border border-warmNeutral-200 bg-white p-6 dark:border-warmNeutral-700 dark:bg-warmNeutral-800">
+            <h2 className="mb-4 text-lg font-bold">Recent activity</h2>
+            {activityError ? (
+              <p className="text-sm text-error">Could not load activity.</p>
+            ) : !activity ? (
+              <LoadingSpinner size="sm" />
+            ) : (
+              <ActivityFeed items={activity} />
+            )}
+          </section>
         </>
       )}
     </div>

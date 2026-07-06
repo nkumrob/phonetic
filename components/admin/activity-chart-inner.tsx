@@ -1,12 +1,14 @@
 'use client';
 
 import {
-  AreaChart,
+  ComposedChart,
   Area,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
 } from 'recharts';
 
@@ -14,6 +16,8 @@ interface DailyPoint {
   date: string;
   ai: number;
   other: number;
+  /** Total (ai + other) from the equivalent day in the previous window. */
+  prevTotal: number;
 }
 
 function formatDate(date: string): string {
@@ -24,7 +28,7 @@ function formatDate(date: string): string {
 export default function ActivityChartInner({ data }: { data: DailyPoint[] }) {
   return (
     <ResponsiveContainer width="100%" height={280}>
-      <AreaChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
+      <ComposedChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -16 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
         <XAxis
           dataKey="date"
@@ -34,6 +38,7 @@ export default function ActivityChartInner({ data }: { data: DailyPoint[] }) {
         />
         <YAxis allowDecimals={false} tick={{ fontSize: 11 }} tickLine={false} axisLine={false} />
         <Tooltip />
+        <Legend />
         <Area
           type="monotone"
           dataKey="ai"
@@ -50,7 +55,15 @@ export default function ActivityChartInner({ data }: { data: DailyPoint[] }) {
           fill="#93C5FD"
           fillOpacity={0.6}
         />
-      </AreaChart>
+        <Line
+          type="monotone"
+          dataKey="prevTotal"
+          name="prev period"
+          stroke="#9CA3AF"
+          strokeDasharray="3 3"
+          dot={false}
+        />
+      </ComposedChart>
     </ResponsiveContainer>
   );
 }

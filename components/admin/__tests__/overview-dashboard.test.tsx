@@ -12,6 +12,18 @@ const STATS = {
   dailySeries: [{ date: '2026-07-05', ai: 3, other: 5, prevTotal: 6 }],
 };
 
+/** Stub activity response — an empty feed is fine for most tests. */
+const ACTIVITY: unknown[] = [];
+
+function mockFetch(statsData = STATS, activityData: unknown[] = ACTIVITY) {
+  return jest.fn().mockImplementation((url: string) => {
+    if (String(url).includes('activity')) {
+      return Promise.resolve({ ok: true, json: async () => activityData });
+    }
+    return Promise.resolve({ ok: true, json: async () => statsData });
+  }) as unknown as typeof fetch;
+}
+
 describe('OverviewDashboard', () => {
   const originalFetch = global.fetch;
   afterEach(() => {
@@ -19,7 +31,7 @@ describe('OverviewDashboard', () => {
   });
 
   it('loads stats and renders the KPI cards', async () => {
-    global.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => STATS }) as unknown as typeof fetch;
+    global.fetch = mockFetch();
 
     render(<OverviewDashboard />);
 
@@ -33,7 +45,34 @@ describe('OverviewDashboard', () => {
     );
   });
 
-  it('shows an error state when the fetch fails', async () => {
+  it('renders KPI deltas as trend indicators', async () => {
+    global.fetch = mockFetch();
+
+    render(<OverviewDashboard />);
+
+    // At least one delta indicator should be visible after data loads.
+    // uniqueVisitors: 42 vs 38, interactions: 128 vs 110, etc. — all positive
+    await screen.findByText('42');
+    expect(screen.getAllByText(/↑\d+%/).length).toBeGreaterThan(0);
+  });
+
+  it('shows the "Recent activity" section heading', async () => {
+    global.fetch = mockFetch();
+
+    render(<OverviewDashboard />);
+
+    expect(await screen.findByText('Recent activity')).toBeInTheDocument();
+  });
+
+  it('shows "No activity yet." when activity feed is empty', async () => {
+    global.fetch = mockFetch(STATS, []);
+
+    render(<OverviewDashboard />);
+
+    expect(await screen.findByText('No activity yet.')).toBeInTheDocument();
+  });
+
+  it('shows an error state when the overview fetch fails', async () => {
     global.fetch = jest.fn().mockResolvedValue({ ok: false, json: async () => ({}) }) as unknown as typeof fetch;
 
     render(<OverviewDashboard />);

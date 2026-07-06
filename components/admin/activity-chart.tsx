@@ -7,6 +7,8 @@ interface DailyPoint {
   date: string;
   ai: number;
   other: number;
+  /** Total (ai + other) from the equivalent day in the previous window. */
+  prevTotal: number;
 }
 
 export const ActivityChart = dynamic<{ data: DailyPoint[] }>(

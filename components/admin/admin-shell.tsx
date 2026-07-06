@@ -2,11 +2,13 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Wrench, MessageSquare, LogOut } from 'lucide-react';
+import { LayoutDashboard, Globe, Cpu, Wrench, MessageSquare, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
 const NAV = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard },
+  { href: '/admin/traffic', label: 'Traffic', icon: Globe },
+  { href: '/admin/ai', label: 'AI Ops', icon: Cpu },
   { href: '/admin/tools', label: 'Tools', icon: Wrench },
   { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare },
 ];
