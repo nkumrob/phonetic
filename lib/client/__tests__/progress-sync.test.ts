@@ -125,6 +125,57 @@ describe('clearHistory triggers server sync (Fix 1)', () => {
   });
 });
 
+describe('pullAndMergeProgress — malformed remote blobs (Fix 3)', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it('resolves and fires a corrective PUT when remote has wrong shape {"a":1}', async () => {
+    // Seed one local entry so merged !== normalised-remote → triggers PUT
+    window.localStorage.setItem('tool-history:translator', JSON.stringify([ENTRY_NEW]));
+
+    const fetchMock = jest
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ data: '{"a":1}' }) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ ok: true }) });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    await expect(pullAndMergeProgress()).resolves.toBeUndefined();
+
+    // localStorage must still contain the seeded entry (unharmed)
+    expect(window.localStorage.getItem('tool-history:translator')).not.toBeNull();
+
+    // A corrective PUT must have fired
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock.mock.calls[1][1].method).toBe('PUT');
+
+    // PUT body must be well-formed
+    const body = JSON.parse(fetchMock.mock.calls[1][1].body as string) as ProgressData;
+    expect(body).toHaveProperty('toolHistory');
+    expect(typeof body.timeSavedMinutes).toBe('number');
+    expect(Number.isFinite(body.timeSavedMinutes)).toBe(true);
+  });
+
+  it('does not write NaN to time-saved-minutes when remote timeSavedMinutes is a non-numeric string', async () => {
+    const fetchMock = jest
+      .fn()
+      .mockResolvedValue({
+        ok: true,
+        json: async () => ({ data: '{"toolHistory":{},"timeSavedMinutes":"wat"}' }),
+      });
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    await pullAndMergeProgress();
+
+    const stored = window.localStorage.getItem('time-saved-minutes');
+    // Must not be 'NaN' — either absent or a valid finite number string
+    expect(stored).not.toBe('NaN');
+    if (stored !== null) {
+      expect(Number.isFinite(Number(stored))).toBe(true);
+    }
+  });
+});
+
 describe('boundProgressPayload (Fix 2)', () => {
   it('truncates outputs longer than 2000 chars in the pushed body', async () => {
     jest.useFakeTimers();

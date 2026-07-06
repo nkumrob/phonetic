@@ -163,9 +163,18 @@ export async function pullAndMergeProgress(): Promise<void> {
   try {
     const response = await fetch('/api/progress');
     const { data } = (await response.json()) as { data: string | null };
-    const remote: ProgressData = data
-      ? (JSON.parse(data) as ProgressData)
-      : { toolHistory: {}, timeSavedMinutes: 0 };
+    const parsed: unknown = data ? JSON.parse(data) : null;
+    const p = parsed as { toolHistory?: unknown; timeSavedMinutes?: unknown } | null;
+    const remote: ProgressData = {
+      toolHistory:
+        p &&
+        typeof p.toolHistory === 'object' &&
+        p.toolHistory !== null &&
+        !Array.isArray(p.toolHistory)
+          ? (p.toolHistory as ProgressData['toolHistory'])
+          : {},
+      timeSavedMinutes: Number(p?.timeSavedMinutes) > 0 ? Number(p?.timeSavedMinutes) : 0,
+    };
     const local = collectLocalProgress();
     const merged = mergeProgress(local, remote);
     applyProgress(merged);
