@@ -16,9 +16,10 @@ const customJestConfig = {
     '^@/tests/(.*)$': '<rootDir>/__tests__/$1',
   },
   testPathIgnorePatterns: [
-    '<rootDir>/node_modules/', 
+    '<rootDir>/node_modules/',
     '<rootDir>/.next/',
-    '<rootDir>/e2e/'  // Exclude Playwright tests
+    '<rootDir>/e2e/',        // Exclude Playwright tests
+    '<rootDir>/.claude/',    // Exclude agent worktrees
   ],
   collectCoverageFrom: [
     'components/**/*.{js,jsx,ts,tsx}',
