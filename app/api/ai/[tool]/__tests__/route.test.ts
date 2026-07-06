@@ -47,6 +47,8 @@ describe('POST /api/ai/[tool]', () => {
         latencyMs: 950,
         sessionHash: expect.any(String),
         anonId: null,
+        country: null,
+        city: null,
       })
     );
     expect(response.headers.get('Cache-Control')).toContain('no-store');

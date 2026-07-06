@@ -5,6 +5,7 @@ import { recordToolUsage, type ToolUsageEntry } from '@/lib/ai/metrics';
 import { anonymousSessionHash } from '@/lib/ai/session-hash';
 import { AiServiceError } from '@/lib/ai/types';
 import { parseAnonId } from '@/lib/utils/anon-id';
+import { readGeo } from '@/lib/utils/geo';
 import { cacheConfigs, getCacheHeaders } from '@/lib/utils/cache-headers';
 import { logger } from '@/lib/utils/logger';
 
@@ -47,6 +48,7 @@ export function createAiToolHandler(deps?: HandlerDeps) {
         latencyMs: result.latencyMs,
         sessionHash: anonymousSessionHash(request),
         anonId: parseAnonId(request.cookies.get('np_anon')?.value),
+        ...readGeo(request),
       });
 
       return NextResponse.json(

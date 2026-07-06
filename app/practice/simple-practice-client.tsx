@@ -20,12 +20,17 @@ export default function SimplePracticeClient() {
   const handleBack = () => {
     setCurrentMode('hub');
   };
-  
-  const handleQuizComplete = () => {
-    // Add a small delay for better UX
-    setTimeout(() => {
+
+  const completeSession = (mode: 'learn' | 'practice' | 'challenge') => {
+    track('practice_complete', mode);
+    if (mode === 'learn') {
       setCurrentMode('hub');
-    }, 100);
+    } else {
+      // Add a small delay for better UX
+      setTimeout(() => {
+        setCurrentMode('hub');
+      }, 100);
+    }
   };
   
   return (
@@ -50,15 +55,15 @@ export default function SimplePracticeClient() {
         )}
         
         {currentMode === 'learn' && (
-          <LazySimpleFlashcards onComplete={handleBack} />
+          <LazySimpleFlashcards onComplete={() => completeSession('learn')} />
         )}
-        
+
         {currentMode === 'practice' && (
-          <LazySimpleQuiz mode="practice" onComplete={handleQuizComplete} />
+          <LazySimpleQuiz mode="practice" onComplete={() => completeSession('practice')} />
         )}
-        
+
         {currentMode === 'challenge' && (
-          <LazySimpleQuiz mode="challenge" onComplete={handleQuizComplete} />
+          <LazySimpleQuiz mode="challenge" onComplete={() => completeSession('challenge')} />
         )}
       </ErrorBoundary>
     </div>

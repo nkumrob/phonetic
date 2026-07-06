@@ -20,6 +20,8 @@ export interface ToolUsageEntry {
   latencyMs: number;
   sessionHash: string;
   anonId: string | null;
+  country: string | null;
+  city: string | null;
 }
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -37,8 +39,8 @@ export function recordToolUsage(entry: ToolUsageEntry, deps?: { db?: DbLike }): 
     const db = await resolveDb(deps);
     await db.execute({
       sql: `insert into tool_usage
-              (id, tool_name, model, input_tokens, output_tokens, latency_ms, session_hash, anon_id)
-            values (?, ?, ?, ?, ?, ?, ?, ?)`,
+              (id, tool_name, model, input_tokens, output_tokens, latency_ms, session_hash, anon_id, country, city)
+            values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       args: [
         entry.id,
         entry.toolName,
@@ -48,6 +50,8 @@ export function recordToolUsage(entry: ToolUsageEntry, deps?: { db?: DbLike }): 
         entry.latencyMs,
         entry.sessionHash,
         entry.anonId,
+        entry.country,
+        entry.city,
       ],
     });
   })().catch((error) => {

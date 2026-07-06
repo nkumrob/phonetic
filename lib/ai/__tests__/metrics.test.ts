@@ -12,6 +12,8 @@ const ENTRY: ToolUsageEntry = {
   latencyMs: 950,
   sessionHash: 'abc123',
   anonId: null,
+  country: null,
+  city: null,
 };
 
 function fakeDb(execute = jest.fn().mockResolvedValue({ rowsAffected: 1 })) {
@@ -40,7 +42,9 @@ describe('recordToolUsage', () => {
       80,
       950,
       'abc123',
-      null,
+      null, // anonId
+      null, // country
+      null, // city
     ]);
   });
 
@@ -51,7 +55,7 @@ describe('recordToolUsage', () => {
     await flushAsync(); // an unhandled rejection here would fail the test
   });
 
-  it('includes anon_id in the insert', async () => {
+  it('includes anon_id, country, and city in the insert', async () => {
     const execute = jest.fn().mockResolvedValue({});
     recordToolUsage(
       {
@@ -63,6 +67,8 @@ describe('recordToolUsage', () => {
         latencyMs: 3,
         sessionHash: 'sh',
         anonId: 'anon-9',
+        country: 'GB',
+        city: 'London',
       },
       { db: { execute } }
     );
@@ -70,7 +76,11 @@ describe('recordToolUsage', () => {
 
     const stmt = execute.mock.calls[0][0];
     expect(stmt.sql).toMatch(/anon_id/i);
+    expect(stmt.sql).toMatch(/country/i);
+    expect(stmt.sql).toMatch(/city/i);
     expect(stmt.args).toContain('anon-9');
+    expect(stmt.args).toContain('GB');
+    expect(stmt.args).toContain('London');
   });
 });
 

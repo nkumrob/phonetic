@@ -15,6 +15,8 @@ export interface NewEvent {
   tool: string | null;
   anonId: string | null;
   metadata: string | null;
+  country: string | null;
+  city: string | null;
 }
 
 async function resolveDb(deps?: { db?: DbLike }): Promise<DbLike> {
@@ -26,7 +28,7 @@ async function resolveDb(deps?: { db?: DbLike }): Promise<DbLike> {
 export async function insertEvent(event: NewEvent, deps?: { db?: DbLike }): Promise<void> {
   const db = await resolveDb(deps);
   await db.execute({
-    sql: 'insert into events (id, name, tool, anon_id, metadata) values (?, ?, ?, ?, ?)',
-    args: [event.id, event.name, event.tool, event.anonId, event.metadata],
+    sql: 'insert into events (id, name, tool, anon_id, metadata, country, city) values (?, ?, ?, ?, ?, ?, ?)',
+    args: [event.id, event.name, event.tool, event.anonId, event.metadata, event.country, event.city],
   });
 }

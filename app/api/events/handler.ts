@@ -7,6 +7,7 @@ import {
 } from '@/lib/constants/events';
 import { insertEvent, type NewEvent } from '@/lib/db/events-repo';
 import { parseAnonId } from '@/lib/utils/anon-id';
+import { readGeo } from '@/lib/utils/geo';
 import { RateLimiter } from '@/lib/utils/rate-limit';
 import { logger } from '@/lib/utils/logger';
 
@@ -71,6 +72,7 @@ export function createEventsHandler(deps?: HandlerDeps) {
 
     try {
       const anonId = parseAnonId(request.cookies.get('np_anon')?.value);
+      const { country, city } = readGeo(request);
 
       await insert({
         id: randomUUID(),
@@ -78,6 +80,8 @@ export function createEventsHandler(deps?: HandlerDeps) {
         tool: typeof tool === 'string' ? tool : null,
         anonId,
         metadata: metadataJson,
+        country,
+        city,
       });
     } catch (error) {
       logger.error('Failed to record event', error, { context: 'api/events' });

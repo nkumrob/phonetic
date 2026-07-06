@@ -4,11 +4,19 @@
 import { NextRequest } from 'next/server';
 import { createEventsHandler } from '../handler';
 
-function makeRequest(body: unknown, cookie?: string) {
+function makeRequest(
+  body: unknown,
+  cookie?: string,
+  geoHeaders?: { country?: string; city?: string }
+) {
+  const headers: Record<string, string> = {};
+  if (cookie) headers.cookie = `np_anon=${cookie}`;
+  if (geoHeaders?.country) headers['x-vercel-ip-country'] = geoHeaders.country;
+  if (geoHeaders?.city) headers['x-vercel-ip-city'] = geoHeaders.city;
   return new NextRequest('http://localhost/api/events', {
     method: 'POST',
     body: typeof body === 'string' ? body : JSON.stringify(body),
-    headers: cookie ? { cookie: `np_anon=${cookie}` } : {},
+    headers,
   });
 }
 
@@ -89,6 +97,32 @@ describe('POST /api/events', () => {
     const insert = jest.fn().mockRejectedValue(new Error('db down'));
     const handler = createEventsHandler({ insert, limiter: allow });
     expect((await handler(makeRequest({ name: 'page_view' }))).status).toBe(500);
+  });
+
+  it('passes geo values to insert when Vercel headers are present', async () => {
+    const insert = jest.fn().mockResolvedValue(undefined);
+    const handler = createEventsHandler({ insert, limiter: allow });
+
+    const res = await handler(
+      makeRequest({ name: 'page_view' }, undefined, { country: 'US', city: 'Austin' })
+    );
+
+    expect(res.status).toBe(202);
+    const event = insert.mock.calls[0][0];
+    expect(event.country).toBe('US');
+    expect(event.city).toBe('Austin');
+  });
+
+  it('passes null geo values when Vercel headers are absent', async () => {
+    const insert = jest.fn().mockResolvedValue(undefined);
+    const handler = createEventsHandler({ insert, limiter: allow });
+
+    const res = await handler(makeRequest({ name: 'page_view' }));
+
+    expect(res.status).toBe(202);
+    const event = insert.mock.calls[0][0];
+    expect(event.country).toBeNull();
+    expect(event.city).toBeNull();
   });
 
   it('rejects metadata that is an array with 400 and does not insert', async () => {
