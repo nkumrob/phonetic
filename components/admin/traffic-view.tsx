@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useState } from 'react';
 import type { TrafficStats } from '@/lib/db/analytics-repo';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';

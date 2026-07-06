@@ -42,6 +42,7 @@ export default function ActivityChartInner({ data }: { data: DailyPoint[] }) {
         <Area
           type="monotone"
           dataKey="ai"
+          name="AI"
           stackId="1"
           stroke="#2563EB"
           fill="#2563EB"
@@ -50,6 +51,7 @@ export default function ActivityChartInner({ data }: { data: DailyPoint[] }) {
         <Area
           type="monotone"
           dataKey="other"
+          name="Other"
           stackId="1"
           stroke="#93C5FD"
           fill="#93C5FD"

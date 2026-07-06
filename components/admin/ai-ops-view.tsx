@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useState } from 'react';
 import type { AiOpsStats } from '@/lib/db/analytics-repo';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
@@ -51,19 +49,19 @@ export function AiOpsView() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-warmNeutral-200 text-left dark:border-warmNeutral-700">
-                        <th className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
+                        <th scope="col" className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
                           Model
                         </th>
-                        <th className="pb-2 pr-4 text-right text-xs font-bold uppercase tracking-widest text-tertiary">
+                        <th scope="col" className="pb-2 pr-4 text-right text-xs font-bold uppercase tracking-widest text-tertiary">
                           Convs
                         </th>
-                        <th className="pb-2 pr-4 text-right text-xs font-bold uppercase tracking-widest text-tertiary">
+                        <th scope="col" className="pb-2 pr-4 text-right text-xs font-bold uppercase tracking-widest text-tertiary">
                           Input tok
                         </th>
-                        <th className="pb-2 pr-4 text-right text-xs font-bold uppercase tracking-widest text-tertiary">
+                        <th scope="col" className="pb-2 pr-4 text-right text-xs font-bold uppercase tracking-widest text-tertiary">
                           Output tok
                         </th>
-                        <th className="pb-2 text-right text-xs font-bold uppercase tracking-widest text-tertiary">
+                        <th scope="col" className="pb-2 text-right text-xs font-bold uppercase tracking-widest text-tertiary">
                           Est. cost
                         </th>
                       </tr>

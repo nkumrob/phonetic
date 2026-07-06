@@ -59,7 +59,7 @@ export function FunnelList({ data }: { data: FunnelRow[] }) {
                 <span className="w-16 shrink-0">Done</span>
                 <div className="flex-1 rounded-full bg-warmNeutral-100 dark:bg-warmNeutral-700" style={{ height: '6px' }}>
                   <div
-                    className="h-full rounded-full bg-green-500"
+                    className="h-full rounded-full bg-success"
                     style={{ width: `${(completed / maxStarted) * 100}%` }}
                   />
                 </div>

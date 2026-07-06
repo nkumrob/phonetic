@@ -22,7 +22,8 @@ function clampLimit(limit: number | undefined): number {
 }
 
 export interface ActivityItem {
-  /** ISO datetime string (created_at value from the DB). */
+  /** True ISO-8601 UTC string (YYYY-MM-DDTHH:MM:SSZ). SQLite stores created_at
+   *  without a T or Z; the data layer normalises to UTC before handing off. */
   at: string;
   kind: 'ai' | 'event';
   name: string;
@@ -69,12 +70,18 @@ export async function getRecentActivity(
     args: [safeLimit],
   });
 
-  return (result.rows as Array<Record<string, unknown>>).map((r) => ({
-    at: String(r.at),
-    kind: r.kind === 'ai' ? 'ai' : ('event' as 'ai' | 'event'),
-    name: String(r.name ?? ''),
-    tool: r.tool != null ? String(r.tool) : null,
-    anonShort: r.anon_id != null ? String(r.anon_id).slice(0, 8) : null,
-    country: r.country != null ? String(r.country) : null,
-  }));
+  return (result.rows as Array<Record<string, unknown>>).map((r) => {
+    const raw = String(r.at);
+    // SQLite stores created_at as 'YYYY-MM-DD HH:MM:SS' (UTC, no T/Z separator).
+    // Normalise to true ISO-8601 so consumers parse it as UTC, not local time.
+    const at = raw.includes('T') ? raw : raw.replace(' ', 'T') + 'Z';
+    return {
+      at,
+      kind: r.kind === 'ai' ? 'ai' : ('event' as 'ai' | 'event'),
+      name: String(r.name ?? ''),
+      tool: r.tool != null ? String(r.tool) : null,
+      anonShort: r.anon_id != null ? String(r.anon_id).slice(0, 8) : null,
+      country: r.country != null ? String(r.country) : null,
+    };
+  });
 }

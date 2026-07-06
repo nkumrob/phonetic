@@ -26,19 +26,19 @@ export function ActivityFeed({ items }: { items: ActivityItem[] }) {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-warmNeutral-200 text-left dark:border-warmNeutral-700">
-            <th className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
+            <th scope="col" className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
               Time
             </th>
-            <th className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
+            <th scope="col" className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
               Kind
             </th>
-            <th className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
+            <th scope="col" className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
               Tool
             </th>
-            <th className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
+            <th scope="col" className="pb-2 pr-4 text-xs font-bold uppercase tracking-widest text-tertiary">
               Visitor
             </th>
-            <th className="pb-2 text-xs font-bold uppercase tracking-widest text-tertiary">
+            <th scope="col" className="pb-2 text-xs font-bold uppercase tracking-widest text-tertiary">
               Country
             </th>
           </tr>

@@ -36,14 +36,54 @@ describe('getRecentActivity — ordering', () => {
     const items = await getRecentActivity(10, { db });
 
     expect(items).toHaveLength(4);
-    expect(items[0].at).toBe('2026-07-04 09:00:00');
+    expect(items[0].at).toBe('2026-07-04T09:00:00Z');
     expect(items[0].kind).toBe('event');
-    expect(items[1].at).toBe('2026-07-03 12:00:00');
+    expect(items[1].at).toBe('2026-07-03T12:00:00Z');
     expect(items[1].kind).toBe('ai');
-    expect(items[2].at).toBe('2026-07-02 08:00:00');
+    expect(items[2].at).toBe('2026-07-02T08:00:00Z');
     expect(items[2].kind).toBe('event');
-    expect(items[3].at).toBe('2026-07-01 10:00:00');
+    expect(items[3].at).toBe('2026-07-01T10:00:00Z');
     expect(items[3].kind).toBe('ai');
+  });
+});
+
+describe('getRecentActivity — at ISO-Z normalisation', () => {
+  const isoZPattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+
+  it('returns at values in true ISO-8601 UTC format for datetime("now") seeds', async () => {
+    await client.execute({
+      sql: `insert into tool_usage (id, tool_name, model, created_at) values
+        ('u1','summarizer','m',datetime('now')),
+        ('u2','email-drafter','m',datetime('now','-1 minute'))`,
+      args: [],
+    });
+    await client.execute({
+      sql: `insert into events (id, name, created_at) values
+        ('e1','page_view',datetime('now','-2 minutes')),
+        ('e2','converter_use',datetime('now','-3 minutes'))`,
+      args: [],
+    });
+
+    const items = await getRecentActivity(10, { db });
+
+    expect(items).toHaveLength(4);
+    for (const item of items) {
+      expect(item.at).toMatch(isoZPattern);
+    }
+  });
+
+  it('normalises hardcoded SQLite-style timestamps (no T, no Z) to ISO-Z', async () => {
+    await client.execute({
+      sql: `insert into events (id, name, created_at) values
+        ('e1','page_view','2026-06-15 14:30:00'),
+        ('e2','page_view','2026-01-01 00:00:00')`,
+      args: [],
+    });
+
+    const items = await getRecentActivity(10, { db });
+
+    expect(items[0].at).toBe('2026-06-15T14:30:00Z');
+    expect(items[1].at).toBe('2026-01-01T00:00:00Z');
   });
 });
 
