@@ -11,6 +11,7 @@ const ENTRY: ToolUsageEntry = {
   outputTokens: 80,
   latencyMs: 950,
   sessionHash: 'abc123',
+  anonId: null,
 };
 
 function fakeDb(execute = jest.fn().mockResolvedValue({ rowsAffected: 1 })) {
@@ -39,6 +40,7 @@ describe('recordToolUsage', () => {
       80,
       950,
       'abc123',
+      null,
     ]);
   });
 
@@ -47,6 +49,28 @@ describe('recordToolUsage', () => {
 
     expect(() => recordToolUsage(ENTRY, { db })).not.toThrow();
     await flushAsync(); // an unhandled rejection here would fail the test
+  });
+
+  it('includes anon_id in the insert', async () => {
+    const execute = jest.fn().mockResolvedValue({});
+    recordToolUsage(
+      {
+        id: 'u-1',
+        toolName: 'summarizer',
+        model: 'm',
+        inputTokens: 1,
+        outputTokens: 2,
+        latencyMs: 3,
+        sessionHash: 'sh',
+        anonId: 'anon-9',
+      },
+      { db: { execute } }
+    );
+    await new Promise((resolve) => setTimeout(resolve, 0)); // fire-and-forget settles
+
+    const stmt = execute.mock.calls[0][0];
+    expect(stmt.sql).toMatch(/anon_id/i);
+    expect(stmt.args).toContain('anon-9');
   });
 });
 

@@ -45,6 +45,7 @@ export function createAiToolHandler(deps?: HandlerDeps) {
         outputTokens: result.outputTokens,
         latencyMs: result.latencyMs,
         sessionHash: anonymousSessionHash(request),
+        anonId: request.cookies.get('np_anon')?.value ?? null,
       });
 
       return NextResponse.json(

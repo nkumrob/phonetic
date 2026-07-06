@@ -10,6 +10,7 @@ function fakeRequest(pathname: string, body: unknown): NextRequest {
     nextUrl: { pathname },
     json: async () => body,
     headers: new Headers({ 'x-forwarded-for': '203.0.113.7', 'user-agent': 'jest' }),
+    cookies: { get: (_: string) => undefined },
   } as unknown as NextRequest;
 }
 
@@ -45,6 +46,7 @@ describe('POST /api/ai/[tool]', () => {
         outputTokens: 80,
         latencyMs: 950,
         sessionHash: expect.any(String),
+        anonId: null,
       })
     );
     expect(response.headers.get('Cache-Control')).toContain('no-store');
