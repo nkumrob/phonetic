@@ -1,49 +1,27 @@
 /**
  * Individual Review API Route — Turso-backed.
- * Handles updating and deleting specific reviews (admin operations).
+ * Thin Next.js wrapper; all logic (including auth) lives in handler.ts.
+ * Auth is enforced by middleware AND by an in-handler check (defense-in-depth).
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { deleteReview, updateReview } from '@/lib/db/reviews-repo';
-import { logger } from '@/lib/utils/logger';
+import { NextRequest } from 'next/server';
+import { createPatchHandler, createDeleteHandler } from './handler';
+
+const patchHandler = createPatchHandler();
+const deleteHandler = createDeleteHandler();
 
 // PATCH /api/reviews/[id] - Update a review (approve, verify, etc.)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const body = await request.json();
-    const { id } = await params;
-
-    const review = await updateReview(id, body);
-    if (!review) {
-      return NextResponse.json({ error: 'Review not found' }, { status: 404 });
-    }
-
-    return NextResponse.json({ review });
-  } catch (error) {
-    logger.error('Error in PATCH /api/reviews/[id]', error, { context: 'api/reviews' });
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+  return patchHandler(request, context);
 }
 
 // DELETE /api/reviews/[id] - Delete a review
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
-  try {
-    const { id } = await params;
-
-    const deleted = await deleteReview(id);
-    if (!deleted) {
-      return NextResponse.json({ error: 'Review not found' }, { status: 404 });
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    logger.error('Error in DELETE /api/reviews/[id]', error, { context: 'api/reviews' });
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+  return deleteHandler(request, context);
 }
