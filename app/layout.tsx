@@ -13,6 +13,7 @@ import { WebVitalsReporter } from '@/components/analytics/web-vitals';
 import { inter, jetbrainsMono } from './fonts';
 import { RouteSpeechHandler } from '@/components/speech/route-speech-handler';
 import { PageViewTracker } from '@/components/analytics/page-view-tracker';
+import { ProgressSyncProvider } from '@/components/analytics/progress-sync-provider';
 
 export const metadata: Metadata = generateMetadata();
 
@@ -68,6 +69,7 @@ export default function RootLayout({
         />
         <AnalyticsProvider>
           <PageViewTracker />
+          <ProgressSyncProvider />
           <SimpleAppProvider>
             <RouteSpeechHandler />
             <div className="min-h-screen bg-background flex flex-col">

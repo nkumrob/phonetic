@@ -1,4 +1,5 @@
 import type { TimeSavedBucket } from '@/lib/ai/types';
+import { notifyProgressChanged } from './progress-sync';
 
 const STORAGE_KEY = 'time-saved-minutes';
 
@@ -24,6 +25,7 @@ export function recordLocalTimeSaved(bucket: TimeSavedBucket): void {
   } catch {
     // Best-effort; losing the tally must never affect the user.
   }
+  notifyProgressChanged();
 }
 
 export function formatTimeSaved(minutes: number): string {

@@ -1,3 +1,5 @@
+import { notifyProgressChanged } from './progress-sync';
+
 export interface ToolHistoryEntry {
   inputPreview: string;
   output: string;
@@ -39,6 +41,7 @@ export function addHistoryEntry(
   } catch {
     // Storage full/blocked — history is best-effort.
   }
+  notifyProgressChanged();
   return next;
 }
 
