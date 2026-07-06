@@ -31,15 +31,17 @@ const db = createClient({ url, authToken: process.env.TURSO_AUTH_TOKEN || undefi
 const schema = readFileSync(resolve(process.cwd(), 'lib/db/schema.sql'), 'utf8');
 
 try {
-  await db.executeMultiple(schema);
-
-  // Guarded migrations: idempotent column adds that schema.sql cannot express.
+  // Guarded legacy migrations must run BEFORE the schema: schema.sql now
+  // references anon_id in an index, which aborts executeMultiple on a
+  // legacy tool_usage that predates the column.
+  // Fresh DB → pragma returns zero rows → skip ALTER; CREATE TABLE will include the column.
   const info = await db.execute("pragma table_info('tool_usage')");
-  const hasAnonId = info.rows.some((row) => row.name === 'anon_id');
-  if (!hasAnonId) {
+  if (info.rows.length > 0 && !info.rows.some((row) => row.name === 'anon_id')) {
     await db.execute('alter table tool_usage add column anon_id text');
     console.log('Added tool_usage.anon_id column.');
   }
+
+  await db.executeMultiple(schema);
 
   console.log(`Schema applied to ${url.startsWith('file:') ? url : 'Turso database'}.`);
 } catch (error) {
