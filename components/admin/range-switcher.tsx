@@ -16,6 +16,7 @@ export function RangeSwitcher({
     <div className="inline-flex gap-1 rounded-lg border border-warmNeutral-200 p-1 dark:border-warmNeutral-700">
       {RANGES.map((days) => (
         <button
+          type="button"
           key={days}
           aria-pressed={value === days}
           onClick={() => onChange(days)}

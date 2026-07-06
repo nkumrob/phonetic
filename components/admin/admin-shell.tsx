@@ -17,8 +17,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   if (pathname === '/admin/login') return <>{children}</>;
 
   async function logout() {
-    await fetch('/api/admin/session', { method: 'DELETE' });
-    window.location.href = '/admin/login';
+    try {
+      await fetch('/api/admin/session', { method: 'DELETE' });
+    } finally {
+      window.location.href = '/admin/login';
+    }
   }
 
   return (
@@ -46,6 +49,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             );
           })}
           <button
+            type="button"
             onClick={logout}
             className="mt-2 flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-gray-500 hover:bg-warmNeutral-100 md:mt-8 dark:text-warmNeutral-300 dark:hover:bg-warmNeutral-800"
           >
@@ -53,7 +57,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             Log out
           </button>
         </nav>
-        <main className="min-w-0 flex-1">{children}</main>
+        <div className="min-w-0 flex-1">{children}</div>
       </div>
     </div>
   );
