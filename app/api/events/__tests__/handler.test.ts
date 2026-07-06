@@ -18,13 +18,24 @@ describe('POST /api/events', () => {
   it('records a valid event with anon id from cookie and returns 202', async () => {
     const insert = jest.fn().mockResolvedValue(undefined);
     const handler = createEventsHandler({ insert, limiter: allow });
+    const validUuid = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 
-    const res = await handler(makeRequest({ name: 'converter_use', tool: 'phonetic-converter' }, 'anon-123'));
+    const res = await handler(makeRequest({ name: 'converter_use', tool: 'phonetic-converter' }, validUuid));
 
     expect(res.status).toBe(202);
     const event = insert.mock.calls[0][0];
-    expect(event).toMatchObject({ name: 'converter_use', tool: 'phonetic-converter', anonId: 'anon-123' });
+    expect(event).toMatchObject({ name: 'converter_use', tool: 'phonetic-converter', anonId: validUuid });
     expect(event.id).toMatch(/^[0-9a-f-]{36}$/);
+  });
+
+  it('stores null anonId when the np_anon cookie is not a valid UUID', async () => {
+    const insert = jest.fn().mockResolvedValue(undefined);
+    const handler = createEventsHandler({ insert, limiter: allow });
+
+    const res = await handler(makeRequest({ name: 'page_view' }, 'anon-123'));
+
+    expect(res.status).toBe(202);
+    expect(insert.mock.calls[0][0].anonId).toBeNull();
   });
 
   it('serializes metadata objects to JSON', async () => {
@@ -78,5 +89,25 @@ describe('POST /api/events', () => {
     const insert = jest.fn().mockRejectedValue(new Error('db down'));
     const handler = createEventsHandler({ insert, limiter: allow });
     expect((await handler(makeRequest({ name: 'page_view' }))).status).toBe(500);
+  });
+
+  it('rejects metadata that is an array with 400 and does not insert', async () => {
+    const insert = jest.fn();
+    const handler = createEventsHandler({ insert, limiter: allow });
+
+    const res = await handler(makeRequest({ name: 'page_view', metadata: ['x'] }));
+
+    expect(res.status).toBe(400);
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it('rejects metadata that is a string with 400 and does not insert', async () => {
+    const insert = jest.fn();
+    const handler = createEventsHandler({ insert, limiter: allow });
+
+    const res = await handler(makeRequest({ name: 'page_view', metadata: 'invalid-string' }));
+
+    expect(res.status).toBe(400);
+    expect(insert).not.toHaveBeenCalled();
   });
 });

@@ -17,22 +17,25 @@ const rateLimitStore = new Map<string, RateLimitEntry>();
 export class RateLimiter {
   private max: number;
   private windowMs: number;
-  
-  constructor(options?: { max?: number; windowMs?: number }) {
+  private keyPrefix: string;
+
+  constructor(options?: { max?: number; windowMs?: number; keyPrefix?: string }) {
     this.max = options?.max || config.apiRateLimitMax;
     this.windowMs = options?.windowMs || config.apiRateLimitWindowMs;
+    this.keyPrefix = options?.keyPrefix ?? '';
   }
   
   /**
    * Check if request should be rate limited
    */
   async check(request: NextRequest): Promise<{ allowed: boolean; remaining: number; reset: Date }> {
-    // Get identifier (IP address or user ID)
+    // Get identifier (IP address or user ID) scoped to this limiter's namespace
     const identifier = this.getIdentifier(request);
+    const storeKey = this.keyPrefix ? `${this.keyPrefix}:${identifier}` : identifier;
     const now = Date.now();
-    
+
     // Get or create rate limit entry
-    let entry = rateLimitStore.get(identifier);
+    let entry = rateLimitStore.get(storeKey);
     
     // Reset if window has passed
     if (!entry || entry.resetTime <= now) {
@@ -44,19 +47,19 @@ export class RateLimiter {
     
     // Increment count
     entry.count++;
-    rateLimitStore.set(identifier, entry);
-    
+    rateLimitStore.set(storeKey, entry);
+
     // Calculate remaining requests
     const remaining = Math.max(0, this.max - entry.count);
     const reset = new Date(entry.resetTime);
     const allowed = entry.count <= this.max;
-    
+
     // Log rate limit hit
     if (!allowed) {
       logger.warn('Rate limit exceeded', {
         context: 'rate-limit',
         metadata: {
-          identifier,
+          identifier: storeKey,
           count: entry.count,
           max: this.max,
         }

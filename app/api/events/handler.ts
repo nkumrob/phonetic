@@ -18,13 +18,21 @@ interface HandlerDeps {
   limiter?: LimiterLike;
 }
 
+// UUID v4 pattern — only accepted format for the np_anon anonymous-session cookie
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /**
  * Records one allowlisted analytics event. Clients fire-and-forget, so
  * error statuses here are for correctness, never user-visible.
+ *
+ * Rate-limit is in its own "events" namespace so high-volume event posts cannot
+ * consume the AI-route quota. Fire-and-forget clients ignore 429s;
+ * X-RateLimit headers are intentionally omitted here.
  */
 export function createEventsHandler(deps?: HandlerDeps) {
   const insert = deps?.insert ?? insertEvent;
-  const limiter: LimiterLike = deps?.limiter ?? new RateLimiter();
+  const limiter: LimiterLike =
+    deps?.limiter ?? new RateLimiter({ keyPrefix: 'events', max: 120, windowMs: 60_000 });
 
   return async (request: NextRequest): Promise<NextResponse> => {
     const { allowed } = await limiter.check(request);
@@ -64,11 +72,14 @@ export function createEventsHandler(deps?: HandlerDeps) {
     }
 
     try {
+      const rawAnonId = request.cookies.get('np_anon')?.value ?? null;
+      const anonId = rawAnonId !== null && UUID_RE.test(rawAnonId) ? rawAnonId : null;
+
       await insert({
         id: randomUUID(),
         name,
         tool: typeof tool === 'string' ? tool : null,
-        anonId: request.cookies.get('np_anon')?.value ?? null,
+        anonId,
         metadata: metadataJson,
       });
     } catch (error) {
