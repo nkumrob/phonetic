@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProgress, upsertProgress } from '@/lib/db/progress-repo';
 import { parseAnonId } from '@/lib/utils/anon-id';
+import { RateLimiter } from '@/lib/utils/rate-limit';
 import { logger } from '@/lib/utils/logger';
 
 export const PROGRESS_MAX_BYTES = 32 * 1024;
+
+interface LimiterLike {
+  check(request: NextRequest): Promise<{ allowed: boolean; remaining: number; reset: Date }>;
+}
 
 interface GetDeps {
   get?: (anonId: string) => Promise<string | null>;
@@ -11,6 +16,7 @@ interface GetDeps {
 
 interface PutDeps {
   upsert?: (anonId: string, data: string) => Promise<void>;
+  limiter?: LimiterLike;
 }
 
 export function createProgressGetHandler(deps?: GetDeps) {
@@ -31,8 +37,18 @@ export function createProgressGetHandler(deps?: GetDeps) {
 
 export function createProgressPutHandler(deps?: PutDeps) {
   const upsert = deps?.upsert ?? upsertProgress;
+  // Rate-limit is in its own "progress" namespace so high-volume debounced
+  // sync posts cannot consume other route quotas. Fire-and-forget clients
+  // ignore 429s; X-RateLimit headers are intentionally omitted here.
+  const limiter: LimiterLike =
+    deps?.limiter ?? new RateLimiter({ keyPrefix: 'progress', max: 30, windowMs: 60_000 });
 
   return async (request: NextRequest): Promise<NextResponse> => {
+    const { allowed } = await limiter.check(request);
+    if (!allowed) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+
     const anonId = parseAnonId(request.cookies.get('np_anon')?.value);
     if (!anonId) return NextResponse.json({ error: 'Missing visitor id' }, { status: 400 });
 

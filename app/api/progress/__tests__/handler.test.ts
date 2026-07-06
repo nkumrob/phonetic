@@ -14,6 +14,8 @@ function makeRequest(method: 'GET' | 'PUT', body?: string, cookie?: string) {
   });
 }
 
+const allow = { check: jest.fn().mockResolvedValue({ allowed: true, remaining: 29, reset: new Date() }) };
+
 describe('GET /api/progress', () => {
   it('returns stored data for the cookie holder', async () => {
     const get = jest.fn().mockResolvedValue('{"timeSavedMinutes":10}');
@@ -58,7 +60,7 @@ describe('GET /api/progress', () => {
 describe('PUT /api/progress', () => {
   it('upserts valid JSON for the cookie holder', async () => {
     const upsert = jest.fn().mockResolvedValue(undefined);
-    const handler = createProgressPutHandler({ upsert });
+    const handler = createProgressPutHandler({ upsert, limiter: allow });
 
     const res = await handler(makeRequest('PUT', '{"timeSavedMinutes":13,"toolHistory":{}}', ANON));
 
@@ -67,26 +69,32 @@ describe('PUT /api/progress', () => {
   });
 
   it('rejects requests without a valid cookie', async () => {
-    const handler = createProgressPutHandler({ upsert: jest.fn() });
+    const handler = createProgressPutHandler({ upsert: jest.fn(), limiter: allow });
     expect((await handler(makeRequest('PUT', '{}'))).status).toBe(400);
     expect((await handler(makeRequest('PUT', '{}', 'anon-123'))).status).toBe(400);
   });
 
   it('rejects non-object payloads', async () => {
-    const handler = createProgressPutHandler({ upsert: jest.fn() });
+    const handler = createProgressPutHandler({ upsert: jest.fn(), limiter: allow });
     expect((await handler(makeRequest('PUT', '"just a string"', ANON))).status).toBe(400);
     expect((await handler(makeRequest('PUT', '{broken', ANON))).status).toBe(400);
   });
 
   it('rejects payloads over 32 KB', async () => {
-    const handler = createProgressPutHandler({ upsert: jest.fn() });
+    const handler = createProgressPutHandler({ upsert: jest.fn(), limiter: allow });
     const big = JSON.stringify({ pad: 'x'.repeat(33 * 1024) });
     expect((await handler(makeRequest('PUT', big, ANON))).status).toBe(400);
   });
 
   it('returns 500 when the upsert fails', async () => {
     const upsert = jest.fn().mockRejectedValue(new Error('db down'));
-    const handler = createProgressPutHandler({ upsert });
+    const handler = createProgressPutHandler({ upsert, limiter: allow });
     expect((await handler(makeRequest('PUT', '{}', ANON))).status).toBe(500);
+  });
+
+  it('returns 429 when rate limited', async () => {
+    const deny = { check: jest.fn().mockResolvedValue({ allowed: false, remaining: 0, reset: new Date() }) };
+    const handler = createProgressPutHandler({ upsert: jest.fn(), limiter: deny });
+    expect((await handler(makeRequest('PUT', '{}'))).status).toBe(429);
   });
 });
