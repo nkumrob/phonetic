@@ -11,8 +11,12 @@ function isGuardedPage(pathname: string): boolean {
 }
 
 function isGuardedApi(pathname: string, method: string): boolean {
-  // /api/admin/* except /api/admin/session (and sub-paths of /api/admin/session)
-  if (pathname.startsWith('/api/admin/') && !pathname.startsWith('/api/admin/session')) {
+  // /api/admin/* except exactly /api/admin/session or sub-paths thereof
+  if (
+    pathname.startsWith('/api/admin/') &&
+    pathname !== '/api/admin/session' &&
+    !pathname.startsWith('/api/admin/session/')
+  ) {
     return true;
   }
   // /api/reviews/* PATCH or DELETE only

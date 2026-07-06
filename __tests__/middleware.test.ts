@@ -79,6 +79,11 @@ describe('admin guard', () => {
     expect((await middleware(new NextRequest('http://localhost/api/admin/session', { method: 'POST' }))).status).toBe(200);
   });
 
+  it('401s /api/admin/session-hijack without a session (prefix-sharing route is NOT exempt)', async () => {
+    const res = await middleware(new NextRequest('http://localhost/api/admin/session-hijack'));
+    expect(res.status).toBe(401);
+  });
+
   it('401s review mutations but not review reads', async () => {
     expect((await middleware(new NextRequest('http://localhost/api/reviews/abc', { method: 'PATCH' }))).status).toBe(401);
     expect((await middleware(new NextRequest('http://localhost/api/reviews/abc', { method: 'DELETE' }))).status).toBe(401);

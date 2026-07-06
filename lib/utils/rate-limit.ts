@@ -18,11 +18,13 @@ export class RateLimiter {
   private max: number;
   private windowMs: number;
   private keyPrefix: string;
+  private trustProxyIp: boolean;
 
-  constructor(options?: { max?: number; windowMs?: number; keyPrefix?: string }) {
+  constructor(options?: { max?: number; windowMs?: number; keyPrefix?: string; trustProxyIp?: boolean }) {
     this.max = options?.max || config.apiRateLimitMax;
     this.windowMs = options?.windowMs || config.apiRateLimitWindowMs;
     this.keyPrefix = options?.keyPrefix ?? '';
+    this.trustProxyIp = options?.trustProxyIp ?? false;
   }
   
   /**
@@ -73,22 +75,48 @@ export class RateLimiter {
   }
   
   /**
-   * Get identifier for rate limiting (IP-based)
+   * Get identifier for rate limiting (IP-based).
+   *
+   * When `trustProxyIp` is true the identifier is resolved in a
+   * spoofing-resistant way:
+   *   1. `x-real-ip` — injected by the platform (Vercel) and not
+   *      forwarded from client headers, so it cannot be spoofed.
+   *   2. Rightmost `x-forwarded-for` entry — added by the nearest
+   *      trusted proxy hop, not the client, so rotating the leftmost
+   *      (client-supplied) entries has no effect on the bucket key.
+   *
+   * When `trustProxyIp` is false (the default) the legacy behaviour is
+   * preserved: leftmost `x-forwarded-for` entry, then `x-real-ip`.
    */
   private getIdentifier(request: NextRequest): string {
-    // Try to get real IP from headers (for proxied requests)
+    if (this.trustProxyIp) {
+      // Platform-injected header (Vercel sets this; client cannot override it)
+      const realIp = request.headers.get('x-real-ip');
+      if (realIp) return realIp.trim();
+
+      // Rightmost x-forwarded-for entry = nearest proxy hop (not client-controlled)
+      const forwardedFor = request.headers.get('x-forwarded-for');
+      if (forwardedFor) {
+        const parts = forwardedFor.split(',');
+        return parts[parts.length - 1].trim();
+      }
+
+      return 'unknown';
+    }
+
+    // Default (legacy) behaviour — existing callers are unchanged
     const forwardedFor = request.headers.get('x-forwarded-for');
     const realIp = request.headers.get('x-real-ip');
-    
+
     if (forwardedFor) {
-      // x-forwarded-for can contain multiple IPs, take the first one
+      // x-forwarded-for can contain multiple IPs; take the first (leftmost) one
       return forwardedFor.split(',')[0].trim();
     }
-    
+
     if (realIp) {
       return realIp;
     }
-    
+
     // Fallback to unknown (Next.js Request doesn't have ip property)
     return 'unknown';
   }

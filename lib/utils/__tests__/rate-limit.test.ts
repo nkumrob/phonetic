@@ -45,6 +45,47 @@ describe('RateLimiter', () => {
     });
   });
 
+  describe('trustProxyIp mode', () => {
+    it('shares one bucket when leftmost xff differs but rightmost hop is the same', async () => {
+      const suffix = Math.random().toString(36).slice(2);
+      const limiter = new RateLimiter({ keyPrefix: `trusted-${suffix}`, max: 1, windowMs: 60_000, trustProxyIp: true });
+
+      // Attacker rotates the client-supplied (leftmost) entry; rightmost (proxy) stays the same
+      const req1 = new NextRequest('http://localhost/test', {
+        headers: { 'x-forwarded-for': '1.2.3.4, 10.0.0.1' },
+      });
+      const req2 = new NextRequest('http://localhost/test', {
+        headers: { 'x-forwarded-for': '9.9.9.9, 10.0.0.1' },
+      });
+
+      const first = await limiter.check(req1);
+      expect(first.allowed).toBe(true);
+
+      // Same rightmost hop → same bucket → now at limit → blocked
+      const second = await limiter.check(req2);
+      expect(second.allowed).toBe(false);
+    });
+
+    it('without trustProxyIp, different leftmost xff entries are treated as different identifiers', async () => {
+      const suffix = Math.random().toString(36).slice(2);
+      const limiter = new RateLimiter({ keyPrefix: `untrusted-${suffix}`, max: 1, windowMs: 60_000 });
+
+      const req1 = new NextRequest('http://localhost/test', {
+        headers: { 'x-forwarded-for': '1.2.3.4, 10.0.0.1' },
+      });
+      const req2 = new NextRequest('http://localhost/test', {
+        headers: { 'x-forwarded-for': '9.9.9.9, 10.0.0.1' },
+      });
+
+      const first = await limiter.check(req1);
+      expect(first.allowed).toBe(true);
+
+      // Different leftmost → different bucket → still allowed (existing legacy behaviour)
+      const second = await limiter.check(req2);
+      expect(second.allowed).toBe(true);
+    });
+  });
+
   describe('no-prefix backward compatibility', () => {
     it('allows requests up to max when no keyPrefix is provided', async () => {
       const suffix = Math.random().toString(36).slice(2);

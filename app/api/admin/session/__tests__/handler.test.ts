@@ -56,11 +56,17 @@ describe('POST /api/admin/session (login)', () => {
 });
 
 describe('DELETE /api/admin/session (logout)', () => {
-  it('clears the cookie', async () => {
+  it('clears the cookie and mirrors the set attributes', async () => {
     const handler = createLogoutHandler();
     const res = await handler();
 
     expect(res.status).toBe(200);
-    expect(res.cookies.get('np_admin')?.value).toBe('');
+    const cookie = res.cookies.get('np_admin');
+    expect(cookie?.value).toBe('');
+    expect(cookie?.maxAge).toBe(0);
+    expect(cookie?.httpOnly).toBe(true);
+    expect(cookie?.sameSite).toBe('lax');
+    // secure mirrors NODE_ENV === 'production'; in jest it is 'test' → false
+    expect(cookie?.secure).toBe(process.env.NODE_ENV === 'production');
   });
 });

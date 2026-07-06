@@ -38,7 +38,7 @@ function passwordsMatch(supplied: string, expected: string): boolean {
 
 export function createLoginHandler(deps?: LoginDeps) {
   const limiter: LimiterLike =
-    deps?.limiter ?? new RateLimiter({ keyPrefix: 'admin-login', max: 5, windowMs: 15 * 60_000 });
+    deps?.limiter ?? new RateLimiter({ keyPrefix: 'admin-login', max: 5, windowMs: 15 * 60_000, trustProxyIp: true });
 
   return async (request: NextRequest): Promise<NextResponse> => {
     const { allowed } = await limiter.check(request);
@@ -48,7 +48,7 @@ export function createLoginHandler(deps?: LoginDeps) {
 
     const env = deps?.env ?? envFromProcess();
     if (!env.password || !env.secret) {
-      logger.error('Admin login attempted but ADMIN_PASSWORD/ADMIN_SESSION_SECRET not set', undefined, {
+      logger.warn('Admin login attempted but ADMIN_PASSWORD/ADMIN_SESSION_SECRET not set', {
         context: 'api/admin/session',
       });
       return NextResponse.json({ error: 'Admin access is not configured' }, { status: 503 });
@@ -84,7 +84,13 @@ export function createLoginHandler(deps?: LoginDeps) {
 export function createLogoutHandler() {
   return async (): Promise<NextResponse> => {
     const response = NextResponse.json({ ok: true });
-    response.cookies.set(ADMIN_COOKIE, '', { httpOnly: true, maxAge: 0, path: '/' });
+    response.cookies.set(ADMIN_COOKIE, '', {
+      httpOnly: true,
+      maxAge: 0,
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
     return response;
   };
 }
