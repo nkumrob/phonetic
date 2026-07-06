@@ -12,9 +12,9 @@ if (typeof Blob !== 'undefined' && typeof Blob.prototype.text !== 'function') {
 }
 
 import { render } from '@testing-library/react';
-import { PageViewTracker } from '../page-view-tracker';
+import { PageViewEffect } from '../page-view-tracker';
 
-describe('PageViewTracker', () => {
+describe('PageViewEffect', () => {
   const originalSendBeacon = navigator.sendBeacon;
 
   afterEach(() => {
@@ -25,7 +25,7 @@ describe('PageViewTracker', () => {
     const sendBeacon = jest.fn().mockReturnValue(true);
     Object.defineProperty(navigator, 'sendBeacon', { value: sendBeacon, configurable: true });
 
-    render(<PageViewTracker pathname="/learn" />);
+    render(<PageViewEffect pathname="/learn" />);
 
     expect(sendBeacon).toHaveBeenCalledTimes(1);
     const blob = sendBeacon.mock.calls[0][1] as Blob;
@@ -36,9 +36,9 @@ describe('PageViewTracker', () => {
     const sendBeacon = jest.fn().mockReturnValue(true);
     Object.defineProperty(navigator, 'sendBeacon', { value: sendBeacon, configurable: true });
 
-    const { rerender } = render(<PageViewTracker pathname="/learn" />);
-    rerender(<PageViewTracker pathname="/learn" />);
-    rerender(<PageViewTracker pathname="/tools" />);
+    const { rerender } = render(<PageViewEffect pathname="/learn" />);
+    rerender(<PageViewEffect pathname="/learn" />);
+    rerender(<PageViewEffect pathname="/tools" />);
 
     expect(sendBeacon).toHaveBeenCalledTimes(2);
   });

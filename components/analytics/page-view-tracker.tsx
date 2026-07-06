@@ -5,23 +5,20 @@ import { usePathname } from 'next/navigation';
 import { track } from '@/lib/client/track';
 
 /**
- * Fires one page_view event per route change. The pathname prop is
- * injectable for tests; production use passes nothing and reads the router.
+ * Effect half of the page-view tracker; exported separately so tests can
+ * drive it with an explicit pathname (no app router in jsdom).
  */
-export function PageViewTracker({ pathname }: { pathname?: string }) {
-  // usePathname throws when rendered outside the app router (jsdom tests
-  // pass the pathname prop instead), so the hook call is guarded.
-  let routerPathname: string | null = null;
-  try {
-    routerPathname = usePathname();
-  } catch {
-    routerPathname = null;
-  }
-  const current = pathname ?? routerPathname;
-
+export function PageViewEffect({ pathname }: { pathname: string | null }) {
   useEffect(() => {
-    if (current) track('page_view', current);
-  }, [current]);
+    if (pathname) track('page_view', pathname);
+  }, [pathname]);
 
   return null;
+}
+
+/** Fires one page_view event per route change. */
+export function PageViewTracker() {
+  const pathname = usePathname();
+
+  return <PageViewEffect pathname={pathname} />;
 }
