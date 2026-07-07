@@ -41,13 +41,13 @@ describe('getAiOpsStats — cost estimation', () => {
   it('sets estimatedCostUsd to null for an unpriced model and totalCostUsd to null', async () => {
     await client.execute({
       sql: `insert into tool_usage (id, tool_name, model, input_tokens, output_tokens, created_at) values
-        ('u1','gpt-tool','gpt-5.4-nano',500000,100000,datetime('now'))`,
+        ('u1','gpt-tool','some-unpriced-model',500000,100000,datetime('now'))`,
       args: [],
     });
 
     const stats = await getAiOpsStats(7, { db });
 
-    const nano = stats.byModel.find((m) => m.model === 'gpt-5.4-nano')!;
+    const nano = stats.byModel.find((m) => m.model === 'some-unpriced-model')!;
     expect(nano).toBeDefined();
     expect(nano.estimatedCostUsd).toBeNull();
     expect(stats.totalCostUsd).toBeNull();
@@ -57,7 +57,7 @@ describe('getAiOpsStats — cost estimation', () => {
     await client.execute({
       sql: `insert into tool_usage (id, tool_name, model, input_tokens, output_tokens, latency_ms, created_at) values
         ('u1','summarizer','claude-haiku-4-5',1000000,200000,800,datetime('now')),
-        ('u2','gpt-tool','gpt-5.4-nano',500000,100000,600,datetime('now'))`,
+        ('u2','gpt-tool','some-unpriced-model',500000,100000,600,datetime('now'))`,
       args: [],
     });
 
@@ -66,7 +66,7 @@ describe('getAiOpsStats — cost estimation', () => {
     const haiku = stats.byModel.find((m) => m.model === 'claude-haiku-4-5')!;
     expect(haiku.estimatedCostUsd).toBeCloseTo(2.0, 4); // priced row still shows cost
 
-    const nano = stats.byModel.find((m) => m.model === 'gpt-5.4-nano')!;
+    const nano = stats.byModel.find((m) => m.model === 'some-unpriced-model')!;
     expect(nano.estimatedCostUsd).toBeNull();
 
     expect(stats.totalCostUsd).toBeNull(); // null because at least one model is unpriced

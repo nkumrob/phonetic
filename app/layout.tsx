@@ -29,6 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const schemas = [structuredData, faqSchema, organizationSchema];
+  // GA renders only when explicitly configured — hardcoding the tag previously
+  // ignored these flags and half-collided with our CSP (see next.config.ts).
+  const gaId =
+    process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === 'true' ? process.env.NEXT_PUBLIC_GA_ID : undefined;
   
   return (
     <html lang="en" suppressHydrationWarning>
@@ -44,9 +48,7 @@ export default function RootLayout({
         )}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6386864042923808"
-     crossOrigin="anonymous"></script>
+        {gaId && <link rel="dns-prefetch" href="https://www.googletagmanager.com" />}
       </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased font-sans`} suppressHydrationWarning>
         <script
@@ -84,19 +86,20 @@ export default function RootLayout({
         <Analytics />
         <WebVitalsReporter />
 
-        {/* Google Analytics - Using next/script for proper optimization */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-J1E4GKFXVT"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-J1E4GKFXVT');
-          `}
-        </Script>
+        {/* Google Analytics — only when NEXT_PUBLIC_GA_ID is set and analytics enabled */}
+        {gaId && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}');
+              `}
+            </Script>
+          </>
+        )}
 
       </body>
     </html>
