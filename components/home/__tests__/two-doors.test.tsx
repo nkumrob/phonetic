@@ -19,9 +19,10 @@ describe('TwoDoors', () => {
     expect(nato.compareDocumentPosition(ai) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
-  it('keeps the NATO keyword as the door label', () => {
+  it('frames the NATO door as a comms standard, not just an alphabet', () => {
     render(<TwoDoors />);
-    expect(screen.getByText('NATO Phonetic Alphabet')).toBeInTheDocument();
+    expect(screen.getByText('Clear Comms · NATO Standard')).toBeInTheDocument();
+    expect(screen.getByText(/precision to your everyday work/i)).toBeInTheDocument();
   });
 
   it('routes all NATO entry points correctly', () => {

@@ -5,7 +5,7 @@ export const siteConfig = {
   name: 'natophonetic.com',
   title: 'natophonetic.com | NATO Phonetic Alphabet (A to Z) & AI Tools for Mission-Critical Communication',
   description:
-    'Learn the NATO phonetic alphabet: A–Z list, pronunciation, printable PDF, and interactive translator. Plus AI tools for mission-critical communication: draft comms, build briefs, extract action items, and verify AI output. Built for aviation, military, maritime, dispatch, and emergency professionals.',
+    'Professional AI tools for mission-critical work: draft comms, build briefs, extract action items, verify AI output. Plus master NATO comms — the A–Z standard with pronunciation, practice, and a printable chart. Built for aviation, military, maritime, dispatch, and emergency professionals.',
   url: config.siteUrl,
   author: 'Phonetic Alphabet Learning Platform',
   keywords: [

@@ -12,13 +12,13 @@ export function Footer() {
           <div className="space-y-4 sm:col-span-2 lg:col-span-1">
             <h3 className="text-xl md:text-2xl font-black tracking-tight">NATO Phonetic</h3>
             <p className="text-body text-secondary leading-relaxed max-w-xs">
-              Master the international radiotelephony spelling alphabet used by aviation, maritime, and military professionals worldwide.
+              AI productivity tools and radio-clear communication training for aviation, maritime, military, dispatch, and emergency professionals.
             </p>
           </div>
 
           {/* Learn Section */}
           <div>
-            <h4 className="text-base md:text-lg font-bold mb-4 md:mb-5">Learn</h4>
+            <h4 className="text-base md:text-lg font-bold mb-4 md:mb-5">NATO Comms</h4>
             <ul className="space-y-2">
               <li>
                 <Link href="/learn" className="text-body text-secondary hover:text-primary transition-colors inline-block">

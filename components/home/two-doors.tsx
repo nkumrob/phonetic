@@ -20,14 +20,15 @@ export function TwoDoors() {
           >
             <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1.5 bg-warmAmber-500" />
             <p className="mb-4 font-mono text-[12px] font-bold uppercase tracking-[0.2em] text-warmAmber-700 dark:text-warmAmber-400">
-              NATO Phonetic Alphabet
+              Clear Comms · NATO Standard
             </p>
             <h2 className="mb-3 text-2xl font-black tracking-tight md:text-3xl">
               Split-second clarity
             </h2>
             <p className="mb-8 max-w-md text-base leading-relaxed text-gray-600 dark:text-warmNeutral-300">
-              The NATO phonetic alphabet is the universal standard for communicating letters and
-              codes without error over radio, phone, or dispatch.
+              Master the communication standard that aviation, dispatch, and military teams
+              trust — spell names, codes, and call signs with zero errors, then bring that same
+              precision to your everyday work.
             </p>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
               <Link
