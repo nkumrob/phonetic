@@ -29,7 +29,7 @@ export function toolsMenuItems(): NavItem[] {
 }
 
 export const NATO_MENU_ITEMS: NavItem[] = [
-  { name: 'Learn the Alphabet', href: '/learn' },
+  { name: 'Master NATO Comms', href: '/learn' },
   { name: 'Practice & Quiz', href: '/practice' },
   { name: 'Printable Chart', href: '/api/pdf', download: 'nato-phonetic-alphabet.html' },
 ];

@@ -33,7 +33,7 @@ describe('TwoDoors', () => {
     const chart = screen.getByRole('link', { name: /chart pdf/i });
     expect(chart).toHaveAttribute('href', '/api/pdf');
     expect(chart).toHaveAttribute('download');
-    expect(screen.getByRole('link', { name: /learn a to z/i })).toHaveAttribute('href', '/learn');
+    expect(screen.getByRole('link', { name: /master nato comms/i })).toHaveAttribute('href', '/learn');
   });
 
   it('routes the AI door to the tools hub', () => {

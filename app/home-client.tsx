@@ -88,7 +88,7 @@ export default function HomeClient() {
                 href="/learn"
                 className="inline-flex items-center justify-center rounded-lg border-2 border-white px-8 py-4 text-lg font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white hover:text-coolBlue-700"
               >
-                Learn the Alphabet
+                Master NATO Comms
               </Link>
             </div>
           </div>

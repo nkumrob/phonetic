@@ -19,7 +19,7 @@ const REFERENCE_CARDS: ReferenceCard[] = [
     download: true,
   },
   {
-    name: 'Learn the Alphabet',
+    name: 'Master NATO Comms',
     tagline: 'All 26 code words with audio pronunciation and memory aids',
     href: '/learn',
   },

@@ -49,9 +49,9 @@ describe('HomeClient structure', () => {
     const toolsLinks = screen.getAllByRole('link', { name: /open the tools/i });
     expect(toolsLinks.length).toBeGreaterThanOrEqual(1);
     toolsLinks.forEach((l) => expect(l).toHaveAttribute('href', '/tools'));
-    expect(screen.getByRole('link', { name: /learn the alphabet/i })).toHaveAttribute(
-      'href',
-      '/learn'
-    );
+    // "Master NATO Comms" also appears twice (hero + closing CTA) — both must hit /learn.
+    const learnLinks = screen.getAllByRole('link', { name: /master nato comms/i });
+    expect(learnLinks.length).toBeGreaterThanOrEqual(1);
+    learnLinks.forEach((l) => expect(l).toHaveAttribute('href', '/learn'));
   });
 });

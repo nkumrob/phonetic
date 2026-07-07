@@ -41,7 +41,7 @@ export function TwoDoors() {
                 Chart PDF
               </a>
               <Link href="/learn" className={TEXT_LINK}>
-                Learn A to Z
+                Master NATO Comms
               </Link>
             </div>
           </div>
