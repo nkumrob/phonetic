@@ -21,13 +21,13 @@ describe('HomeHero', () => {
     expect(screen.queryByText(/natophonetic/i)).not.toBeInTheDocument();
   });
 
-  it('routes the primary action to the AI tools and the secondary to learning the alphabet', () => {
+  it('routes the primary action to the AI tools and the secondary to mastering NATO comms', () => {
     render(<HomeHero />);
     expect(screen.getByRole('link', { name: /open the ai tools/i })).toHaveAttribute(
       'href',
       '/tools'
     );
-    expect(screen.getByRole('link', { name: /learn the nato alphabet/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /master nato comms/i })).toHaveAttribute(
       'href',
       '/learn'
     );

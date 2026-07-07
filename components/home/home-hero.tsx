@@ -61,7 +61,7 @@ export function HomeHero() {
               href="/learn"
               className="inline-flex items-center justify-center rounded-lg border-2 border-stone-900 bg-white px-8 py-4 text-lg font-bold text-stone-900 transition-all duration-200 hover:-translate-y-0.5 hover:bg-stone-900 hover:text-white dark:border-warmNeutral-100 dark:bg-transparent dark:text-warmNeutral-100 dark:hover:bg-warmNeutral-100 dark:hover:text-warmNeutral-900"
             >
-              Learn the NATO Alphabet
+              Master NATO Comms
             </Link>
           </div>
 
