@@ -38,6 +38,15 @@ create index if not exists idx_tool_usage_tool_created on tool_usage (tool_name,
 create index if not exists idx_tool_usage_created on tool_usage (created_at desc);
 create index if not exists idx_tool_usage_anon on tool_usage (anon_id, created_at desc);
 
+create table if not exists feature_requests (
+  id         text primary key,
+  name       text,
+  email      text,
+  request    text not null,
+  created_at text not null default (datetime('now'))
+);
+create index if not exists idx_feature_requests_created on feature_requests (created_at desc);
+
 -- Event-name validation lives in lib/constants/events.ts (server allowlist); no CHECK so new names don't force a table rebuild.
 create table if not exists events (
   id         text primary key,

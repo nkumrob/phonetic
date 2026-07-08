@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { LayoutDashboard, Globe, Cpu, Wrench, MessageSquare, LogOut } from 'lucide-react';
+import { LayoutDashboard, Globe, Cpu, Wrench, MessageSquare, Inbox, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils/cn';
 
 const NAV = [
@@ -11,6 +11,7 @@ const NAV = [
   { href: '/admin/ai', label: 'AI Ops', icon: Cpu },
   { href: '/admin/tools', label: 'Tools', icon: Wrench },
   { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare },
+  { href: '/admin/requests', label: 'Requests', icon: Inbox },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

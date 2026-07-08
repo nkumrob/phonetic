@@ -70,6 +70,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/feature-request" className="text-body text-secondary hover:text-primary transition-colors inline-block">
+                  Request a feature
+                </Link>
+              </li>
+              <li>
                 <a
                   href="mailto:support@natophonetic.com"
                   className="text-body text-secondary hover:text-primary transition-colors inline-flex items-center gap-2"
