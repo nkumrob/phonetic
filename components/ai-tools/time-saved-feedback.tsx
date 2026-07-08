@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { TIME_SAVED_BUCKETS, type TimeSavedBucket } from '@/lib/ai/types';
 import { submitTimeSaved } from '@/lib/services/ai-tool-service';
 import { recordLocalTimeSaved } from '@/lib/client/time-saved';
@@ -22,9 +23,15 @@ export function TimeSavedFeedback({ usageId }: TimeSavedFeedbackProps) {
 
   if (submitted) {
     return (
-      <p className="text-sm text-success font-medium animate-fade-in">
-        Thanks! Your feedback helps us improve.
-      </p>
+      <div className="animate-fade-in space-y-1">
+        <p className="text-sm text-success font-medium">Thanks! Your feedback helps us improve.</p>
+        <p className="text-sm text-secondary">
+          Glad it helped. Mind sharing a sentence about how you use it?{' '}
+          <Link href="/reviews" className="font-semibold text-coolBlue-600 hover:underline dark:text-coolBlue-400">
+            Leave a quick review
+          </Link>
+        </p>
+      </div>
     );
   }
 
