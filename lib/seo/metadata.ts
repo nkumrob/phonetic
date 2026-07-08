@@ -116,11 +116,6 @@ export const structuredData = {
     price: '0',
     priceCurrency: 'USD'
   },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '2453'
-  },
   featureList: [
     'Interactive NATO alphabet grid',
     'Text to phonetic converter',

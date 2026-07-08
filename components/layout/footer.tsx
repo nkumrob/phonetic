@@ -99,7 +99,7 @@ export function Footer() {
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6 md:gap-8">
             <div className="flex flex-col items-center lg:items-start gap-3 text-center lg:text-left">
               <p className="text-sm md:text-body text-secondary leading-relaxed max-w-2xl">
-                © {currentYear} natophonetic.com. AI productivity tools and NATO comms training for professionals who can&apos;t afford miscommunication.
+                © {currentYear} natophonetic.com. AI productivity tools and NATO comms training for mission-critical professionals.
               </p>
               <div className="flex items-center gap-2 text-sm md:text-body text-secondary">
                 <span>Made with</span>
