@@ -28,22 +28,8 @@ export default function HomeClient() {
       {/* AI tools showcase (cross-sell) */}
       <HomeAiSection />
 
-      {/* Testimonials Section */}
-      <section className="border-t border-warmNeutral-200 bg-white py-20 dark:border-warmNeutral-700 dark:bg-warmNeutral-900 md:py-24">
-        <div className="container px-6 md:px-8 lg:px-4">
-          <div className="mb-12 max-w-5xl md:mb-16">
-            <h2 className="h2 mb-4">What Our Users Say</h2>
-            <p className="max-w-2xl text-lg leading-relaxed text-gray-600 dark:text-warmNeutral-300">
-              Join thousands of professionals who communicate clearly, with people and with AI
-            </p>
-          </div>
-
-          {/* First-party reviews: real submissions, moderated in /admin */}
-          <div className="mx-auto max-w-7xl">
-            <ApprovedReviewsWall />
-          </div>
-        </div>
-      </section>
+      {/* Testimonials: hidden until at least two approved first-party reviews exist */}
+      <ApprovedReviewsWall />
 
       {/* CTA Section */}
       <section className="bg-coolBlue-600 py-20 dark:bg-coolBlue-700 md:py-24">
