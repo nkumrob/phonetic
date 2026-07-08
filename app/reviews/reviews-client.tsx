@@ -1,59 +1,92 @@
 'use client';
 
-import React from 'react';
-import { Button } from '@/components/ui';
-import { ExternalLink, Star } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ReviewForm } from '@/components/reviews/review-form';
+import { StarRating } from '@/components/reviews/star-rating';
+import { Review, ReviewFormData } from '@/lib/types/review';
 
+/**
+ * First-party review collection: the form posts straight into our own
+ * moderation queue (POST /api/reviews); approved reviews render below.
+ */
 export default function ReviewsClient() {
-  const googleReviewLink = "https://g.page/r/YOUR_GOOGLE_PLACE_ID/review";
+  const [approved, setApproved] = useState<Review[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/reviews?limit=24')
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+      .then((data: { reviews: Review[] }) => {
+        if (!cancelled) setApproved(data.reviews ?? []);
+      })
+      .catch(() => {
+        // List is optional; the form is the point of this page.
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function submitReview(data: ReviewFormData) {
+    const res = await fetch('/api/reviews', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const body = (await res.json().catch(() => null)) as { error?: string } | null;
+      throw new Error(body?.error ?? 'Could not submit your review. Please try again.');
+    }
+  }
 
   return (
     <div className="min-h-screen py-12 px-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            User Reviews & Testimonials
+      <div className="container mx-auto max-w-3xl">
+        <div className="mb-12 text-center">
+          <p className="font-mono text-[13px] uppercase tracking-[0.12em] text-tertiary">Reviews</p>
+          <h1 className="mt-2 text-4xl font-black tracking-headlines md:text-5xl">
+            Share your experience
           </h1>
-          <p className="text-xl text-secondary max-w-2xl mx-auto">
-            See what others are saying about learning the NATO phonetic alphabet
-            with our platform
+          <p className="mx-auto mt-4 max-w-xl text-lg text-gray-600 dark:text-warmNeutral-300">
+            Tell other professionals how the AI tools or the NATO comms training fit your work. A
+            sentence or two is plenty.
           </p>
         </div>
 
-        {/* Google Review CTA */}
-        <div className="max-w-2xl mx-auto">
-          <div className="p-8 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800">
-            <div className="flex items-center gap-3 mb-4">
-              <Star className="w-10 h-10 text-yellow-400 fill-yellow-400" />
-              <h2 className="text-3xl font-bold">Love Our Platform?</h2>
-            </div>
-            <p className="text-lg text-secondary mb-6">
-              Help others discover us by leaving a review on Google! Your feedback
-              helps us improve and reach more learners.
-            </p>
-            <Button
-              onClick={() => window.open(googleReviewLink, '_blank')}
-              className="w-full"
-              size="lg"
-            >
-              <ExternalLink className="w-5 h-5 mr-2" />
-              Leave a Google Review
-            </Button>
-          </div>
-
-          {/* Coming Soon */}
-          <div className="mt-12 text-center p-8 bg-warmNeutral-50 dark:bg-warmNeutral-900 rounded-xl border-2 border-border">
-            <div className="text-6xl mb-4">🚀</div>
-            <h3 className="text-2xl font-bold mb-2">Reviews Coming Soon</h3>
-            <p className="text-secondary">
-              We&apos;re building a review system to showcase user testimonials.
-              In the meantime, please share your feedback on Google!
-            </p>
-          </div>
+        <div className="rounded-xl border border-warmNeutral-200 bg-white p-6 shadow-[0_16px_32px_-20px_rgba(92,54,38,0.35)] dark:border-warmNeutral-700 dark:bg-warmNeutral-800 md:p-8">
+          <ReviewForm onSubmit={submitReview} />
         </div>
+
+        <p className="mt-4 text-center text-sm text-tertiary">
+          Reviews are moderated before publication. Your email, if provided, is never shown.
+        </p>
+
+        {approved.length > 0 && (
+          <section className="mt-16">
+            <h2 className="mb-6 text-2xl font-bold tracking-largeText">What others said</h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              {approved.map((review) => (
+                <figure
+                  key={review.id}
+                  className="flex flex-col rounded-xl border border-warmNeutral-200 bg-white p-6 dark:border-warmNeutral-700 dark:bg-warmNeutral-800"
+                >
+                  <StarRating rating={review.rating} size="sm" />
+                  <blockquote className="mt-4 flex-1">
+                    <p className="font-bold">{review.title}</p>
+                    <p className="mt-2 text-gray-600 dark:text-warmNeutral-300">{review.comment}</p>
+                  </blockquote>
+                  <figcaption className="mt-4 flex items-center justify-between text-sm">
+                    <span className="font-semibold">{review.name}</span>
+                    <span className="text-tertiary">
+                      {new Date(review.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    </span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
 }
-

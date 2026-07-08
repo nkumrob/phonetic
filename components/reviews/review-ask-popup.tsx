@@ -49,31 +49,42 @@ export function ReviewAskEffect({ pathname }: { pathname: string }) {
   }
 
   return (
-    <div
-      role="dialog"
-      aria-label="Share your experience"
-      className="fixed bottom-6 right-6 z-50 w-80 max-w-[calc(100vw-3rem)] rounded-xl border border-warmNeutral-200 bg-white p-5 shadow-[0_16px_32px_-16px_rgba(92,54,38,0.45)] animate-fade-in dark:border-warmNeutral-700 dark:bg-warmNeutral-800"
-    >
-      <p className="font-bold">Welcome back</p>
-      <p className="mt-1 text-sm text-gray-600 dark:text-warmNeutral-300">
-        If the tools or the NATO comms training have helped your work, a one-sentence review helps
-        other professionals find us.
-      </p>
-      <div className="mt-4 flex items-center gap-3">
-        <Link
-          href="/reviews"
-          onClick={dismiss}
-          className="inline-flex items-center justify-center rounded-lg bg-coolBlue-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-coolBlue-700"
-        >
-          Leave a review
-        </Link>
-        <button
-          type="button"
-          onClick={dismiss}
-          className="text-sm font-semibold text-gray-500 hover:text-gray-700 dark:text-warmNeutral-400 dark:hover:text-warmNeutral-200"
-        >
-          Maybe later
-        </button>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <button
+        type="button"
+        aria-label="Dismiss"
+        onClick={dismiss}
+        className="absolute inset-0 bg-stone-900/40 backdrop-blur-[2px]"
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Share your experience"
+        className="relative w-full max-w-md animate-slide-up rounded-2xl border border-warmNeutral-200 bg-white p-8 shadow-[0_32px_64px_-24px_rgba(92,54,38,0.55)] dark:border-warmNeutral-700 dark:bg-warmNeutral-800"
+      >
+        <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1.5 rounded-t-2xl bg-coolBlue-600" />
+        <p className="font-mono text-[13px] uppercase tracking-[0.12em] text-tertiary">Welcome back</p>
+        <h2 className="mt-2 text-2xl font-black tracking-headlines">How is it working for you?</h2>
+        <p className="mt-3 text-gray-600 dark:text-warmNeutral-300">
+          If the AI tools or the NATO comms training have helped your work, a one-sentence review
+          helps other professionals find us.
+        </p>
+        <div className="mt-6 flex items-center gap-4">
+          <Link
+            href="/reviews"
+            onClick={dismiss}
+            className="inline-flex flex-1 items-center justify-center rounded-lg bg-coolBlue-600 px-5 py-3 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-coolBlue-700"
+          >
+            Leave a review
+          </Link>
+          <button
+            type="button"
+            onClick={dismiss}
+            className="font-semibold text-gray-500 hover:text-gray-700 dark:text-warmNeutral-400 dark:hover:text-warmNeutral-200"
+          >
+            Maybe later
+          </button>
+        </div>
       </div>
     </div>
   );
