@@ -106,10 +106,6 @@ export default function PrivacyPage() {
               <strong>OpenAI / Anthropic</strong> process AI tool inputs as described above.
             </li>
             <li>
-              <strong>Famewall</strong> displays our testimonial carousel and handles review
-              collection through its widget under its own privacy policy.
-            </li>
-            <li>
               <strong>Google Analytics</strong> may run when enabled; it is currently used only in
               aggregate and can be blocked by standard browser tools without affecting the site.
             </li>

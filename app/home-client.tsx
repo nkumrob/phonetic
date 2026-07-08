@@ -7,15 +7,11 @@ import { HomeHero } from '@/components/home/home-hero';
 import { TwoDoors } from '@/components/home/two-doors';
 import { BenefitsSection } from '@/components/home/benefits-section';
 
-const FamewallWidget = dynamic(() => import('@/components/famewall').then(mod => ({ default: mod.FamewallWidget })), {
+const ApprovedReviewsWall = dynamic(() => import('@/components/reviews/approved-reviews-wall').then(mod => ({ default: mod.ApprovedReviewsWall })), {
   loading: () => <div className="h-96 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
   ssr: false,
 });
 
-const TestimonialsGrid = dynamic(() => import('@/components/testimonials').then(mod => ({ default: mod.TestimonialsGrid })), {
-  loading: () => <div className="h-96 animate-pulse bg-warmNeutral-100 dark:bg-warmNeutral-800 rounded-xl" />,
-  ssr: false,
-});
 
 export default function HomeClient() {
   return (
@@ -42,25 +38,9 @@ export default function HomeClient() {
             </p>
           </div>
 
-          {/* Hardcoded Testimonials */}
-          <div className="mx-auto mb-16 max-w-7xl">
-            <TestimonialsGrid />
-          </div>
-
-          {/* Divider */}
-          <div className="mx-auto mb-12 max-w-5xl">
-            <div className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
-              <p className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-warmNeutral-400">
-                Share Your Experience
-              </p>
-              <div className="h-px flex-1 bg-warmNeutral-200 dark:bg-warmNeutral-700"></div>
-            </div>
-          </div>
-
-          {/* Famewall Widget - New Reviews */}
-          <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl">
-            <FamewallWidget />
+          {/* First-party reviews: real submissions, moderated in /admin */}
+          <div className="mx-auto max-w-7xl">
+            <ApprovedReviewsWall />
           </div>
         </div>
       </section>

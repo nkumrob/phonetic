@@ -27,11 +27,11 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(self "https://page.famewall.io"), microphone=(self "https://page.famewall.io"), geolocation=(), payment=()',
+            value: 'camera=(), microphone=(), geolocation=(), payment=()',
           },
           {
             key: 'Content-Security-Policy',
-            value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com https://page.famewall.io; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.google.com https://vitals.vercel-insights.com https://page.famewall.io; media-src 'self'; object-src 'none'; child-src 'self' https://page.famewall.io; frame-src 'self' https://page.famewall.io; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; manifest-src 'self'; worker-src 'self';`.replace(/\s+/g, ' ').trim(),
+            value: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.google.com https://vitals.vercel-insights.com; media-src 'self'; object-src 'none'; child-src 'self'; frame-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; manifest-src 'self'; worker-src 'self';`.replace(/\s+/g, ' ').trim(),
           },
         ],
       },
