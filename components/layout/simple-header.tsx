@@ -2,18 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { cn } from '@/lib/utils/cn';
-import { Settings } from 'lucide-react';
 import { useSimpleAppState } from '@/lib/contexts/simple-app-context';
 import { speechManager } from '@/lib/utils/speech-synthesis';
 import { NavDropdown, toolsMenuItems, NATO_MENU_ITEMS } from './nav-menu';
+import { AccountMenu } from './account-menu';
 
 export function SimpleHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const pathname = usePathname();
   const { state } = useSimpleAppState();
 
   useEffect(() => {
@@ -56,31 +53,12 @@ export function SimpleHeader() {
 
           {/* Actions */}
           <div className="flex items-center gap-1 sm:gap-2">
-            {/* Profile Link - Desktop Only */}
-            <Link
-              href="/profile"
-              className="hidden md:flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              <span className="text-xl">{mounted ? (state.user.avatar || '✈️') : '✈️'}</span>
-              <span className="text-sm font-medium">{mounted ? (state.user.name || 'Profile') : 'Profile'}</span>
-            </Link>
-
-            {/* Settings Link - Hidden on Mobile */}
-            <Link
-              href="/settings"
-              className={cn(
-                'hidden sm:block p-2 rounded-lg transition-colors',
-                'hover:bg-gray-100 dark:hover:bg-gray-800',
-                pathname === '/settings' && 'bg-gray-100 dark:bg-gray-800'
-              )}
-              aria-label="Settings"
-            >
-              <Settings className="w-5 h-5 text-gray-700 dark:text-gray-300" />
-            </Link>
-
-            {/* Theme Toggle - Hidden on Mobile */}
+            {/* Account menu: progress, settings, theme in one place */}
             <div className="hidden sm:block">
-              <ThemeToggle />
+              <AccountMenu
+                userName={mounted ? state.user.name || null : null}
+                onNavigate={handleNavigate}
+              />
             </div>
 
             {/* Mobile menu button */}
