@@ -99,7 +99,7 @@ export function Footer() {
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6 md:gap-8">
             <div className="flex flex-col items-center lg:items-start gap-3 text-center lg:text-left">
               <p className="text-sm md:text-body text-secondary leading-relaxed max-w-2xl">
-                © {currentYear} NATO Phonetic Alphabet. Educational resource for learning the international radiotelephony spelling alphabet.
+                © {currentYear} natophonetic.com. AI productivity tools and NATO comms training for professionals who can&apos;t afford miscommunication.
               </p>
               <div className="flex items-center gap-2 text-sm md:text-body text-secondary">
                 <span>Made with</span>
@@ -113,7 +113,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="font-bold text-coolBlue-500 hover:text-coolBlue-600 dark:text-coolBlue-400 dark:hover:text-coolBlue-300 transition-colors inline-flex items-center gap-1"
                 >
-                  Bob
+                  Robert Appiah
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
