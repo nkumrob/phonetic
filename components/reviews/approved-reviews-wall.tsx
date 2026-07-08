@@ -18,7 +18,7 @@ export function ApprovedReviewsWall() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/reviews?limit=9')
+    fetch('/api/reviews?approved=true&limit=9')
       .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
       .then((data: { reviews: Review[] }) => {
         if (!cancelled) setReviews(data.reviews ?? []);

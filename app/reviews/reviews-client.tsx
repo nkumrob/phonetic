@@ -14,7 +14,7 @@ export default function ReviewsClient() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/reviews?limit=24')
+    fetch('/api/reviews?approved=true&limit=24')
       .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
       .then((data: { reviews: Review[] }) => {
         if (!cancelled) setApproved(data.reviews ?? []);
