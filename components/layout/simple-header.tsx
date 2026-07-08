@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils/cn';
+import { User } from 'lucide-react';
 import { useSimpleAppState } from '@/lib/contexts/simple-app-context';
 import { speechManager } from '@/lib/utils/speech-synthesis';
 import { NavDropdown, toolsMenuItems, NATO_MENU_ITEMS } from './nav-menu';
@@ -49,6 +50,13 @@ export function SimpleHeader() {
               items={NATO_MENU_ITEMS}
               onNavigate={handleNavigate}
             />
+            <Link
+              href="/feature-request"
+              onClick={handleNavigate}
+              className="px-3 py-2 text-sm font-medium text-secondary hover:text-foreground transition-colors"
+            >
+              Request a Feature
+            </Link>
           </div>
 
           {/* Actions */}
@@ -108,7 +116,9 @@ export function SimpleHeader() {
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span className="text-2xl">{mounted ? (state.user.avatar || '✈️') : '✈️'}</span>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-warmNeutral-100 dark:bg-warmNeutral-700">
+                  <User size={18} aria-hidden="true" className="text-gray-700 dark:text-warmNeutral-200" />
+                </span>
                 <span className="font-medium">{mounted ? (state.user.name || 'Profile') : 'Profile'}</span>
               </Link>
 
@@ -147,6 +157,18 @@ export function SimpleHeader() {
                   {item.name}
                 </Link>
               ))}
+
+              <div className="my-2 border-t border-warmNeutral-200 dark:border-warmNeutral-700" />
+              <Link
+                href="/feature-request"
+                className="block px-4 py-3 rounded-lg font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleNavigate();
+                }}
+              >
+                Request a Feature
+              </Link>
             </div>
           </div>
         )}
