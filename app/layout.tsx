@@ -79,10 +79,10 @@ export default function RootLayout({
             <RouteSpeechHandler />
             <div className="min-h-screen bg-background flex flex-col">
               <SimpleHeader />
+              <RetirementGuideCard />
               <main className="flex-1">
                 {children}
               </main>
-              <RetirementGuideCard />
               <Footer />
             </div>
           </SimpleAppProvider>

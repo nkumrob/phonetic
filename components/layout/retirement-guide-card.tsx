@@ -1,39 +1,36 @@
-// Affiliate card: Augusta Precious Metals' free gold/silver IRA guide.
-// Copy kept inside Augusta's affiliate rules: no fear, urgency, price or "protect/hedge/diversify" claims, no advice.
+// Affiliate card: Augusta Precious Metals' free gold/silver IRA guide, shown under the site header.
+// Self-styled (own background and colours) so it reads on any page. Copy kept inside Augusta's affiliate rules:
+// no fear, urgency, price or "protect/hedge/diversify" claims, no advice.
 const URL =
   "https://learn.augustapreciousmetals.com/apm-aff-lp-1-v3?apmtrkr_cid=1696&aff_id=5459&sub_id=web-natophonetic";
 
 export function RetirementGuideCard() {
   return (
-    <aside
-      aria-label="Sponsored"
-      style={{
-        maxWidth: 880,
-        margin: "48px auto 0",
-        padding: "0 16px",
-      }}
-    >
+    <aside aria-label="Sponsored" style={{ maxWidth: 1100, margin: "12px auto", padding: "0 16px", position: "relative", zIndex: 1 }}>
       <div
         style={{
-          border: "1px solid rgba(127,127,127,0.35)",
-          borderRadius: 14,
-          padding: "20px 22px",
+          background: "#FFF7E3",
+          color: "#1F1A0E",
+          border: "1px solid #E8D59A",
+          borderRadius: 12,
+          padding: "12px 16px",
           display: "flex",
           flexWrap: "wrap",
           alignItems: "center",
-          gap: 16,
+          gap: "8px 16px",
           justifyContent: "space-between",
-          color: "inherit",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
+          fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
         }}
       >
-        <div style={{ flex: "1 1 360px", minWidth: 0 }}>
-          <p style={{ margin: 0, fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", opacity: 0.6 }}>
-            Sponsored
-          </p>
-          <p style={{ margin: "4px 0 0", fontSize: 18, fontWeight: 700, lineHeight: 1.3 }}>
+        <div style={{ flex: "1 1 320px", minWidth: 0 }}>
+          <p style={{ margin: 0, fontSize: 16, fontWeight: 700, lineHeight: 1.35, color: "#1F1A0E" }}>
+            <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", color: "#7A6A3A", marginRight: 8 }}>
+              Sponsored
+            </span>
             Put your hard-earned retirement money to work
           </p>
-          <p style={{ margin: "6px 0 0", fontSize: 15, lineHeight: 1.5, opacity: 0.8 }}>
+          <p style={{ margin: "2px 0 0", fontSize: 14, lineHeight: 1.45, color: "#4A4130" }}>
             Augusta Precious Metals&apos; free guide explains how a gold or silver IRA works.
           </p>
         </div>
@@ -43,19 +40,19 @@ export function RetirementGuideCard() {
           rel="sponsored noopener noreferrer"
           style={{
             flex: "0 0 auto",
-            padding: "11px 18px",
-            borderRadius: 10,
+            padding: "9px 16px",
+            borderRadius: 9,
             background: "#C9A227",
-            color: "#1a1406",
+            color: "#1A1406",
             fontWeight: 700,
-            fontSize: 15,
+            fontSize: 14,
             textDecoration: "none",
             whiteSpace: "nowrap",
           }}
         >
           Get the free guide &rarr;
         </a>
-        <p style={{ flex: "1 1 100%", margin: 0, fontSize: 12, lineHeight: 1.5, opacity: 0.55 }}>
+        <p style={{ flex: "1 1 100%", margin: 0, fontSize: 11, lineHeight: 1.4, color: "#6B6150" }}>
           Affiliate link: we may earn a commission at no cost to you. General information only, not financial, tax or
           investment advice.
         </p>
